@@ -6,7 +6,9 @@ module.exports = {
       client: Twilio(api.config.twilio.ssid, api.config.twilio.token),
 
       sanitize: function(number){
-        return number.replace(/\D+/g, '');
+        number = number.replace(/\D+/g, '');
+        if (number.length === 10){ number = '1' + number; }
+        return number;
       }
     };
 
