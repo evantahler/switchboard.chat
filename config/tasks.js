@@ -22,15 +22,15 @@ exports.default = {
       toDisconnectProcessors: true,
       // What redis server should we connect to for tasks / delayed jobs?
       redis: api.config.redis
-    }
+    };
   }
-}
+};
 
 exports.test = {
   tasks: function(api){
     return {
       timeout: 100,
       checkTimeout: 50
-    }  
+    };
   }
-}
+};

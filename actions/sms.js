@@ -39,7 +39,7 @@ exports.smsOut = {
   name:                   'sms:out',
   description:            'sms:out',
   outputExample:          {},
-  // middleware:             [ 'logged-in-session' ],
+  middleware:             [ 'logged-in-session' ],
 
   inputs: {
     to:       { required: true }, // +14159658964
@@ -60,7 +60,7 @@ exports.smsOut = {
       from:      from,
       to:        to,
       message:   data.params.body,
-      direction: 'in',
+      direction: 'out',
       read:      false,
     });
 
@@ -76,6 +76,44 @@ exports.smsOut = {
         next(error);
       });
 
+    }).catch(function(errors){
+      next(errors.errors[0].message);
+    });
+  }
+};
+
+exports.smsList = {
+  name:                   'sms:list',
+  description:            'sms:list',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {
+    limit:       { 
+      required: true,
+      default: 100,
+      formatter: function(p){ return parseInt(p); }
+    },
+    offset:       { 
+      required: true,
+      default: 0,
+      formatter: function(p){ return parseInt(p); }
+    },
+  },
+
+  run: function(api, data, next){
+    api.models.message.findAll({
+      limit: data.params.limit, 
+      offset: data.params.offset,
+      order: 'createdAt desc',
+    }).then(function(records){
+      var d = [];
+      records.forEach(function(r){
+        d.push(r.apiData(api));
+      });
+
+      data.response.messages = d;
+      next();
     }).catch(function(errors){
       next(errors.errors[0].message);
     });

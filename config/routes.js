@@ -4,6 +4,7 @@ exports.default = {
       
       get: [
         { path: '/user',                  action: 'user:view' },
+        { path: '/sms/list',              action: 'sms:list' },
       ],
 
       post: [

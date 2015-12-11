@@ -9,7 +9,32 @@ module.exports = {
         number = number.replace(/\D+/g, '');
         if (number.length === 10){ number = '1' + number; }
         return number;
-      }
+      },
+
+      registerTeamPhoneNumber: function(team, callback){
+        var countryCode = 'US';
+
+        api.twilio.client.availablePhoneNumbers(countryCode).local.list({ areaCode: team.areaCode }, function(error, numbers){
+          if(error){ return callback(error); }
+          var phoneNumber = numbers.available_phone_numbers[0].phone_number;
+          team.phoneNumber = api.twilio.sanitize(phoneNumber);
+          api.twilio.client.incomingPhoneNumbers.create({phoneNumber: phoneNumber}, function(err, purchasedNumber) {
+            team.sid = purchasedNumber.sid;
+            team.save().then(function(team){ callback(); }).catch(function(){
+              if(error){ return callback(error); }
+              api.twilio.updateSmsUrl(team, callback);
+            });
+          });
+        });
+      },
+
+      realeaseTeamPhoneNumber: function(team, callback){
+        api.twilio.client.incomingPhoneNumbers(team.sid).release(callback);
+      },
+
+      updateSmsUrl: function(team, callback){
+        api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.smsUrl}, callback);
+      },
     };
 
     next();

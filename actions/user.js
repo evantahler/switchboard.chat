@@ -15,6 +15,8 @@ exports.userCreate = {
 
   run: function(api, data, next){
     var user = api.models.user.build(data.params);
+    if(data.params.phoneNumber){ data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber); }
+
     user.updatePassword(data.params.password, function(error){
       if(error){ return next(error); }
 
@@ -38,7 +40,10 @@ exports.userView = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    userId: { required: false }
+    userId: {
+      required: false,
+      formatter: function(p){ return parseInt(p); }
+    }
   },
 
   run: function(api, data, next){
@@ -62,7 +67,11 @@ exports.userEdit = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    userId:      { required: false },
+    userId: {
+      required: false,
+      formatter: function(p){ return parseInt(p); }
+    },
+
     email:       { required: false },
     password:    { required: false },
     firstName:   { required: false },
@@ -74,6 +83,8 @@ exports.userEdit = {
   run: function(api, data, next){
     var userId = data.session.userId;
     if(data.params.userId){ userId = userId; }
+
+    if(data.params.phoneNumber){ data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber); }
 
     api.models.user.findOne({where: {id: userId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
@@ -90,6 +101,31 @@ exports.userEdit = {
           next();
         }
       }).catch(next);
+    })
+    .catch(next)
+    ;
+  }
+};
+
+exports.userDelete = {
+  name:                   'user:delete',
+  description:            'user:delete',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {
+    userId: {
+      required: true,
+      formatter: function(p){ return parseInt(p); }
+    }
+  },
+
+  run: function(api, data, next){
+    // TODO: don't delete yourself
+
+    api.models.user.findOne({where: {id: data.params.userId}}).then(function(user){
+      if(!user){ return next(new Error('user not found')); }
+      user.destroy().then(function(){ next(); }).catch(next);
     })
     .catch(next)
     ;

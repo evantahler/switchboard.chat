@@ -8,20 +8,16 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
       validate: { isEmail: true }, 
     },
+    'teamId': {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     'passwordHash': {
       type: DataTypes.TEXT,
       allowNull: true,
     },
     'passwordSalt': {
       type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    'role': {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    'phoneNumber': {
-      type: DataTypes.STRING,
       allowNull: true,
     },
     'firstName': {
@@ -68,11 +64,11 @@ module.exports = function(sequelize, DataTypes){
 
       apiData: function(api){
         return {
-          id:        this.id,
-          email:     this.email,
-          role:      this.role,
-          firstName: this.firstName,
-          lastName:  this.lastName,
+          id:          this.id,
+          teamId:      this.teamId,
+          email:       this.email,
+          firstName:   this.firstName,
+          lastName:    this.lastName,
         };
       }
     }

@@ -21,7 +21,7 @@ exports.default = {
       fs.mkdirSync('./log');
     } catch(e) {
       if(e.code !== 'EEXIST'){
-        return next([new Error('Cannot create ./log directory'), e])
+        return next([new Error('Cannot create ./log directory'), e]);
       }
     }
     logger.transports.push(function(api, winston) {
@@ -43,12 +43,12 @@ exports.default = {
     
     return logger;
   }
-}
+};
 
 exports.test = { 
   logger: function(api){
     return {
       transports: null
-    }
+    };
   }
-}
+};

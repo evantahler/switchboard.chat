@@ -1,0 +1,33 @@
+<div ng-controller="message:create">
+
+  <h2>Send Message</h2>
+
+  <form ng-submit="processForm()">
+    <div class="alert alert-dismissible alert-danger" ng-show="error">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      {{ error }}
+    </div>
+
+    <div class="alert alert-dismissible alert-success" ng-show="success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      {{ success }}
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      <label>To</label>
+      <input type="tel" name="to" class="form-control" placeholder="xxx.xxx.xxxx" ng-model="formData.to">
+    </div>
+
+    <div class="form-group">
+      <label>Message</label>
+      <input type="text" name="body" class="form-control" placeholder="sups." ng-model="formData.body">
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg btn-block">
+      <span class="glyphicon glyphicon-flash"></span> Submit!
+    </button>
+  </form>
+
+</div>

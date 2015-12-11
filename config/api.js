@@ -2,14 +2,14 @@ exports.default = {
   general: function(api){
     return {
       apiVersion: '0.0.1',
-      serverName: 'actionhero API',
+      serverName: 'switchboard.chat',
       // id can be set here, or it will be generated dynamically.
       //  Be sure that every server you run has a unique ID (which will happen when generated dynamically)
       //  id: 'myActionHeroServer',
       // A unique token to your application that servers will use to authenticate to each other
-      serverToken: 'change-me',
+      serverToken: 't4ugwijegoijwePHJewp49hjepw',
       // The welcome message seen by TCP and webSocket clients upon connection
-      welcomeMessage: 'Hello! Welcome to the actionhero api',
+      welcomeMessage: 'Hello! Welcome to the switchboard api',
       // the redis prefix for actionhero's cache objects
       cachePrefix: 'actionhero:cache:',
       // the redis prefix for actionhero's cache/lock objects
@@ -47,9 +47,9 @@ exports.default = {
       },
       // hash containing chat rooms you wish to be created at server boot
       startingChatRooms: {}
-    }
+    };
   }
-}
+};
 
 exports.test = { 
   general: function(api){
@@ -66,14 +66,14 @@ exports.test = {
         'defaultRoom': {},
         'otherRoom': {},
       },
-    }
+    };
   }
-}
+};
 
 exports.production = { 
   general: function(api){
     return {  
       developmentMode: false
-    }
+    };
   }
-}
+};
