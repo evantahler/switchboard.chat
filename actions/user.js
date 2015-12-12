@@ -6,17 +6,14 @@ exports.userCreate = {
 
   inputs: {
     email:       { required: true },
-    password:    { required: false },
+    password:    { required: true },
     firstName:   { required: true },
     lastName:    { required: true },
-    role:        { required: false },
-    phoneNumber: { required: false },
+    teamId:      { required: true },
   },
 
   run: function(api, data, next){
     var user = api.models.user.build(data.params);
-    if(data.params.phoneNumber){ data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber); }
-
     user.updatePassword(data.params.password, function(error){
       if(error){ return next(error); }
 
@@ -41,16 +38,13 @@ exports.userView = {
 
   inputs: {
     userId: {
-      required: false,
+      required: true,
       formatter: function(p){ return parseInt(p); }
     }
   },
 
   run: function(api, data, next){
-    var userId = data.session.userId;
-    if(data.params.userId){ userId = userId; }
-
-    api.models.user.findOne({where: {id: userId}}).then(function(user){
+    api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
       data.response.user = user.apiData(api);
       next();
@@ -68,31 +62,23 @@ exports.userEdit = {
 
   inputs: {
     userId: {
-      required: false,
+      required: true,
       formatter: function(p){ return parseInt(p); }
     },
-
     email:       { required: false },
     password:    { required: false },
     firstName:   { required: false },
     lastName:    { required: false },
-    role:        { required: false },
-    phoneNumber: { required: false },
   },
 
   run: function(api, data, next){
-    var userId = data.session.userId;
-    if(data.params.userId){ userId = userId; }
-
-    if(data.params.phoneNumber){ data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber); }
-
-    api.models.user.findOne({where: {id: userId}}).then(function(user){
+    api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
       user.updateAttributes(data.params).then(function(){
         data.response.user = user.apiData(api);
         if(data.params.password){
           user.updatePassword(data.params.password, function(error){
-            if(error){ return callback(error); }
+            if(error){ return next(error); }
             user.save().then(function(){
               next();
             }).catch(next);
@@ -121,9 +107,11 @@ exports.userDelete = {
   },
 
   run: function(api, data, next){
-    // TODO: don't delete yourself
+    if(data.session.userId === data.params.userId){
+      return next(new Error('you cannot delete yourself'));
+    }
 
-    api.models.user.findOne({where: {id: data.params.userId}}).then(function(user){
+    api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
       user.destroy().then(function(){ next(); }).catch(next);
     })

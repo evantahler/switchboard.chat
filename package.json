@@ -1,7 +1,7 @@
 {
   "author": "evan tahler <evantahler@gmail.com>",
-  "name": "sms-dispatcher",
-  "description": "sms-dispatcher",
+  "name": "switchboard.chat",
+  "description": "switchboard.chat",
   "version": "0.0.1",
   "engines": {
     "node": ">=0.10.0"

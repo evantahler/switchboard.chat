@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    'teamId': {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     instanceMethods: {
       apiData: function(api){
@@ -30,6 +34,7 @@ module.exports = function(sequelize, DataTypes){
           message:    this.message,
           direction:  this.direction,
           read:       this.read,
+          teamId:     this.teamId,
           createdAt:  this.createdAt,
         };
       }

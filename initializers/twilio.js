@@ -22,7 +22,7 @@ module.exports = {
             team.sid = purchasedNumber.sid;
             team.save().then(function(team){ callback(); }).catch(function(){
               if(error){ return callback(error); }
-              api.twilio.updateSmsUrl(team, callback);
+              api.twilio.updateIncommingUrl(team, callback);
             });
           });
         });
@@ -32,8 +32,8 @@ module.exports = {
         api.twilio.client.incomingPhoneNumbers(team.sid).release(callback);
       },
 
-      updateSmsUrl: function(team, callback){
-        api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.smsUrl}, callback);
+      updateIncommingUrl: function(team, callback){
+        api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.messageUrl}, callback);
       },
     };
 
