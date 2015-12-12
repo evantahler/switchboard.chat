@@ -2,7 +2,7 @@ exports.personCreate = {
   name:                   'person:create',
   description:            'person:create',
   outputExample:          {},
-  middleware:             [],
+  middleware:             [ 'logged-in-session' ],
 
   inputs: {
     phoneNumber: { required: true },
@@ -19,13 +19,12 @@ exports.personCreate = {
       teamId: data.session.teamId,
     });
 
-    person.save().then(
-      api.models.person.findOne({where: {phoneNumber: data.params.phoneNumber, teamId: data.session.teamId}})
-    ).then(function(pesronObj){
-      data.response.person = pesronObj.apiData(api);
-      next(error);
-    })
-    .catch(function(errors){
+    person.save().then(function(){
+      api.models.person.findOne({where: {phoneNumber: api.twilio.sanitize(data.params.phoneNumber), teamId: data.session.teamId}}).then(function(pesronObj){
+        data.response.person = pesronObj.apiData(api);
+        next();
+      }).catch(next);
+    }).catch(function(errors){
       next(errors.errors[0].message);
     });
   }
@@ -64,7 +63,7 @@ exports.personList = {
   inputs: {},
 
   run: function(api, data, next){
-    api.models.person.findAll({where: {teamId: data.session.teamId}}).then(function(people){
+    api.models.person.findAll({where: {teamId: data.session.teamId}, order: 'lastName desc'}).then(function(people){
       data.response.people = [];
       people.forEach(function(person){
         data.response.people.push( person.apiData(api) );

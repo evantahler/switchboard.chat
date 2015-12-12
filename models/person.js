@@ -17,6 +17,13 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
     }
   }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['teamId', 'phoneNumber']
+      },
+    ],
+
     instanceMethods: {
       apiData: function(api){
         return {

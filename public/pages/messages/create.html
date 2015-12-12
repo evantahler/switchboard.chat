@@ -1,6 +1,7 @@
 <div ng-controller="message:create">
 
   <h2>Send Message</h2>
+  <h4>From: {{ $root.formatters.phoneNumber( $root.team.phoneNumber, false ) }}</h4>
 
   <form ng-submit="processForm()">
     <div class="alert alert-dismissible alert-danger" ng-show="error">
@@ -22,7 +23,7 @@
 
     <div class="form-group">
       <label>Message</label>
-      <input type="text" name="body" class="form-control" placeholder="sups." ng-model="formData.body">
+      <input type="text" name="body" class="form-control" placeholder="Hi!" ng-model="formData.body">
     </div>
 
     <button type="submit" class="btn btn-success btn-lg btn-block">

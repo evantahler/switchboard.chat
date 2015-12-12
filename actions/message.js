@@ -132,7 +132,9 @@ exports.messageList = {
 
     if(data.params.personId){
 
-      api.models.person.findOne({where: { id: data.params.personId, teamId: data.session.teamId }}).then(function(person){
+      api.models.person.findOne({
+        where: { id: data.params.personId, teamId: data.session.teamId }
+      }).then(function(person){
         q = {
           where: { 
             teamId: data.session.teamId,
@@ -144,7 +146,7 @@ exports.messageList = {
         };
 
         findMessages();
-      }).catch(error);
+      }).catch(next);
 
     }else{
       

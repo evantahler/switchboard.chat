@@ -12,7 +12,7 @@ module.exports = {
         var roomParts = room.split(':');
         var roomNameId = parseInt(roomParts[1]);
 
-        if(connection.session.teamId !== roomNameId){
+        if(!connection.session || connection.session.teamId !== roomNameId){
           callback('cannot join this team room');
         }else{
           callback();

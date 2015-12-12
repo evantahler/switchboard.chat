@@ -15,18 +15,18 @@
     <tbody ng-repeat="message in messages">
 
       <tr ng-if="message.direction === 'in'" class="animated zoomIn info">
-        <td>{{ formatters.phoneNumber( message.to ) }}</td>
-        <td>{{ formatters.phoneNumber( message.from ) }}</td>
+        <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
+        <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
         <td>{{ message.direction }}</td>
         <td>{{ message.message }}</td>
-        <td>{{ formatters.timestamp( message.createdAt ) }}</td>
+        <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
       </tr>
       <tr ng-if="message.direction === 'out'" class="animated zoomIn success">
-        <td>{{ formatters.phoneNumber( message.to ) }}</td>
-        <td>{{ formatters.phoneNumber( message.from ) }}</td>
+        <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
+        <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
         <td>{{ message.direction }}</td>
         <td>{{ message.message }}</td>
-        <td>{{ formatters.timestamp( message.createdAt ) }}</td>
+        <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
       </tr>
     </tbody>
   </table>

@@ -87,6 +87,33 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     2: new Audio('/sounds/ding-2.mp3'),
   };
 
+  $rootScope.formatters = {
+    phoneNumber: function(p, toName){
+      p = p.replace(/\D+/g, '');
+      if(p.length === 10){ p = '1' + p; }
+
+      if(toName !== false){
+        if(String(p) === $rootScope.team.phoneNumber){
+          return '{{switchboard}}';
+        }
+
+        for(var i in $rootScope.people){
+          var person = $rootScope.people[i];
+          if(String(person.phoneNumber) === String(p)){
+            return person.firstName + ' ' + person.lastName;
+          }
+        }
+      }
+
+      p = p.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '$2.$3.$4');
+      return p;
+    },
+    timestamp: function(p){
+      var d = Date.parse(p);
+      return moment(d).fromNow();
+    }
+  };
+
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
     $rootScope.pageTitle = current.$$route.pageTitle;
   });

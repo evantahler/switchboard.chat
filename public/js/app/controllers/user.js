@@ -19,6 +19,7 @@ app.controller('user:edit', ['$scope', '$rootScope', '$location', function($scop
     
   $scope.processForm = function(){
     delete $scope.success;
+    $scope.formData.userId = $rootScope.user.id;
     $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'PUT', function(data){
       if(data.user){ 
         $rootScope.user = data.user; 

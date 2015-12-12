@@ -7,12 +7,11 @@ app.controller('team:create', ['$scope', '$rootScope', '$location', function($sc
 
 app.controller('team:edit', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
   $scope.formData = {};
-  $scope.formatters = app.formatters;
 
   $rootScope.actionHelper($scope, {
     userId: $rootScope.user.id, teamId: $rootScope.user.teamId
   }, '/api/team', 'GET', function(data){
-    data.team.phoneNumber = $scope.formatters.phoneNumber(data.team.phoneNumber);
+    data.team.phoneNumber = $rootScope.formatters.phoneNumber(data.team.phoneNumber);
     $scope.formData = data.team;
   });
     

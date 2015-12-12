@@ -8,13 +8,14 @@ app.controller('message:create', ['$scope', '$rootScope', '$location', function(
 }]);
 
 app.controller('messages:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
-  $scope.formatters = app.formatters;
-
+  
   $scope.loadMessages = function(){
     $rootScope.actionHelper($scope, {}, '/api/message/list', 'GET', function(data){
       $scope.messages = data.messages;
     }, function(error){ alert(error); });
   };
+
+  $scope.loadMessages();
 
   ///////////////
   // WEBSOCKET //
@@ -50,5 +51,4 @@ app.controller('messages:list', ['$scope', '$rootScope', '$location', function($
     $scope.client.disconnect();
   });
 
-  $scope.loadMessages();
 }]);
