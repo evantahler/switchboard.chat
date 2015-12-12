@@ -20,6 +20,7 @@ app.controller('team:edit', ['$scope', '$rootScope', '$location', function($scop
     delete $scope.success;
     $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'PUT', function(data){
       $scope.success = 'Updated!';
+      $rootScope.team = data.team;
     });
   };
 }]);

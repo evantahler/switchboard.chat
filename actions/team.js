@@ -59,6 +59,7 @@ exports.teamEdit = {
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
       team.updateAttributes(data.params).then(function(){
+        data.response.team = team.apiData(api);
         next();
       }).catch(next);
     }).catch(next);

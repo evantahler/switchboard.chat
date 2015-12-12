@@ -29,6 +29,12 @@ app.controller('messages:list', ['$scope', '$rootScope', '$location', function($
   
   $scope.client.on('say', function(payload){
     $scope.messages.unshift(payload.message);
+    if(payload.message.direction === 'in'){
+      $rootScope.audio[1].play();
+    }
+    if(payload.message.direction === 'out'){
+      $rootScope.audio[2].play();
+    }
     $rootScope.$apply();
   });
 

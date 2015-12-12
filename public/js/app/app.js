@@ -39,6 +39,8 @@ app.config(function($routeProvider, $locationProvider){
 app.run(['$rootScope', '$http', function($rootScope, $http){
 
   $rootScope.user   = null;
+  $rootScope.team   = null;
+  $rootScope.people = null;
   $rootScope.routes = routes;
 
   $rootScope.actionHelper = function($scope, data, path, verb, successCallback, errorCallback){
@@ -80,6 +82,11 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     });
   };
 
+  $rootScope.audio = {
+    1: new Audio('/sounds/ding-1.mp3'),
+    2: new Audio('/sounds/ding-2.mp3'),
+  };
+
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
     $rootScope.pageTitle = current.$$route.pageTitle;
   });
@@ -93,14 +100,18 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
     if(data.user){ 
       $rootScope.user      = data.user; 
       $rootScope.csrfToken = data.csrfToken; 
+      
+      $rootScope.actionHelper($scope, {}, '/api/team', 'GET', function(data){
+        if(data.team){ $rootScope.team = data.team;  }
+      });
+
+      $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
+        if(data.people){ $rootScope.people = data.people;  }
+      });
     }
   }, function(error){
     var matchedAndOK = false;
     var path = $location.path();
-
-    if(path.indexOf('/r/') === 0){
-      matchedAndOK = true;
-    }
 
     $rootScope.routes.forEach(function(r){
       if( !matchedAndOK && path === r[0] && r[3] === false ){

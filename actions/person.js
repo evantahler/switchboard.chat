@@ -55,6 +55,27 @@ exports.personView = {
   }
 };
 
+exports.personList = {
+  name:                   'person:list',
+  description:            'person:list',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {},
+
+  run: function(api, data, next){
+    api.models.person.findAll({where: {teamId: data.session.teamId}}).then(function(people){
+      data.response.people = [];
+      people.forEach(function(person){
+        data.response.people.push( person.apiData(api) );
+      });
+      next();
+    })
+    .catch(next)
+    ;
+  }
+};
+
 exports.personEdit = {
   name:                   'person:edit',
   description:            'person:edit',
