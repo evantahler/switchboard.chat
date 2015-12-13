@@ -25,6 +25,25 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
     },
   }, {
+    indexes: [
+      {
+        unique: false,
+        fields: ['from']
+      },
+      {
+        unique: false,
+        fields: ['to']
+      },
+      {
+        unique: false,
+        fields: ['read']
+      },
+      {
+        unique: false,
+        fields: ['teamId']
+      },
+    ],
+
     instanceMethods: {
       apiData: function(api){
         return {

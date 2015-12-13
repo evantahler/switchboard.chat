@@ -2,33 +2,6 @@
 
   <h2>Messages ({{ $root.team.name }})</h2>
 
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>To</th>
-        <th>From</th>
-        <th>Direction</th>
-        <th>Message</th>
-        <th>When</th>
-      </tr>
-    </thead>
-    <tbody ng-repeat="message in messages">
-
-      <tr ng-if="message.direction === 'in'" class="animated zoomIn info">
-        <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
-        <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
-        <td>{{ message.direction }}</td>
-        <td>{{ message.message }}</td>
-        <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
-      </tr>
-      <tr ng-if="message.direction === 'out'" class="animated zoomIn success">
-        <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
-        <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
-        <td>{{ message.direction }}</td>
-        <td>{{ message.message }}</td>
-        <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div ng-include="'pages/shared/messageTable.html'"></div> 
 
 </div>

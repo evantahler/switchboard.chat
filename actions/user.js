@@ -6,6 +6,7 @@ exports.userCreate = {
 
   inputs: {
     email:       { required: true },
+    phoneNumber: { required: false },
     password:    { required: true },
     firstName:   { required: true },
     lastName:    { required: true },
@@ -13,6 +14,10 @@ exports.userCreate = {
   },
 
   run: function(api, data, next){
+    if(data.params.phoneNumber){  
+      data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber);
+    }
+
     var user = api.models.user.build(data.params);
     user.updatePassword(data.params.password, function(error){
       if(error){ return next(error); }
@@ -21,9 +26,16 @@ exports.userCreate = {
         api.models.user.findOne({where: {email: data.params.email}})
       ).then(function(userObj){
         data.response.user = userObj.apiData(api);
-        next(error);
-      })
-      .catch(function(errors){
+        var notification = api.models.notification.build({
+          userId: userObj.id,
+        });
+
+        notification.save().then(function(){
+          next();
+        }).catch(function(errors){
+          next(errors.errors[0].message);
+        });        
+      }).catch(function(errors){
         next(errors.errors[0].message);
       });
     });
@@ -48,9 +60,7 @@ exports.userView = {
       if(!user){ return next(new Error('user not found')); }
       data.response.user = user.apiData(api);
       next();
-    })
-    .catch(next)
-    ;
+    }).catch(next);
   }
 };
 
@@ -72,9 +82,7 @@ exports.userList = {
         data.response.users.push( user.apiData(api) );
       });
       next();
-    })
-    .catch(next)
-    ;
+    }).catch(next);
   }
 };
 
@@ -90,12 +98,17 @@ exports.userEdit = {
       formatter: function(p){ return parseInt(p); }
     },
     email:       { required: false },
+    phoneNumber: { required: false },
     password:    { required: false },
     firstName:   { required: false },
     lastName:    { required: false },
   },
 
   run: function(api, data, next){
+    if(data.params.phoneNumber){  
+      data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber);
+    }
+    
     api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
       user.updateAttributes(data.params).then(function(){
@@ -111,9 +124,7 @@ exports.userEdit = {
           next();
         }
       }).catch(next);
-    })
-    .catch(next)
-    ;
+    }).catch(next);
   }
 };
 
@@ -137,9 +148,13 @@ exports.userDelete = {
 
     api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
-      user.destroy().then(function(){ next(); }).catch(next);
-    })
-    .catch(next)
-    ;
+      user.destroy().then(function(){ 
+        api.models.notification.findOne({where: {userId: data.params.userId}}).then(function(notification){
+          notification.destroy().then(function(){
+            next();
+          }).catch(next);
+        }).catch(next);
+      }).catch(next);
+    }).catch(next);
   }
 };

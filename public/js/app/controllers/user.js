@@ -50,3 +50,20 @@ app.controller('user:edit', ['$scope', '$rootScope', '$location', function($scop
     });
   };
 }]);
+
+app.controller('notification:edit', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+  $rootScope.actionHelper($scope, {userId: $rootScope.user.id}, '/api/notification', 'GET', function(data){
+    $scope.formData = data.notification;
+  });
+    
+  $scope.processForm = function(){
+    delete $scope.success;
+    $scope.formData.userId = $rootScope.user.id;
+    $rootScope.actionHelper($scope, $scope.formData, '/api/notification', 'PUT', function(data){
+      if(data.notification){ 
+        $scope.formData = data.notification; 
+      }
+      $scope.success = 'Updated!';
+    });
+  };
+}]);

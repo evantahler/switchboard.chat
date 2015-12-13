@@ -8,6 +8,10 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
       validate: { isEmail: true }, 
     },
+    'phoneNumber': {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     'teamId': {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -37,6 +41,14 @@ module.exports = function(sequelize, DataTypes){
       {
         unique: true,
         fields: ['email']
+      },
+      {
+        unique: true,
+        fields: ['phoneNumber']
+      },
+      {
+        unique: false,
+        fields: ['teamId']
       },
     ],
 
@@ -71,6 +83,7 @@ module.exports = function(sequelize, DataTypes){
           id:          this.id,
           teamId:      this.teamId,
           email:       this.email,
+          phoneNumber: this.phoneNumber,
           firstName:   this.firstName,
           lastName:    this.lastName,
         };

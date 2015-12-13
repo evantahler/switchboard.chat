@@ -22,6 +22,10 @@ module.exports = function(sequelize, DataTypes){
         unique: true,
         fields: ['teamId', 'phoneNumber']
       },
+      {
+        unique: false,
+        fields: ['teamId']
+      },
     ],
 
     instanceMethods: {

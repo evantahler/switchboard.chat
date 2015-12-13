@@ -45,6 +45,9 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
   $rootScope.actionHelper = function($scope, data, path, verb, successCallback, errorCallback){
     var i;
+
+    $('button').prop('disabled', true);
+
     if(typeof errorCallback !== 'function'){
       errorCallback = function(errorMessage){
         $scope.error = errorMessage;
@@ -71,6 +74,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
       headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
      }).success(function(data){
       successCallback(data);
+      $('button').prop('disabled', false);
     }).catch(function(data){
       var errorMessage = '';
       if(data.data && data.data.error){
@@ -79,6 +83,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         errorMessage = data.statusText + ' | ' + data.status;
       }
       errorCallback(errorMessage);
+      $('button').prop('disabled', false);
     });
   };
 
@@ -94,7 +99,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
       if(toName !== false){
         if(String(p) === $rootScope.team.phoneNumber){
-          return '{{switchboard}}';
+          return '{{' + $rootScope.team.name + '}}';
         }
 
         for(var i in $rootScope.people){
@@ -124,7 +129,7 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
   $scope.date = new Date();
 
   $rootScope.actionHelper($scope, {}, '/api/session', 'PUT', function(data){
-    if(data.user){ 
+    if(data.user){
       $rootScope.user      = data.user; 
       $rootScope.csrfToken = data.csrfToken; 
       

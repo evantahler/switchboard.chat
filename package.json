@@ -11,6 +11,8 @@
     "bcrypt": "^0.8.5",
     "grunt": "latest",
     "mysql": "^2.9.0",
+    "nodemailer": "^1.10.0",
+    "nodemailer-smtp-transport": "^1.0.4",
     "sequelize": "^3.14.2",
     "twilio": "^2.7.0",
     "ws": "latest"
