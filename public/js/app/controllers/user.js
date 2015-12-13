@@ -1,12 +1,33 @@
 app.controller('user:create', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
   $scope.formData    = {};
   $scope.processForm = function(){
-    // $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'POST', function(data){
-    //   $rootScope.actionHelper($scope, $scope.formData, '/api/session', 'POST', function(data){
-    //     if(data.user){ $rootScope.user = data.user; }
-    //     $location.path('/dashboard');
-    //   });
-    // });
+    $scope.formData.teamId = $rootScope.team.id;
+    $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'POST', function(data){
+      location.reload();
+    });
+  };
+}]);
+
+app.controller('user:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+  var loadTeamUsers = function(){
+    $rootScope.actionHelper($scope, {}, '/api/user/list', 'GET', function(data){
+      $scope.users = data.users;
+    });
+  };
+
+  loadTeamUsers();
+
+  $scope.deleteTeamUser = function(userId){
+    if(confirm('Are you sure?')){
+      $rootScope.actionHelper($scope, {
+        userId: userId,
+        teamId: $rootScope.team.id,
+      }, '/api/user', 'DELETE', function(data){
+        loadTeamUsers();
+      }, function(e){
+        alert(e);
+      });
+    }
   };
 }]);
 

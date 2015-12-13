@@ -14,9 +14,30 @@ app.controller('person:create', ['$scope', '$rootScope', '$location', function($
 }]);
 
 app.controller('person:list', ['$scope', '$rootScope', function($scope, $rootScope){
+  $scope.selectedPersonId = null;
   $scope.loadThread = function(personId){
+    $scope.selectedPersonId = personId;
+    for(var i in $rootScope.people){
+      var person = $rootScope.people[i];
+      if(person.id === personId){
+        person.alert = false;
+        break;
+      }
+    }
     $rootScope.$broadcast('loadThread', personId);
   };
+
+  $rootScope.$on('blinkPerson', function(event, payload){
+    var to   = payload[0];
+    var from = payload[1];
+    for(var i in $rootScope.people){
+      var person = $rootScope.people[i];
+      if(person.phoneNumber === to || person.phoneNumber === from){
+        person.alert = true;
+        break;
+      }
+    }      
+  });
 }]);
 
 app.controller('person:thread', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
@@ -56,19 +77,23 @@ app.controller('person:thread', ['$scope', '$rootScope', '$location', function($
   $scope.client.on('reconnecting', function(){    console.log('reconnecting');     });
   
   $scope.client.on('say', function(payload){
+    if(payload.message.direction === 'in'){ $rootScope.audio[1].play(); }
+    if(payload.message.direction === 'out'){ $rootScope.audio[2].play(); }
+
     if(
-      String(payload.message.to) === String($scope.person.phoneNumber) || 
-      String(payload.message.from) === String($scope.person.phoneNumber)
+      $scope.person && (
+        String(payload.message.to) === String($scope.person.phoneNumber) || 
+        String(payload.message.from) === String($scope.person.phoneNumber)
+      )
     ){
       $scope.messages.unshift(payload.message);
-      if(payload.message.direction === 'in'){
-        $rootScope.audio[1].play();
-      }
-      if(payload.message.direction === 'out'){
-        $rootScope.audio[2].play();
-      }
-      $rootScope.$apply();
     }
+
+    else{
+      $rootScope.$broadcast('blinkPerson', [payload.message.to, payload.message.from]);
+    }
+
+    $rootScope.$apply();
   });
 
   $scope.client.connect(function(err, details){

@@ -63,7 +63,7 @@ exports.personList = {
   inputs: {},
 
   run: function(api, data, next){
-    api.models.person.findAll({where: {teamId: data.session.teamId}, order: 'lastName desc'}).then(function(people){
+    api.models.person.findAll({where: {teamId: data.session.teamId}, order: 'lastName asc'}).then(function(people){
       data.response.people = [];
       people.forEach(function(person){
         data.response.people.push( person.apiData(api) );

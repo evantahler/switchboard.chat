@@ -8,8 +8,12 @@
       </tr>
     </thead>
     <tbody ng-repeat="person in $root.people">
-      <tr ng-click="loadThread(person.id);">
-        <td>{{ person.firstName }}</td>
+      <tr ng-if="selectedPersonId === person.id" ng-click="loadThread(person.id);" class="warning">
+        <td><span ng-if="person.alert" class="animated pulse glyphicon glyphicon-asterisk">&nbsp;</span>{{ person.firstName }}</td>
+        <td>{{ person.lastName }}</td>
+      </tr>
+      <tr ng-if="selectedPersonId !== person.id" ng-click="loadThread(person.id);">
+        <td><span ng-if="person.alert" class="animated pulse glyphicon glyphicon-asterisk">&nbsp;</span>{{ person.firstName }}</td>
         <td>{{ person.lastName }}</td>
       </tr>
     </tbody>

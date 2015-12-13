@@ -27,6 +27,10 @@ module.exports = function(sequelize, DataTypes){
     'lastName': {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    'lastLoginAt': {
+      type: DataTypes.DATE,
+      allowNull: true,
     }
   }, {
     indexes: [
