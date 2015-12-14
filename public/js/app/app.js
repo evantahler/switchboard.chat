@@ -3,17 +3,19 @@
 /////////////
 
 var routes = [
-  // ROUTE         PAGE PARTIAL                   PAGE TITLE                  REQUIRE LOGIN
-  [ '/',           'pages/home.html',             'switchboard',              false ],
-  [ '/home',       'pages/home.html',             'switchboard',              false ],
-  [ '/about',      'pages/about.html',            'switchboard: About',       false ],
-  [ '/sign-up',    'pages/team/create.html',      'switchboard: Create Team', false ],
-  [ '/login',      'pages/session/create.html',   'switchboard: Log In',      false ],
-  [ '/logout',     'pages/session/destroy.html',  'switchboard: Log Out',     false ],
-  [ '/messages',   'pages/messages.html',         'switchboard: Messages',    true  ],
-  [ '/people',     'pages/people.html',           'switchboard: People',      true  ],
-  [ '/account',    'pages/account.html',          'switchboard: Account',     true  ],
-  [ '/team',       'pages/team.html',             'switchboard: Team',        true  ],
+  // ROUTE              PAGE PARTIAL                        PAGE TITLE                      REQUIRE LOGIN
+  [ '/',                'pages/home.html',                  'switchboard',                  false ],
+  [ '/home',            'pages/home.html',                  'switchboard',                  false ],
+  [ '/about',           'pages/about.html',                 'switchboard: About',           false ],
+  [ '/sign-up',         'pages/team/create.html',           'switchboard: Create Team',     false ],
+  [ '/login',           'pages/session/create.html',        'switchboard: Log In',          false ],
+  [ '/logout',          'pages/session/destroy.html',       'switchboard: Log Out',         false ],
+  [ '/forgot-password', 'pages/user/forgot-password.html',  'switchboard: Forgot Password', false ],
+  [ '/reset-password',  'pages/user/reset-password.html',   'switchboard: Reset Password',  false ],
+  [ '/messages',        'pages/messages.html',              'switchboard: Messages',        true  ],
+  [ '/people',          'pages/people.html',                'switchboard: People',          true  ],
+  [ '/account',         'pages/account.html',               'switchboard: Account',         true  ],
+  [ '/team',            'pages/team.html',                  'switchboard: Team',            true  ],
 ];
 
 /////////////////

@@ -24,6 +24,10 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    'passwordResetToken': {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     'firstName': {
       type: DataTypes.STRING,
       allowNull: false,

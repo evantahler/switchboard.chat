@@ -8,6 +8,26 @@ app.controller('user:create', ['$scope', '$rootScope', '$location', function($sc
   };
 }]);
 
+app.controller('user:forgot-password', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+  $scope.formData    = {};
+  $scope.processForm = function(){
+    $rootScope.actionHelper($scope, $scope.formData, '/api/user/forgot-password', 'POST', function(data){
+      $scope.success = data.message;
+    });
+  };
+}]);
+
+app.controller('user:reset-password', ['$scope', '$rootScope', '$location', '$routeParams', function($scope, $rootScope, $location, $routeParams){
+  $scope.formData    = {};
+  $scope.processForm = function(){
+    $scope.formData.userId              = $routeParams.userId;
+    $scope.formData.passwordResetToken  = $routeParams.token;
+    $rootScope.actionHelper($scope, $scope.formData, '/api/user/reset-password', 'POST', function(data){
+      window.location = '/#/login';
+    });
+  };
+}]);
+
 app.controller('user:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
   var loadTeamUsers = function(){
     $rootScope.actionHelper($scope, {}, '/api/user/list', 'GET', function(data){

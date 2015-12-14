@@ -1,4 +1,4 @@
-var async = require('async')
+var async = require('async');
 
 exports.teamCreate = {
   name:                   'team:comboCreate',

@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+
 exports.userCreate = {
   name:                   'user:create',
   description:            'user:create',
@@ -124,6 +126,70 @@ exports.userEdit = {
           next();
         }
       }).catch(next);
+    }).catch(next);
+  }
+};
+
+exports.userForgotPassword = {
+  name:                   'user:forgot-password',
+  description:            'user:forgot-password',
+  outputExample:          {},
+  middleware:             [],
+
+  inputs: {
+    email: { required: true }
+  },
+
+  run: function(api, data, next){
+    data.response.message = 'Check your email for a link to continue.'; // send this no matter what
+    api.models.user.findOne({where: {email: data.params.email }}).then(function(user){
+      if(!user){ return next(); }
+      require('crypto').randomBytes(48, function(ex, buf) {
+        var token = buf.toString('hex');
+        user.passwordResetToken = token;
+        user.save().then(function(){
+          var email = {
+            from:    api.config.smtp.auth.user,
+            to:      user.email,
+            subject: '[switchboard.chat] Your password reset link',
+            text:    '[switchboard.chat] You have requested a link to update your password.  Click here: ' + process.env.PUBLIC_URL + '/#/reset-password?userId=' + user.id + '&token=' + token,
+          };
+
+          api.smtp.client.sendMail(email, next);
+        }).catch(next);
+      });
+    }).catch(next);
+  }
+};
+
+exports.userResetPassword = {
+  name:                   'user:reset-password',
+  description:            'user:reset-password',
+  outputExample:          {},
+  middleware:             [],
+
+  inputs: {
+    userId: {
+      required: true,
+      formatter: function(p){ return parseInt(p); }
+    },
+    passwordResetToken: { required: true },
+    password:           { required: true },
+  },
+
+  run: function(api, data, next){
+    api.models.user.findOne({where: {id: data.params.userId }}).then(function(user){
+      if(!user){ return next(new Error('user not found')); }
+      if(!user.passwordResetToken){ return next(new Error('user not found')); }
+      if(user.passwordResetToken !== data.params.passwordResetToken){ return next(new Error('user not found')); }
+
+      user.updatePassword(data.params.password, function(error){
+        if(error){ return next(error); }
+        user.passwordResetToken = null;
+        user.save().then(function(){
+          next();
+        }).catch(next);
+      });
     }).catch(next);
   }
 };

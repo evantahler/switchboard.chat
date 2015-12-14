@@ -17,7 +17,7 @@
       <td>{{ message.message }}</td>
       <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
     </tr>
-    <tr ng-if="message.direction === 'out'" class="animated zoomIn success">
+    <tr ng-if="message.direction === 'out'" class="animated zoomIn warning">
       <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
       <td><span class="glyphicon glyphicon-chevron-right"></span></td>
       <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
