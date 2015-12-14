@@ -16,14 +16,17 @@ module.exports = {
 
         api.twilio.client.availablePhoneNumbers(countryCode).local.list({ areaCode: team.areaCode }, function(error, numbers){
           if(error){ return callback(error); }
+          if(numbers.length === 0 || !numbers.available_phone_numbers[0]){ 
+            return callback(new Error('No phone numbers availalbe for this area code')); 
+          }
+
           var phoneNumber = numbers.available_phone_numbers[0].phone_number;
           team.phoneNumber = api.twilio.sanitize(phoneNumber);
-          api.twilio.client.incomingPhoneNumbers.create({phoneNumber: phoneNumber}, function(err, purchasedNumber) {
+          api.twilio.client.incomingPhoneNumbers.create({phoneNumber: phoneNumber}, function(err, purchasedNumber){
             team.sid = purchasedNumber.sid;
-            team.save().then(function(team){ callback(); }).catch(function(){
-              if(error){ return callback(error); }
+            team.save().then(function(){ 
               api.twilio.updateIncommingUrl(team, callback);
-            });
+            }).catch(callback);
           });
         });
       },

@@ -15,7 +15,7 @@ exports.default = {
       post: [
         { path: '/session',           action: 'session:create' },
         { path: '/user',              action: 'user:create' },
-        { path: '/team',              action: 'team:create' },
+        { path: '/team',              action: 'team:comboCreate' },
         { path: '/person',            action: 'person:create' },
         { path: '/message/in',        action: 'message:in' },
         { path: '/message/out',       action: 'message:out' },

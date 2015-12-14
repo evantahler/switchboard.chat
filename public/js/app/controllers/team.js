@@ -1,7 +1,18 @@
 app.controller('team:create', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+  
+  if($rootScope.user){
+    $location.path('/account');
+  }
+
   $scope.formData    = {};
   $scope.processForm = function(){
-    // TODO
+    delete $scope.success;
+    $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'POST', function(data){
+      $rootScope.actionHelper($scope, $scope.formData, '/api/session', 'POST', function(data){
+        if(data.user){ $rootScope.user = data.user; }
+        location.reload(); // <- hack to force the CSRF Token to hydrate
+      });
+    });
   };
 }]);
 

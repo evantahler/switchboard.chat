@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "actionhero": "12.3.0",
+    "ah-swagger-plugin": "0.0.15",
     "bcrypt": "^0.8.5",
     "grunt": "latest",
     "mysql": "^2.9.0",

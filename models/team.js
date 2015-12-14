@@ -10,11 +10,11 @@ module.exports = function(sequelize, DataTypes){
     },
     'phoneNumber': {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     'sid': {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   }, {
     indexes: [

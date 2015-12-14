@@ -38,7 +38,10 @@ exports.default = {
       paths: {
         'action':      [ __dirname + '/../actions'      ] ,
         'task':        [ __dirname + '/../tasks'        ] ,
-        'public':      [ __dirname + '/../public'       ] ,
+        'public':      [ 
+          __dirname + '/../public',
+          __dirname + '/../node_modules/ah-swagger-plugin/public',
+        ],
         'pid':         [ __dirname + '/../pids'         ] ,
         'log':         [ __dirname + '/../log'          ] ,
         'server':      [ __dirname + '/../servers'      ] ,

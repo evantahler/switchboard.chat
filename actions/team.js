@@ -1,32 +1,140 @@
+var async = require('async')
+
 exports.teamCreate = {
-  name:                   'team:create',
-  description:            'team:create',
+  name:                   'team:comboCreate',
+  description:            'team:comboCreate',
   outputExample:          {},
   middleware:             [],
 
   inputs: {
+    // user stuff
+    email:       { required: true },
+    password:    { required: true },
+    firstName:   { required: true },
+    lastName:    { required: true },
+
+    // team stuff
     name:     { required: true },
     areaCode: { 
       required: true,
       formatter: function(p){ return parseInt(p); }
     },
+
+    // billing stuff
+    // TODO
   },
 
   run: function(api, data, next){
-    var team = api.models.team.build(data.params);
-    
-    api.twilio.registerTeamPhoneNumber(team, function(error){
-      team.save().then(
-        api.models.team.findOne({where: {name: data.params.name}})
-      ).then(function(teamObj){
-        data.response.team = teamObj.apiData(api);
-        next(error);
-      }).catch(function(errors){
-        next(errors.errors[0].message);
+    var jobs = [];
+
+    var team = api.models.team.build({
+      name:     data.params.name,
+      areaCode: data.params.areaCode,
+    });
+
+    var user = api.models.user.build({
+      email:     data.params.email,
+      firstName: data.params.firstName,
+      lastName:  data.params.lastName,
+    });
+
+    jobs.push(function(done){
+      // stub for billing... do this first
+      done();
+    });
+
+    jobs.push(function(done){
+      user.updatePassword(data.params.password, done);
+    });
+
+    jobs.push(function(done){
+      team.save().then(function(){
+        done();
+      }).catch(done);
+    });
+
+    jobs.push(function(done){
+      user.teamId = team.id;
+      user.save().then(function(){
+        done();
+      }).catch(done);
+    });
+
+    jobs.push(function(done){
+      var notification = api.models.notification.build({ userId: user.id });
+      notification.save().then(function(){
+        done();
+      }).catch(done);
+    });
+
+    jobs.push(function(done){
+      api.twilio.registerTeamPhoneNumber(team, function(error){
+        if(error){ return done(error); }
+        team.save().then(function(){
+          done();
+        }).catch(done);
       });
-    });    
+    });
+
+    jobs.push(function(done){
+      var roomName = 'team:' + team.id;
+      api.chatRoom.add(roomName);
+      done();
+    });
+
+    jobs.push(function(done){
+      data.response.user = user.apiData(api);
+      data.response.team = team.apiData(api);
+      done();
+    });
+
+    async.series(jobs, function(error){
+      if(error){
+        // roll it back
+        try{ user.destroy(); }catch(e){ api.log(e, 'error'); }
+        try{ team.destroy(); }catch(e){ api.log(e, 'error'); }
+        
+        if(errors.errors){
+          next(errors.errors[0].message);
+        }else{
+          next(error);
+        }
+      }else{
+        next();
+      }
+    });
   }
 };
+
+// exports.teamCreate = {
+//   name:                   'team:create',
+//   description:            'team:create',
+//   outputExample:          {},
+//   middleware:             [],
+
+//   inputs: {
+//     name:     { required: true },
+//     areaCode: { 
+//       required: true,
+//       formatter: function(p){ return parseInt(p); }
+//     },
+//   },
+
+//   run: function(api, data, next){
+//     var team = api.models.team.build(data.params);
+    
+//     api.twilio.registerTeamPhoneNumber(team, function(error){
+//       team.save().then(
+//         api.models.team.findOne({where: {name: data.params.name}})
+//       ).then(function(teamObj){
+//         data.response.team = teamObj.apiData(api);
+//         next(error);
+//       }).catch(function(errors){
+//         next(errors.errors[0].message);
+//       });
+//     });    
+//   }
+// };
 
 exports.teamView = {
   name:                   'team:view',
