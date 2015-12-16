@@ -35,8 +35,8 @@
   <body ng-controller="pageController">
 
     <header id="nav-container" class="container">
-      <div ng-if="$root.user"  ng-include="'sections/nav-logged-in.html'"></div>        
-      <div ng-if="!$root.user" ng-include="'sections/nav-logged-out.html'"></div>        
+      <div ng-if="$root.user"  ng-include="'pages/shared/nav-logged-in.html'"></div>        
+      <div ng-if="!$root.user" ng-include="'pages/shared/nav-logged-out.html'"></div>        
     </header>
 
     <div id="main" class="container">
@@ -44,7 +44,8 @@
     </div>
 
     <footer id="footer-container" class="container">
-      <div ng-include="'sections/footer.html'"></div>
+      <div ng-include="'pages/shared/footer.html'"></div>
+      <div ng-include="'pages/shared/analytics.html'"></div>
     </footer>
 
   </body>
