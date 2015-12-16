@@ -31,6 +31,7 @@ http {
 
   server {
       listen 80;
+      server_name _;
 
       location /nginx_status {
           stub_status on;
@@ -42,6 +43,19 @@ http {
       location / {
           rewrite ^(.*) https://$host$1 permanent;
       }
+  }
+
+  server {
+      listen       443;
+      server_name switchboard.chat;
+
+      ssl     on;
+      ssl_certificate      switchboard_chat.pem;
+      ssl_certificate_key  switchboard_chat.key;
+      ssl_prefer_server_ciphers On;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+      return 301 https://www.switchboard.chat$request_uri;
   }
 
   server {
@@ -59,7 +73,17 @@ http {
       access_log  /var/log/nginx/access.switchboard_chat.log  main;
       error_log   /var/log/nginx/error.switchboard_chat.log;
 
-      client_max_body_size 50M;
+      client_max_body_size 10M;
+
+      location /primus {
+          proxy_http_version 1.1;
+          proxy_buffering off;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "Upgrade";
+          proxy_set_header Host $host;
+      
+          proxy_pass http://127.0.0.1:8080;
+      }
 
       location / {
           root        /home/{{ deploy_user }}/www/switchboard.chat/current/public/;

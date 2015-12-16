@@ -90,12 +90,14 @@
 - name: start actionhero
   shell: " cd {{ current_path }} && ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}"
   sudo: yes
+  sudo_user: '{{ deploy_user }}'
   when: "not actionhero_running_check.stat.exists"
 
 - name: restart actionhero
   ignore_errors: yes
   shell: "kill -s USR2 `cat /home/{{ deploy_user }}/www/{{ application }}/current/pids/cluster_pidfile`"
   sudo: yes
+  sudo_user: '{{ deploy_user }}'
   when: "actionhero_running_check.stat.exists"
 
 - meta: flush_handlers

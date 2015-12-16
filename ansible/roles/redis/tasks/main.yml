@@ -1,5 +1,4 @@
 - set_fact: redis_max_memory_bytes={{ ansible_memtotal_mb * 0.2 * 1024 * 1024 * 1024 | round | int }}
-- set_fact: redis_bind_ip={{ ansible_default_ipv4.address  }}
 
 - file: path=/etc/redis state=directory
 
