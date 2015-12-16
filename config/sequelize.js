@@ -10,6 +10,11 @@ exports.default = {
       "username"    : process.env.MYSQL_USER,
       "password"    : process.env.MYSQL_PASS,
       "logging"     : false,
+      pool: {
+        max: 4,
+        min: 0,
+        idle: 1000
+      },
     };
   }
 };
