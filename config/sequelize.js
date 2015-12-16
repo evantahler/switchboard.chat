@@ -13,3 +13,19 @@ exports.default = {
     };
   }
 };
+
+exports.test = {
+  sequelize: function(api){
+    return {
+      "autoMigrate" : false,
+      "loadFixtures": false,
+      "dialect"     : "mysql",
+      "port"        : 3306,
+      "database"    : 'switchboard_test',
+      "host"        : 'localhost',
+      "username"    : 'root',
+      "password"    : null,
+      "logging"     : false,
+    };
+  }
+};

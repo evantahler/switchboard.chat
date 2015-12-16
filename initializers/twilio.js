@@ -41,9 +41,5 @@ module.exports = {
     };
 
     next();
-  },
-
-  start: function(api, next){
-    api.sequelize.connect(next);
   }
 };

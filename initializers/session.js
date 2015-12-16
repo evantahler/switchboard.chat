@@ -73,13 +73,5 @@ module.exports = {
     api.params.globalSafeParams.push('csrfToken');
 
     next();
-  },
-
-  start: function (api, next) {
-    next();
-  },
-  
-  stop: function (api, next) {
-    next();
   }
 };

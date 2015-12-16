@@ -5,3 +5,11 @@ exports.default = {
     };
   }
 };
+
+exports.test = {
+  billing: function(api){
+    return {
+      promoCode: 'PROMO_CODE',
+    };
+  }
+};

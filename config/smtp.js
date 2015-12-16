@@ -11,3 +11,9 @@ exports.default = {
     };
   }
 };
+
+exports.default = {
+  smtp: function(api){
+    return {};
+  }
+};
