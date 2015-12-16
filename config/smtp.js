@@ -12,7 +12,7 @@ exports.default = {
   }
 };
 
-exports.default = {
+exports.test = {
   smtp: function(api){
     return {};
   }

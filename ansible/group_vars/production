@@ -67,6 +67,6 @@ application_env:
   ##########
 
   - SMTP_HOST="smtp.sendgrid.net"
-  - SMTP_USER="app45116162@heroku.com"
-  - SMTP_PASS="qobvziwy9900"
+  - SMTP_USER="switchboard.chat"
+  - SMTP_PASS="t0u2gwHIGOBWE"
   - SMTP_SECURE="false"

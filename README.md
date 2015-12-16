@@ -18,3 +18,5 @@
 - Hosted on Heroku (evantahler@gmail.com)
 - instantssl.com
   - switchboard.chat / 2390ugwjialsGGgwg3
+- sendgrid
+  - switchboard.chat / admin@switchboard.chat / t0u2gwHIGOBWE

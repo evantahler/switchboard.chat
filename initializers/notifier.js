@@ -48,7 +48,7 @@ module.exports = {
           var emailDeltaMinutes = (new Date() - message.createdAt) / 1000 / 60;
           if(
             notification.notifyByEmail && 
-            notification.lastEmailNotificationAt < message.createdAt &&
+            !notification.lastEmailNotificationAt || notification.lastEmailNotificationAt < message.createdAt &&
             emailDeltaMinutes > notification.notificationDelayMinutesEmail
           ){
             jobs.push(function(done){
@@ -59,7 +59,7 @@ module.exports = {
           var smsDeltaMinutes = (new Date() - message.createdAt) / 1000 / 60;
           if(
             notification.notifyBySMS && 
-            notification.lastSMSNotificationAt < message.createdAt &&
+            !notification.lastSMSNotificationAt || notification.lastSMSNotificationAt < message.createdAt &&
             smsDeltaMinutes > notification.notificationDelayMinutesSMS
           ){
             jobs.push(function(done){
@@ -86,19 +86,22 @@ module.exports = {
             teamId:    team.id,
           });
 
-          notificationMessage.save().then(function(){
-            var payload = {
-              to:   notificationMessage.to,
-              from: notificationMessage.from,
-              body: notificationMessage.message,
-            };
+          var payload = {
+            to:   notificationMessage.to,
+            from: notificationMessage.from,
+            body: notificationMessage.message,
+          };
 
-            api.twilio.client.sendMessage(payload, function(error){
-              if(error){ api.log(error, 'error'); }
-              callback(error);
-            });
+          api.twilio.client.sendMessage(payload, function(error){
+            if(error){ 
+              api.log(error, 'error'); 
+              return callback(error);
+            }
+            notificationMessage.save().then(function(){
+              callback();
+            }).catch(error);
+          });
 
-          }).catch(callback);
         }).catch(callback);
       },
 
@@ -106,15 +109,21 @@ module.exports = {
         api.log('notify user #' + user.id + ' of unseen messages via Email');
         if(!user.email){ return callback(); }
 
-        notification.updateAttributes({lastEmailNotificationAt: new Date()}).then(function(){
-          var email = {
-            from:    api.config.smtp.auth.user,
-            to:      user.email,
-            subject: '[switchboard.chat] Your team, `' + team.name + '`, has unread messages',
-            text:    '[switchboard.chat] Your team, `' + team.name + '`, has unread messages.  Visit switchboard.chat to log in and read them.',
-          };
+        var email = {
+          from:    api.config.smtp.auth.user,
+          to:      user.email,
+          subject: '[switchboard.chat] Your team, `' + team.name + '`, has unread messages',
+          text:    '[switchboard.chat] Your team, `' + team.name + '`, has unread messages.  Visit switchboard.chat to log in and read them.',
+        };
 
-          api.smtp.client.sendMail(email, callback);
+        api.smtp.client.sendMail(email, function(error){
+          if(error){ 
+            api.log(error, 'error'); 
+            return callback(error); 
+          }
+          notification.updateAttributes({lastEmailNotificationAt: new Date()}).then(function(){
+            callback();
+          }).catch(callback);
         });
       }
     };
