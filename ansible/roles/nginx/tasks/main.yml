@@ -1,0 +1,35 @@
+- name: ensure the nginx dir
+  file: path=/etc/nginx state=directory owner=root
+
+- name: ensure the nginx log dir
+  file: path=/var/log/nginx state=directory owner=nobody group=nogroup
+
+- name: ensure the default site is removed
+  file: path=/etc/nginx/sites-{{ item }}/default state=absent
+  with_items:
+    - enabled
+    - available
+  notify:
+    - restart nginx
+
+- name: nginx.conf
+  template: src=production.conf.j2 dest=/etc/nginx/nginx.conf
+  notify:
+    - reload nginx
+
+- name: SSL KEYs
+  template: src=certs/switchboard_chat.key dest=/etc/nginx/switchboard_chat.key
+  notify:
+    - reload nginx
+
+- name: SSL PEMs
+  template: src=certs/switchboard_chat.pem dest=/etc/nginx/switchboard_chat.pem
+  notify:
+    - reload nginx
+
+- name: install nginx
+  apt: pkg=nginx=1.8.0-1+trusty1 state=present
+  notify:
+    - restart nginx
+
+- meta: flush_handlers

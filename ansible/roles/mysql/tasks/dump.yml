@@ -1,0 +1,5 @@
+- name: ensure directories
+  file: "path=/home/{{ deploy_user }}/dumps state=directory owner={{ deploy_user }}"
+
+- name: make a mySQL dump of whatever we have now
+  mysql_db: state=dump name={{ database }} target=/home/{{ deploy_user }}/dumps/{{ database }}-{{ ansible_date_time.date }}.sql

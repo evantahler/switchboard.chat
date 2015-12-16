@@ -1,0 +1,11 @@
+- name: install iptables
+  apt: 'name=iptables-persistent state=present'
+
+- name: template iptables rules
+  template:
+    src: rules.v4.j2
+    dest: /etc/iptables/rules.v4
+  notify: restart iptables
+
+- name: flush handlers
+  meta: flush_handlers

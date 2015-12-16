@@ -1,0 +1,15 @@
+- set_fact: redis_max_memory_bytes={{ ansible_memtotal_mb * 0.2 * 1024 * 1024 * 1024 | round | int }}
+- set_fact: redis_bind_ip={{ ansible_default_ipv4.address  }}
+
+- file: path=/etc/redis state=directory
+
+- name: update redis config
+  template: "src=redis.conf.j2 dest=/etc/redis/redis.conf"
+  notify:
+    - restart redis server
+
+- name: install redis-server
+  apt: 'name=redis-server=3:3.0* state=present'
+
+- name: flush handlers
+  meta: flush_handlers

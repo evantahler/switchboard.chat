@@ -1,0 +1,72 @@
+ansible_ssh_user: root
+deploy_user: deploy
+cluster_env: production
+database: switchboard_production
+git_branch: master
+
+logrotate_paths:
+  - { name: application,   path: /home/deploy/www/*/shared/log/*.log }
+  - { name: mysql,         path: /var/log/mysql/*.log }
+  # - { name: nginx,       path: /var/log/nginx/*.log } #comes with package; using custom script
+  # - { name: redis,       path: /var/log/redis/*.log } #comes with package
+logrotate_options:
+  - daily
+  - rotate 5
+  - size 100M
+  - missingok
+  - compress
+  - delaycompress
+  - copytruncate
+
+ssh_deploy_users:
+ - evan
+
+actionhero_workers: 3
+
+application_env:
+
+  #############
+  ## GENERAL ##
+  #############
+
+  - LANG=en_US.UTF-8
+  - NODE_ENV=production
+
+  - PUBLIC_URL="https://www.switchboard.chat"
+  - PROMO_CODE="24ut90awpjh4ph9erh"
+
+  ###########
+  ## REDIS ##
+  ###########
+
+  - REDIS_HOST="127.0.0.1"
+  - REDIS_PORT=6379
+  - REDIS_DATABASE=0
+  - REDIS_USER="root"
+  - REDIS_PASS=""
+
+  ###########
+  ## MYSQL ##
+  ###########
+
+  - MYSQL_HOST="localhost"
+  - MYSQL_PORT=3306
+  - MYSQL_DATABASE="{{ database }}"
+  - MYSQL_USER="root"
+  - MYSQL_PASS=""
+
+  ############
+  ## TWILIO ##
+  ############
+
+  - TWILIO_SSID="AC3e8d09227392473b8cc1108812dbd5ee"
+  - TWILIO_TOKEN="d5765f7a3b2cb7fd175c07f8adf37945"
+
+  ##########
+  ## SMTP ##
+  ##########
+
+  - SMTP_HOST="smtp.sendgrid.net"
+  - SMTP_USER="app45116162@heroku.com"
+  - SMTP_PASS="qobvziwy9900"
+  - SMTP_SECURE="false"

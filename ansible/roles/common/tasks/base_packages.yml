@@ -1,0 +1,22 @@
+---
+
+- name: install base packages
+  apt: 'name={{ item }} state=present'
+  with_items:
+     - build-essential
+     - htop
+     - unzip
+     - bc
+     - screen
+     - landscape-common
+     - sysstat
+     - git-core
+     - iftop
+     - iptables
+     - ntp
+     - python-pip
+     - python-dev
+     - logrotate
+     - libmysqlclient-dev
+
+- apt: name=apparmor state=absent

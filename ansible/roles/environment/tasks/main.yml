@@ -1,0 +1,15 @@
+- stat: path=/home/{{ deploy_user }}/.ssh/environment
+  register: deploy_ssh_environment_file
+- file: path=/home/{{ deploy_user }}/.ssh/environment state=touch owner={{ deploy_user }}
+  when: not deploy_ssh_environment_file.stat.exists
+
+- stat: path=/home/{{ deploy_user }}/.profile
+  register: deploy_profile_stat
+- file: path=/home/{{ deploy_user }}/.profile state=touch owner={{ deploy_user }}
+  when: not deploy_profile_stat.stat.exists
+
+- name: Configure Environment
+  lineinfile: 'dest={{ item.0 }} line="{{ item.1 }}" state=present'
+  with_nested:
+    - [ '/etc/environment', '/home/{{ deploy_user }}/.ssh/environment', '/home/{{ deploy_user }}/.profile' ]
+    - application_env

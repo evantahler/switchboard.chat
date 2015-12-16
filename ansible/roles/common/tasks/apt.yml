@@ -1,0 +1,38 @@
+---
+
+- stat: path=/root/apt_upgraded
+  register: ansible_upgraded_file
+
+- name: Add webupd8 repo apt-key
+  apt_key: keyserver=keyserver.ubuntu.com id=EEA14886
+  when: not ansible_upgraded_file.stat.exists
+
+- name: Add Percona apt signing key
+  apt_key: keyserver=keys.gnupg.net id=1C4CBDCDCD2EFD2A state=present
+  when: not ansible_upgraded_file.stat.exists
+
+- name: apt sources
+  apt_repository: "update_cache=true state=present  repo='{{ item }}'"
+  when: not ansible_upgraded_file.stat.exists
+  with_items:
+    - "deb http://repo.percona.com/apt trusty main"
+    - "deb-src http://repo.percona.com/apt trusty main"
+    - "ppa:webupd8team/java"
+    - "ppa:brightbox/ruby-ng"
+    - "ppa:chris-lea/redis-server"
+    - "ppa:nginx/stable"
+    - "ppa:ansible/ansible"
+
+- shell: "curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -"
+  when: not ansible_upgraded_file.stat.exists
+
+- apt: update_cache=yes cache_valid_time={{ 60 * 60 * 24 }}
+
+- file: state=absent path=/root/apt_upgraded
+  when: apt_upgrade is defined and apt_upgrade == true
+
+- apt: upgrade=dist
+  when: not ansible_upgraded_file.stat.exists
+  notify: touch apt upgrade file
+
+- meta: flush_handlers

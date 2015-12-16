@@ -1,0 +1,5 @@
+{{ item.path }} {
+  {% for option in logrotate_options -%}
+  {{ option }}
+  {% endfor %}
+}

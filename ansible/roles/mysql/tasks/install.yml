@@ -1,0 +1,11 @@
+- name: install mysql packages (lazy w/ defaults intact)
+  apt: 'name={{ item }} state=present'
+  with_items:
+    - percona-server-server-5.6
+    - percona-xtrabackup
+    - percona-toolkit
+
+- name: create the database
+  mysql_db: name={{ database }} state=present
+
+- mysql_db: name={{ database }} state=present
