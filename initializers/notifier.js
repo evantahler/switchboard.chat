@@ -48,7 +48,7 @@ module.exports = {
           var emailDeltaMinutes = (new Date() - message.createdAt) / 1000 / 60;
           if(
             notification.notifyByEmail && 
-            !notification.lastEmailNotificationAt || notification.lastEmailNotificationAt < message.createdAt &&
+            (!notification.lastEmailNotificationAt || notification.lastEmailNotificationAt < message.createdAt) &&
             emailDeltaMinutes > notification.notificationDelayMinutesEmail
           ){
             jobs.push(function(done){
@@ -59,7 +59,7 @@ module.exports = {
           var smsDeltaMinutes = (new Date() - message.createdAt) / 1000 / 60;
           if(
             notification.notifyBySMS && 
-            !notification.lastSMSNotificationAt || notification.lastSMSNotificationAt < message.createdAt &&
+            (!notification.lastSMSNotificationAt || notification.lastSMSNotificationAt < message.createdAt) &&
             smsDeltaMinutes > notification.notificationDelayMinutesSMS
           ){
             jobs.push(function(done){
@@ -112,10 +112,10 @@ module.exports = {
         var email = {
           from:    api.config.smtp.auth.user,
           to:      user.email,
-          subject: '[switchboard.chat] Your team, `' + team.name + '`, has unread messages',
-          text:    '[switchboard.chat] Your team, `' + team.name + '`, has unread messages.  Visit switchboard.chat to log in and read them.',
+          subject: '[switchboard.chat] Your team, "' + team.name + '", has unread messages',
+          html:    '[switchboard.chat] Your team, <strong>' + team.name + '</strong>, has unread messages.  Visit <a href="https://www.switchboard.chat">switchboard.chat</a> to log in and read them.',
         };
-
+        
         api.smtp.client.sendMail(email, function(error){
           if(error){ 
             api.log(error, 'error'); 

@@ -66,7 +66,4 @@ application_env:
   ## SMTP ##
   ##########
 
-  - SMTP_HOST="smtp.sendgrid.net"
-  - SMTP_USER="switchboard.chat"
-  - SMTP_PASS="t0u2gwHIGOBWE"
-  - SMTP_SECURE="false"
+  - SENDGRID_KEY="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"

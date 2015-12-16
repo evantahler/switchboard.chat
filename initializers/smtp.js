@@ -1,9 +1,12 @@
 var nodemailer    = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
+var sendGridTransport = require('nodemailer-sendgrid-transport');
 
 module.exports = {
   initialize: function(api, next){
-    var transporter = nodemailer.createTransport(smtpTransport(api.config.smtp));
+    var transporter = nodemailer.createTransport(sendGridTransport({
+      auth: { api_key: process.env.SENDGRID_KEY }
+    }));
+
     api.smtp = {
       client: transporter
     };
