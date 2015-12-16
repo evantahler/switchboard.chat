@@ -1,4 +1,5 @@
 # SMS and stuff
+[![Build Status](https://travis-ci.com/evantahler/switchboard.chat.svg?token=8qsWyPhygpegd73zpnCk&branch=master)](https://travis-ci.com/evantahler/switchboard.chat)
 
 ## Local development
 

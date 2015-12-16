@@ -22,7 +22,6 @@ script: npm run test
 services:
   - redis-server
   - mysql
-  - elasticsearch
 
 before_script:
   - mysql -e 'create database IF NOT EXISTS switchboard_test'
