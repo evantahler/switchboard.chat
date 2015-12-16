@@ -4,7 +4,7 @@ app.controller('person:create', ['$scope', '$rootScope', '$location', function($
     $scope.formData.teamId = $rootScope.user.teamId;
     $rootScope.actionHelper($scope, $scope.formData, '/api/person', 'POST', function(data){
       $('#addPersonModal').modal('hide');
-
+      $scope.formData = {};
       $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
         if(data.people){ $rootScope.people = data.people;  }
       });

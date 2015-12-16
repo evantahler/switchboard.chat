@@ -11,9 +11,9 @@ exports.default = {
       "password"    : process.env.MYSQL_PASS,
       "logging"     : false,
       pool: {
-        max: 4,
-        min: 0,
-        idle: 1000
+        maxConnections: 2,
+        minConnections: 1,
+        maxIdleTime: 1000
       },
     };
   }
