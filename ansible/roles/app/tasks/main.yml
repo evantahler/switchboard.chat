@@ -88,7 +88,11 @@
   stat: "path=/home/{{ deploy_user }}/www/{{ application }}/current/pids/cluster_pidfile"
 
 - name: start actionhero
-  shell: " cd {{ current_path }} && ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}"
+  shell: > 
+    rm -f rm /home/deploy/www/switchboard.chat/shared/sockets/actionhero.sock && 
+    . /home/{{ deploy_user }}/.profile && 
+    cd {{ current_path }} && 
+    ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}
   sudo: yes
   sudo_user: '{{ deploy_user }}'
   when: "not actionhero_running_check.stat.exists"

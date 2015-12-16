@@ -3,6 +3,7 @@ app.controller('session:create', ['$scope', '$rootScope', '$location', function(
 
   if($rootScope.user){
     $location.path('/messages');
+    location.reload(); // <- hack to force the CSRF Token to hydrate
   }
 
   $scope.processForm = function(){

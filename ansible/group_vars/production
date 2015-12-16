@@ -21,7 +21,7 @@ logrotate_options:
 ssh_deploy_users:
  - evan
 
-actionhero_workers: 3
+actionhero_workers: 2
 
 application_env:
 
