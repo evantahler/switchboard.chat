@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING,
       allowNull: true,
     },
+    'promoCode': {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     indexes: [
       {

@@ -21,15 +21,16 @@ exports.teamCreate = {
     },
 
     // billing stuff
-    // TODO
+    promoCode:   { required: false },
   },
 
   run: function(api, data, next){
     var jobs = [];
 
     var team = api.models.team.build({
-      name:     data.params.name,
-      areaCode: data.params.areaCode,
+      name:      data.params.name,
+      areaCode:  data.params.areaCode,
+      promoCode: data.params.promoCode,
     });
 
     var user = api.models.user.build({
@@ -39,8 +40,7 @@ exports.teamCreate = {
     });
 
     jobs.push(function(done){
-      // stub for billing... do this first
-      done();
+      api.billing.register(team, done);
     });
 
     jobs.push(function(done){
@@ -94,7 +94,7 @@ exports.teamCreate = {
         try{ user.destroy(); }catch(e){ api.log(e, 'error'); }
         try{ team.destroy(); }catch(e){ api.log(e, 'error'); }
         
-        if(errors.errors){
+        if(error.errors){
           next(errors.errors[0].message);
         }else{
           next(error);
