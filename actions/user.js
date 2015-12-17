@@ -36,25 +36,18 @@ exports.userCreate = {
           });
 
           notification.save().then(function(){
+            var subject = '[switchboard.chat] Welcome to switchboard.chat';
 
             var html = '';
-            html += 'You have been invited to the team "' + team.name + '".<br />';
-            html += 'Log in information:';
+            html += '<p>You have been invited to the team "' + team.name + '".</p>';
+            html += '<p>Log in information:';
             html += '<ul>';
             html += '<li>email: ' + data.params.email + '</li>';
             html += '<li>password: ' + data.params.password + '</li>';
-            html += '</ul>';
-            html += 'Visit <a href="https://switchboard.chat">switchboard.chat</a> to log in!';
+            html += '</ul></p>';
+            html += '<p>Visit <a href="https://switchboard.chat">switchboard.chat</a> to log in!</p>';
 
-            var email = {
-              from:    api.config.smtp.auth.user,
-              to:      user.email,
-              subject: '[switchboard.chat] Welcome to switchboard.chat',
-              html:    html
-            };
-            
-            api.smtp.client.sendMail(email, next);
-
+            api.smtp.send(user.email, subject, html, next);
           }).catch(function(errors){
             next(errors.errors[0].message);
           });        
@@ -170,14 +163,10 @@ exports.userForgotPassword = {
         var token = buf.toString('hex');
         user.passwordResetToken = token;
         user.save().then(function(){
-          var email = {
-            from:    api.config.smtp.auth.user,
-            to:      user.email,
-            subject: '[switchboard.chat] Your password reset link',
-            text:    '[switchboard.chat] You have requested a link to update your password.  Click here: ' + process.env.PUBLIC_URL + '/#/reset-password?userId=' + user.id + '&token=' + token,
-          };
-
-          api.smtp.client.sendMail(email, next);
+          var subject = '[switchboard.chat] Your password reset link';
+          var html    = '<p>You have requested a link to update your password.</p>';
+          html += '<p>Click here: ' + process.env.PUBLIC_URL + '/#/reset-password?userId=' + user.id + '&token=' + token + '</p>';
+          api.smtp.send(user.email, subject, html, next);
         }).catch(next);
       });
     }).catch(next);
