@@ -36,6 +36,8 @@ module.exports = {
       },
 
       updateIncommingUrl: function(team, callback){
+        var url = api.config.twilio.messageUrl;
+        url.replace(/https/, 'http'); //hack for twilio and bad HTTPS certs
         api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.messageUrl}, callback);
       },
     };

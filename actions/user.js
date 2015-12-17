@@ -24,22 +24,44 @@ exports.userCreate = {
     user.updatePassword(data.params.password, function(error){
       if(error){ return next(error); }
 
-      user.save().then(
-        api.models.user.findOne({where: {email: data.params.email}})
-      ).then(function(userObj){
-        data.response.user = userObj.apiData(api);
-        var notification = api.models.notification.build({
-          userId: userObj.id,
-        });
+      api.models.team.findOne({where: {id: data.params.teamId}}).then(function(team){
+        if(!team){ return next(new Error('team not found')); }
 
-        notification.save().then(function(){
-          next();
+        user.save().then(
+          api.models.user.findOne({where: {email: data.params.email}})
+        ).then(function(userObj){
+          data.response.user = userObj.apiData(api);
+          var notification = api.models.notification.build({
+            userId: userObj.id,
+          });
+
+          notification.save().then(function(){
+
+            var html = '';
+            html += 'You have been invited to the team "' + team.name + '".<br />';
+            html += 'Log in information:';
+            html += '<ul>';
+            html += '<li>email: ' + data.params.email + '</li>';
+            html += '<li>password: ' + data.params.password + '</li>';
+            html += '</ul>';
+            html += 'Visit <a href="https://switchboard.chat">switchboard.chat</a> to log in!';
+
+            var email = {
+              from:    api.config.smtp.auth.user,
+              to:      user.email,
+              subject: '[switchboard.chat] Welcome to switchboard.chat',
+              html:    html
+            };
+            
+            api.smtp.client.sendMail(email, next);
+
+          }).catch(function(errors){
+            next(errors.errors[0].message);
+          });        
         }).catch(function(errors){
           next(errors.errors[0].message);
-        });        
-      }).catch(function(errors){
-        next(errors.errors[0].message);
-      });
+        });
+      }).catch(next);
     });
   }
 };

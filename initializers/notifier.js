@@ -113,7 +113,7 @@ module.exports = {
           from:    api.config.smtp.auth.user,
           to:      user.email,
           subject: '[switchboard.chat] Your team, "' + team.name + '", has unread messages',
-          html:    '[switchboard.chat] Your team, <strong>' + team.name + '</strong>, has unread messages.  Visit <a href="https://www.switchboard.chat">switchboard.chat</a> to log in and read them.',
+          html:    '[switchboard.chat] Your team, <strong>' + team.name + '</strong>, has unread messages.  Visit <a href="https://switchboard.chat">switchboard.chat</a> to log in and read them.',
         };
         
         api.smtp.client.sendMail(email, function(error){
