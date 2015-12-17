@@ -41,13 +41,13 @@ http {
       }
 
       location / {
-          rewrite ^(.*) https://$host$1 permanent;
+          rewrite ^(.*) https://switchboard.chat$1 permanent;
       }
   }
 
   server {
       listen       443;
-      server_name switchboard.chat;
+      server_name www.switchboard.chat;
 
       ssl     on;
       ssl_certificate      switchboard_chat.pem;
@@ -55,7 +55,7 @@ http {
       ssl_prefer_server_ciphers On;
       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 
-      return 301 https://www.switchboard.chat$request_uri;
+      return 301 https://switchboard.chat$request_uri;
   }
 
   server {
