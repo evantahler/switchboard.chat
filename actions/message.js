@@ -33,7 +33,11 @@ exports.messageIn = {
 
       message.save().then(function(){
         api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) );
-        data.response.ok = true;
+
+        // Twilio wants XML
+        connection.rawConnection.responseHeaders.push(['Content-Type', 'application/xml']);
+        data.response = '<Response></Response>';
+
         next();
       }).catch(function(errors){
         next(errors.errors[0].message);
