@@ -35,7 +35,7 @@ exports.messageIn = {
         api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) );
 
         // Twilio wants XML
-        connection.rawConnection.responseHeaders.push(['Content-Type', 'application/xml']);
+        data.connection.rawConnection.responseHeaders.push(['Content-Type', 'application/xml']);
         data.response = '<Response></Response>';
 
         next();
