@@ -33,6 +33,7 @@ exports.messageIn = {
 
       message.save().then(function(){
         api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) );
+        data.response.ok = true;
         next();
       }).catch(function(errors){
         next(errors.errors[0].message);
