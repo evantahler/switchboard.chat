@@ -55,7 +55,10 @@ module.exports = {
               if(error){ return callback(error); }
               else if(!sessionData){ 
                 return callback(new Error('Please log in to continue')); 
-              }else if(!data.params.csrfToken || data.params.csrfToken != sessionData.csrfToken){ 
+              }else if(data.connection.session && data.connection.session.csrfToken === sessionData.csrfToken){
+                data.session = sessionData;
+                return callback(); // WS already logged in
+              }else if(!data.params.csrfToken || data.params.csrfToken !== sessionData.csrfToken){ 
                 return callback(new Error('CSRF error')); 
               }else{ 
                 data.session = sessionData;

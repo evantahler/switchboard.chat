@@ -31,6 +31,7 @@ app.controller('messages:list', ['$scope', '$rootScope', '$location', function($
   
   $scope.client.on('say', function(payload){
     $scope.messages.unshift(payload.message);
+    $scope.client.action('message:read', {messageId: payload.message.id});
     if(payload.message.direction === 'in'){
       $rootScope.audio[1].play();
     }

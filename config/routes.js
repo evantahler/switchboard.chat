@@ -29,6 +29,7 @@ exports.default = {
         { path: '/team',                 action: 'team:edit' },
         { path: '/person',               action: 'person:edit' },
         { path: '/notification',         action: 'notification:edit' },
+        { path: '/message/read',         action: 'message:read' },
       ],
 
       delete: [

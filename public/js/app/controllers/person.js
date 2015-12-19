@@ -116,7 +116,7 @@ app.controller('person:thread', ['$scope', '$rootScope', '$location', '$routePar
   $scope.client.on('say', function(payload){
     if(payload.message.direction === 'in'){ $rootScope.audio[1].play(); }
     if(payload.message.direction === 'out'){ $rootScope.audio[2].play(); }
-
+    $scope.client.action('message:read', {messageId: payload.message.id});
     if(
       $scope.person && (
         String(payload.message.to) === String($scope.person.phoneNumber) || 

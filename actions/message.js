@@ -171,3 +171,25 @@ exports.messageList = {
     }
   }
 };
+
+exports.messageRead = {
+  name:                   'message:read',
+  description:            'message:read',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {
+    messageId:       { 
+      required: true,
+      formatter: function(p){ return parseInt(p); }
+    }
+  },
+
+  run: function(api, data, next){
+    api.models.message.findOne({where: {teamId: data.session.teamId, id: data.params.messageId}}).then(function(message){
+      message.updateAttributes({read: true}).then(function(){
+        next();
+      }).catch(next);
+    }).catch(next);
+  },
+};
