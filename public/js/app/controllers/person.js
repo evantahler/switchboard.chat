@@ -38,6 +38,19 @@ app.controller('person:list', ['$scope', '$rootScope', '$location', '$routeParam
       }
     }      
   });
+
+  $scope.deletePerson = function(personId){
+    if(confirm('Are you sure?')){
+      $rootScope.actionHelper($scope, {
+        personId: personId,
+        teamId: $rootScope.team.id,
+      }, '/api/person', 'DELETE', function(data){
+        location.reload();
+      }, function(e){
+        alert(e);
+      });
+    }
+  };
 }]);
 
 app.controller('person:thread', ['$scope', '$rootScope', '$location', '$routeParams', function($scope, $rootScope, $location, $routeParams){
