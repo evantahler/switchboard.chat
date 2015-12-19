@@ -16,6 +16,14 @@ app.controller('person:list', ['$scope', '$rootScope', '$location', '$routeParam
   $scope.selectedPersonId = parseInt($routeParams.personId);
 
   $scope.loadThread = function(personId){
+    personId = parseInt(personId);
+    for(var i in $rootScope.people){
+      if(personId === $rootScope.people[i].id){
+        person.alert = false;
+        break;
+      }
+    }
+
     $location.path('/people/' + personId);
   };
 
