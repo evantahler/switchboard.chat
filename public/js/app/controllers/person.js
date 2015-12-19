@@ -59,6 +59,7 @@ app.controller('person:thread', ['$scope', '$rootScope', '$location', function($
         personId: $scope.person.id,
       }, '/api/message/list', 'GET', function(data){
         $scope.messages = data.messages;
+        $scope.total    = data.total;
         $scope.paginationData.page  = String((data.offset / data.limit) + 1);
         $scope.paginationData.limit = String(data.limit);
         $scope.paginationData.possiblePages = [];

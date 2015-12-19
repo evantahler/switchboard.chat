@@ -12,6 +12,7 @@ app.controller('messages:list', ['$scope', '$rootScope', '$location', function($
   $scope.loadMessages = function(){
     $rootScope.actionHelper($scope, {}, '/api/message/list', 'GET', function(data){
       $scope.messages = data.messages;
+      $scope.total    = data.total;
     }, function(error){ alert(error); });
   };
 
