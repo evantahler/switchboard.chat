@@ -44,16 +44,43 @@ app.controller('person:thread', ['$scope', '$rootScope', '$location', function($
   $scope.person = null;
   $scope.messages = [];
   $scope.formData = {};
+  $scope.showPagination = true;
+  $scope.paginationData = {
+    limit: '50', page: '1', possiblePages: [],
+  };
+
+  var loadMessages = function(){
+    if($scope.person){
+      var offset = ($scope.paginationData.page - 1) * $scope.paginationData.limit;
+
+      $rootScope.actionHelper($scope, {
+        limit: $scope.paginationData.limit,
+        offset: offset,
+        personId: $scope.person.id,
+      }, '/api/message/list', 'GET', function(data){
+        $scope.messages = data.messages;
+        $scope.paginationData.page  = String((data.offset / data.limit) + 1);
+        $scope.paginationData.limit = String(data.limit);
+        $scope.paginationData.possiblePages = [];
+        
+        var counter = 0;
+        while((counter * $scope.paginationData.limit) < data.total){
+          $scope.paginationData.possiblePages.push((counter + 1));
+          counter++; 
+        }
+      });
+    }
+  };
+
+  $scope.$watch('paginationData.limit', loadMessages);
+  $scope.$watch('paginationData.page' , loadMessages);
 
   $rootScope.$on('loadThread', function(event, personId){
     $scope.messages = [];
 
     $rootScope.actionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
       $scope.person = data.person;
-    });
-
-    $rootScope.actionHelper($scope, {personId: personId}, '/api/message/list', 'GET', function(data){
-      $scope.messages = data.messages;
+      loadMessages();
     });
   });
 

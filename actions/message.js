@@ -131,7 +131,12 @@ exports.messageList = {
           d.push(r.apiData(api));
         });
         data.response.messages = d;
-        next();
+        data.response.offset = data.params.offset;
+        data.response.limit = data.params.limit;
+        api.models.message.count({where: q.where}).then(function(total){
+          data.response.total = total;
+          next();
+        }).catch(next);
       }).catch(next);
     };
 
