@@ -1,15 +1,17 @@
 exports.default = {
   sequelize: function(api){
     return {
-      "autoMigrate" : false,
-      "loadFixtures": false,
-      "dialect"     : "mysql",
-      "port"        : parseInt( process.env.MYSQL_PORT ),
-      "database"    : process.env.MYSQL_DATABASE,
-      "host"        : process.env.MYSQL_HOST,
-      "username"    : process.env.MYSQL_USER,
-      "password"    : process.env.MYSQL_PASS,
-      "logging"     : false,
+      "autoMigrate"   : false,
+      "loadFixtures"  : false,
+      "dialect"       : "mysql",
+      "dialectOptions": { "charset": "utf8mb4" },
+      "define"        : { "charset": "utf8mb4" },
+      "port"          : parseInt( process.env.MYSQL_PORT ),
+      "database"      : process.env.MYSQL_DATABASE,
+      "host"          : process.env.MYSQL_HOST,
+      "username"      : process.env.MYSQL_USER,
+      "password"      : process.env.MYSQL_PASS,
+      "logging"       : false,
     };
   }
 };
