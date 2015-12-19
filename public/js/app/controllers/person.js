@@ -19,7 +19,7 @@ app.controller('person:list', ['$scope', '$rootScope', '$location', '$routeParam
     personId = parseInt(personId);
     for(var i in $rootScope.people){
       if(personId === $rootScope.people[i].id){
-        person.alert = false;
+        $rootScope.people[i].alert = false;
         break;
       }
     }
