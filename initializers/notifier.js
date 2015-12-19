@@ -72,7 +72,7 @@ module.exports = {
           var notificationMessage = api.models.message.build({
             from:      team.phoneNumber,
             to:        user.phoneNumber,
-            message:   '[switchboard.chat] Your team, "' + team.name + '", has ' + messages.length + ' unread messages',
+            message:   '[switchboard.chat] Your team, "' + team.name + '", has ' + messages.length + ' unread message(s)',
             direction: 'out',
             read:      false,
             teamId:    team.id,
