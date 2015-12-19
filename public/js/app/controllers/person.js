@@ -8,23 +8,15 @@ app.controller('person:create', ['$scope', '$rootScope', '$location', function($
       $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
         if(data.people){ $rootScope.people = data.people;  }
       });
-
     });
   };
 }]);
 
-app.controller('person:list', ['$scope', '$rootScope', function($scope, $rootScope){
-  $scope.selectedPersonId = null;
+app.controller('person:list', ['$scope', '$rootScope', '$location', '$routeParams', function($scope, $rootScope, $location, $routeParams){
+  $scope.selectedPersonId = parseInt($routeParams.personId);
+
   $scope.loadThread = function(personId){
-    $scope.selectedPersonId = personId;
-    for(var i in $rootScope.people){
-      var person = $rootScope.people[i];
-      if(person.id === personId){
-        person.alert = false;
-        break;
-      }
-    }
-    $rootScope.$broadcast('loadThread', personId);
+    $location.path('/people/' + personId);
   };
 
   $rootScope.$on('blinkPerson', function(event, payload){
@@ -40,7 +32,7 @@ app.controller('person:list', ['$scope', '$rootScope', function($scope, $rootSco
   });
 }]);
 
-app.controller('person:thread', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+app.controller('person:thread', ['$scope', '$rootScope', '$location', '$routeParams', function($scope, $rootScope, $location, $routeParams){
   $scope.person = null;
   $scope.messages = [];
   $scope.formData = {};
@@ -76,13 +68,9 @@ app.controller('person:thread', ['$scope', '$rootScope', '$location', function($
   $scope.$watch('paginationData.limit', loadMessages);
   $scope.$watch('paginationData.page' , loadMessages);
 
-  $rootScope.$on('loadThread', function(event, personId){
-    $scope.messages = [];
-
-    $rootScope.actionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
-      $scope.person = data.person;
-      loadMessages();
-    });
+  $rootScope.actionHelper($scope, {personId: $routeParams.personId}, '/api/person', 'GET', function(data){
+    $scope.person = data.person;
+    loadMessages();
   });
 
   $scope.processForm = function(){
