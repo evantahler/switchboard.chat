@@ -4,74 +4,66 @@ module.exports = {
   initialize: function(api, next){
 
     api.notifier = {
-      workAll: function(callback){
-        // TODO: batch size
-        api.models.team.findAll().then(function(teams){
-          var jobs = [];
-          teams.forEach(function(team){
-            jobs.push(function(done){
-              api.notifier.workTeam(team, done);
-            });
-          });
+      notifyUser: function(user, team, callback){
+        var jobs = [];
+        var messages;
+        var notification;
 
-          async.parallel(jobs, callback);
-        }).catch(callback);
-      },
+        jobs.push(function(done){
+          api.models.message.findAll({
+            where: {teamId: team.id, read: false, direction: 'in'},
+            order: 'createdAt asc',
+          }).then(function(_messages){
+            messages = _messages;
+            done();
+          }).catch(done);
+        });
 
-      workTeam: function(team, callback){
-        api.models.message.findAll({
-          where: {teamId: team.id, read: false},
-          order: 'createdAt asc',
-          limit: 1,
-        }).then(function(messages){
-          api.log('checking team #' + team.id + ' for unseen messages');
-          if(messages.length === 0){ return callback(); }
+        jobs.push(function(done){
+          api.models.notification.findOne({
+            where: {userId: user.id}
+          }).then(function(_notification){
+            notification = _notification;
+            done();
+          }).catch(done);
+        });
 
-          var message = messages[0];
-          api.models.user.findAll({where: {teamId: team.id}}).then(function(users){
-            var jobs = [];
-            users.forEach(function(user){
-              jobs.push(function(done){
-                api.notifier.workUser(user, team, message, done);
-              });
-            });
+        jobs.push(function(done){
+          if(messages.length === 0){ return done(); }
 
-            async.parallel(jobs, callback);
-          }).catch(callback);
-        }).catch(callback);
-      },
-
-      workUser: function(user, team, message, callback){
-        api.models.notification.findOne({where: {userId: user.id}}).then(function(notification){
-          var jobs = [];
-
-          var emailDeltaMinutes = (new Date() - message.createdAt) / 1000 / 60;
+          var emailDeltaMinutes = (new Date() - messages[0].createdAt) / 1000 / 60;
+          console.log((notification.lastEmailNotificationAt))
+          console.log((messages[0].createdAt))
           if(
             notification.notifyByEmail && 
-            (!notification.lastEmailNotificationAt || notification.lastEmailNotificationAt < message.createdAt) &&
+            (!notification.lastEmailNotificationAt || notification.lastEmailNotificationAt < messages[0].createdAt) &&
             emailDeltaMinutes > notification.notificationDelayMinutesEmail
           ){
-            jobs.push(function(done){
-              api.notifier.notifyEmail(user, notification, team, message, done);
-            });
+            api.notifier.notifyUserViaEmail(user, notification, team, messages, done);
+          }else{
+            done();
           }
+        });
 
-          var smsDeltaMinutes = (new Date() - message.createdAt) / 1000 / 60;
+        jobs.push(function(done){
+          if(messages.length === 0){ return done(); }
+
+          var smsDeltaMinutes = (new Date() - messages[0].createdAt) / 1000 / 60;
           if(
             notification.notifyBySMS && 
-            (!notification.lastSMSNotificationAt || notification.lastSMSNotificationAt < message.createdAt) &&
+            (!notification.lastSMSNotificationAt || notification.lastSMSNotificationAt < messages[0].createdAt) &&
             smsDeltaMinutes > notification.notificationDelayMinutesSMS
           ){
-            jobs.push(function(done){
-              api.notifier.notifySMS(user, notification, team, message, done);
-            });
+            api.notifier.notifyUserViaSMS(user, notification, team, messages, done);
+          }else{
+            done();
           }
+        });
 
-          async.series(jobs, callback);
-        }).catch(callback);
+        async.series(jobs, callback);
       },
 
-      notifySMS: function(user, notification, team, message, callback){
+      notifyUserViaSMS: function(user, notification, team, messages, callback){
         api.log('notify user #' + user.id + ' of unseen messages via SMS');
         if(!user.phoneNumber){ return callback(); }
 
@@ -80,7 +72,7 @@ module.exports = {
           var notificationMessage = api.models.message.build({
             from:      team.phoneNumber,
             to:        user.phoneNumber,
-            message:   '[switchboard.chat] Your team, `' + team.name + '`, has unread messages',
+            message:   '[switchboard.chat] Your team, "' + team.name + '", has ' + messages.length + ' unread messages',
             direction: 'out',
             read:      false,
             teamId:    team.id,
@@ -105,21 +97,27 @@ module.exports = {
         }).catch(callback);
       },
 
-      notifyEmail: function(user, notification, team, message, callback){
+      notifyUserViaEmail: function(user, notification, team, messages, callback){
         api.log('notify user #' + user.id + ' of unseen messages via Email');
         if(!user.email){ return callback(); }
 
         var subject = 'Your team, "' + team.name + '", has unread messages';
         var emailData = {
           paragraphs:[
-            'Your team, <strong>' + team.name + '</strong>, has unread messages.',
+            'Your team, "' + team.name + '", has ' + messages.length + ' unread messages:',
             'Visit switchboard.chat to log in and read them.',
+            '----------------------------------',
           ],
           cta: 'Log in Now',
           ctaLink: 'https://switchboard.chat/#/login',
           signoff: 'Thanks, the switchboard.chat team.',
           greeting: 'Hi, ' + user.firstName,
         };
+
+        messages.forEach(function(message){
+          var stanza = '[ ' + message.from + ' ] ' + message.message;
+          emailData.paragraphs.push(stanza);
+        });
 
         api.smtp.send(user.email, subject, emailData, function(error){
           if(error){ 
