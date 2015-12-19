@@ -1,7 +1,7 @@
 module.exports = function(sequelize, DataTypes){
   return sequelize.define("team", {
     'name': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'areaCode': {
@@ -9,15 +9,15 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
     },
     'phoneNumber': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: true,
     },
     'sid': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: true,
     },
     'promoCode': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: true,
     },
   }, {

@@ -5,15 +5,15 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
     },
     'firstName': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'lastName': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'phoneNumber': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     }
   }, {

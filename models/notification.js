@@ -1,7 +1,7 @@
 module.exports = function(sequelize, DataTypes){
   return sequelize.define("notification", {
     'userId': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'notifyByEmail': {

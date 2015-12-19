@@ -1,11 +1,11 @@
 module.exports = function(sequelize, DataTypes){
   return sequelize.define("message", {
     'from': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'to': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'message': {
@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false,
     },
     'direction': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'read': {

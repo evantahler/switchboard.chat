@@ -4,12 +4,12 @@ var bcryptComplexity = 10;
 module.exports = function(sequelize, DataTypes){
   return sequelize.define("user", {
     'email': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
       validate: { isEmail: true }, 
     },
     'phoneNumber': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: true,
     },
     'teamId': {
@@ -29,11 +29,11 @@ module.exports = function(sequelize, DataTypes){
       allowNull: true,
     },
     'firstName': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'lastName': {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(191),
       allowNull: false,
     },
     'lastLoginAt': {
