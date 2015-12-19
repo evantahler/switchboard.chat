@@ -109,10 +109,19 @@ module.exports = {
         api.log('notify user #' + user.id + ' of unseen messages via Email');
         if(!user.email){ return callback(); }
 
-        var subject = '[switchboard.chat] Your team, "' + team.name + '", has unread messages';
-        var html    = '<p>Your team, <strong>' + team.name + '</strong>, has unread messages.</p>';
-        html +=       '<p>Visit <a href="https://switchboard.chat">switchboard.chat</a> to log in and read them.</p>';
-        api.smtp.send(user.email, subject, html, function(error){
+        var subject = 'Your team, "' + team.name + '", has unread messages';
+        var emailData = {
+          paragraphs:[
+            'Your team, <strong>' + team.name + '</strong>, has unread messages.',
+            'Visit switchboard.chat to log in and read them.',
+          ],
+          cta: 'Log in Now',
+          ctaLink: 'https://switchboard.chat/#/login',
+          signoff: 'Thanks, the switchboard.chat team.',
+          greeting: 'Hi, ' + user.firstName,
+        };
+
+        api.smtp.send(user.email, subject, emailData, function(error){
           if(error){ 
             api.log(error, 'error'); 
             return callback(error); 

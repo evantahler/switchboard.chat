@@ -1,4 +1,6 @@
-var nodemailer    = require('nodemailer');
+var mustache          = require('mustache');
+var fs                = require('fs');
+var nodemailer        = require('nodemailer');
 var sendGridTransport = require('nodemailer-sendgrid-transport');
 
 module.exports = {
@@ -10,16 +12,20 @@ module.exports = {
     api.smtp = {
       client: transporter,
       from: api.config.smtp.from,
+      template: fs.readFileSync(__dirname + '/../public/email/email.html'),
     };
 
-    api.smtp.send = function(to, subject, html, callback){
+    api.smtp.send = function(to, subject, data, callback){
+      subject = '[switchboard.chat] ' + subject;
+      var html = mustache.render(api.smtp.template.toString(), data);
+
       var email = {
         from:    api.smtp.from,
         to:      to,
         subject: subject,
-        html:    html
+        html:    html,
       };
-      
+
       api.smtp.client.sendMail(email, callback);
     };
 

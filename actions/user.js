@@ -36,18 +36,21 @@ exports.userCreate = {
           });
 
           notification.save().then(function(){
-            var subject = '[switchboard.chat] Welcome to switchboard.chat';
+            var subject = ' Welcome!';
+            var emailData = {
+              paragraphs:[
+                'You have been invited to the team "' + team.name + '"',
+                'email: ' + data.params.email,
+                'password: ' + data.params.password,
+                'Visit switchboard.chat to get started'
+              ],
+              cta: 'Log in Now',
+              ctaLink: 'https://switchboard.chat/#/login',
+              signoff: 'Thanks, the switchboard.chat team.',
+              greeting: 'Hi, ' + data.params.firstName,
+            };
 
-            var html = '';
-            html += '<p>You have been invited to the team "' + team.name + '".</p>';
-            html += '<p>Log in information:';
-            html += '<ul>';
-            html += '<li>email: ' + data.params.email + '</li>';
-            html += '<li>password: ' + data.params.password + '</li>';
-            html += '</ul></p>';
-            html += '<p>Visit <a href="https://switchboard.chat">switchboard.chat</a> to log in!</p>';
-
-            api.smtp.send(user.email, subject, html, next);
+            api.smtp.send(user.email, subject, emailData, next);
           }).catch(function(errors){
             next(errors.errors[0].message);
           });        
@@ -163,10 +166,18 @@ exports.userForgotPassword = {
         var token = buf.toString('hex');
         user.passwordResetToken = token;
         user.save().then(function(){
-          var subject = '[switchboard.chat] Your password reset link';
-          var html    = '<p>You have requested a link to update your password.</p>';
-          html += '<p>Click here: ' + process.env.PUBLIC_URL + '/#/reset-password?userId=' + user.id + '&token=' + token + '</p>';
-          api.smtp.send(user.email, subject, html, next);
+          var subject = 'Your password reset link';
+          var emailData = {
+            paragraphs:[
+              'You have requested a link to update your password.',
+            ],
+            cta: 'Update Password',
+            ctaLink: 'https://switchboard.chat/#/reset-password?userId=' + user.id + '&token=' + token,
+            signoff: 'Thanks, the switchboard.chat team.',
+            greeting: 'Hi, ' + user.firstName,
+          };
+
+          api.smtp.send(user.email, subject, emailData, next);
         }).catch(next);
       });
     }).catch(next);
