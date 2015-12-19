@@ -38,8 +38,9 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
   
   $scope.getNavigationHighlight = function(path){
     var parts = $location.path().split('/');
-    var simplePath = parts[(parts.length - 1)];
-    if (simplePath == path) {
+    parts.shift();
+    var simplePath = parts[0];
+    if(simplePath == path){
       return "active";
     }else{  
       return "";
