@@ -15,6 +15,11 @@ module.exports = function(sequelize, DataTypes){
     'phoneNumber': {
       type: DataTypes.STRING(191),
       allowNull: false,
+    },
+    'canUseCommands': {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     indexes: [
@@ -31,11 +36,12 @@ module.exports = function(sequelize, DataTypes){
     instanceMethods: {
       apiData: function(api){
         return {
-          id:          this.id,
-          teamId:      this.teamId,
-          firstName:   this.firstName,
-          lastName:    this.lastName,
-          phoneNumber: this.phoneNumber,
+          id:             this.id,
+          teamId:         this.teamId,
+          firstName:      this.firstName,
+          lastName:       this.lastName,
+          phoneNumber:    this.phoneNumber,
+          canUseCommands: this.canUseCommands,
         };
       }
     }

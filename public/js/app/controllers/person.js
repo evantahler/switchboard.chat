@@ -95,7 +95,7 @@ app.controller('person:thread', ['$scope', '$rootScope', '$location', '$routePar
   });
 
   $scope.processForm = function(){
-    $scope.formData.to = $scope.person.phoneNumber;
+    $scope.formData.personId = $scope.person.id;
     $rootScope.actionHelper($scope, $scope.formData, '/api/message/out', 'POST', function(data){
       $scope.formData.body = '';
       $('#sendMessageModal').modal('hide');

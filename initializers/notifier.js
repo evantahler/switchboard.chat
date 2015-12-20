@@ -68,32 +68,8 @@ module.exports = {
         if(!user.phoneNumber){ return callback(); }
 
         notification.updateAttributes({lastSMSNotificationAt: new Date()}).then(function(){
-
-          var notificationMessage = api.models.message.build({
-            from:      team.phoneNumber,
-            to:        user.phoneNumber,
-            message:   '[switchboard.chat] Your team, "' + team.name + '", has ' + messages.length + ' unread message(s)',
-            direction: 'out',
-            read:      false,
-            teamId:    team.id,
-          });
-
-          var payload = {
-            to:   notificationMessage.to,
-            from: notificationMessage.from,
-            body: notificationMessage.message,
-          };
-
-          api.twilio.client.sendMessage(payload, function(error){
-            if(error){ 
-              api.log(error, 'error'); 
-              return callback(error);
-            }
-            notificationMessage.save().then(function(){
-              callback();
-            }).catch(error);
-          });
-
+          var body = '[switchboard.chat] Your team, "' + team.name + '", has ' + messages.length + ' unread message(s)';
+          api.twilio.sendMessage(team, user, body, callback);
         }).catch(callback);
       },
 

@@ -3,7 +3,7 @@
   <div ng-if="person">
 
     <h2>Messages with {{person.firstName}} {{person.lastName}}</h2>
-    <p>{{total}} total messages with this person</p>
+    <p>{{total}} total messages with this person ({{ $root.formatters.phoneNumber(person.phoneNumber, false) }})</p>
 
     <form ng-submit="processForm()">
 

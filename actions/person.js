@@ -5,10 +5,14 @@ exports.personCreate = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    phoneNumber: { required: true },
-    firstName:   { required: true },
-    lastName:    { required: true },
-    teamId:      { required: true },
+    phoneNumber:    { required: true },
+    firstName:      { required: true },
+    lastName:       { required: true },
+    teamId:         { required: true },
+    canUseCommands: { 
+      required: false,
+      default: function(){ return 0; }
+    },
   },
 
   run: function(api, data, next){
@@ -17,10 +21,14 @@ exports.personCreate = {
       firstName: data.params.firstName,
       lastName: data.params.lastName,
       teamId: data.session.teamId,
+      canUseCommands: data.params.canUseCommands,
     });
 
     person.save().then(function(){
-      api.models.person.findOne({where: {phoneNumber: api.twilio.sanitize(data.params.phoneNumber), teamId: data.session.teamId}}).then(function(pesronObj){
+      api.models.person.findOne({where: {
+        phoneNumber: api.twilio.sanitize(data.params.phoneNumber), 
+        teamId: data.session.teamId}
+      }).then(function(pesronObj){
         data.response.person = pesronObj.apiData(api);
         next();
       }).catch(next);
@@ -86,18 +94,24 @@ exports.personEdit = {
       required: true,
       formatter: function(p){ return parseInt(p); }
     },
-    phoneNumber: { required: false },
-    firstName:   { required: false },
-    lastName:    { required: false },
+    phoneNumber:    { required: false },
+    firstName:      { required: false },
+    lastName:       { required: false },
+    canUseCommands: { required: false },
   },
 
   run: function(api, data, next){
-    api.models.person.findOne({where: {id: data.params.personId, teamId: data.session.teamId}}).then(function(person){
+    api.models.person.findOne({where: {
+      id: data.params.personId, 
+      teamId: data.session.teamId}
+    }).then(function(person){
       if(!person){ return next(new Error('person not found')); }
+      
       person.updateAttributes({
         phoneNumber: api.twilio.sanitize(data.params.phoneNumber),
         firstName: data.params.firstName,
         lastName: data.params.lastName,
+        canUseCommands: data.params.canUseCommands,
         teamId: data.session.teamId,
       }).then(function(){
         data.response.person = person.apiData(api);

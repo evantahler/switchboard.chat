@@ -40,6 +40,36 @@ module.exports = {
         url.replace(/https/, 'http'); //hack for twilio and bad HTTPS certs
         api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.messageUrl}, callback);
       },
+
+      sendMessage: function(team, person, body, callback){
+        var from = api.twilio.sanitize(team.phoneNumber);
+        var to   = api.twilio.sanitize(person.phoneNumber);
+
+        var message = api.models.message.build({
+          from:      from,
+          to:        to,
+          message:   body,
+          direction: 'out',
+          read:      true,
+          teamId:    team.id,
+        });
+
+        message.save().then(function(){
+          // sleep between message to attempt to have them send in order
+          setTimeout(function(){
+            api.twilio.client.sendMessage({ 
+              to: to, 
+              from: from, 
+              body: message.message
+            }, function(error){
+              if(error){ return callback(error); }
+              api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) );
+              callback();
+            });
+          }, 500);
+        }).catch(callback);
+      },
+
     };
 
     next();

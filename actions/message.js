@@ -33,6 +33,7 @@ exports.messageIn = {
 
       message.save().then(function(){
         api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) );
+        api.tasks.enqueue('message-task-processor', {messageId: message.id, teamId: team.id}, 'default');
 
         // Twilio wants XML
         data.connection.rawConnection.responseHeaders.push(['Content-Type', 'application/xml']);
@@ -53,7 +54,7 @@ exports.messageOut = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    to:       { required: true }, // +14159658964
+    personId: { required: true },
     body:     { 
       required: true, 
       validator: function(p){
@@ -66,34 +67,14 @@ exports.messageOut = {
   run: function(api, data, next){
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
-
-      var from = api.twilio.sanitize(team.phoneNumber);
-      var to   = api.twilio.sanitize(data.params.to);
-
-      var message = api.models.message.build({
-        from:      from,
-        to:        to,
-        message:   data.params.body,
-        direction: 'out',
-        read:      true,
-        teamId:    team.id,
-      });
-
-      message.save().then(function(){
-        var payload = {
-          to: to,
-          from: from,
-          body: data.params.body,
-        };
-
-        api.twilio.client.sendMessage(payload, function(error){
-          if(error){ api.log(error, 'error'); }
-          else{ api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) ); }
-          next(error);
-        });
-
+      api.models.person.findOne({where: {
+        id: data.params.personId,
+        teamId: data.session.teamId,
+      }}).then(function(person){
+        if(!person){ return next(new Error('person not found')); }
+        api.twilio.sendMessage(team, person, data.params.body, next);
       }).catch(next);
-    });
+    }).catch(next);
   }
 };
 

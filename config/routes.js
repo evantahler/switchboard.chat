@@ -10,6 +10,7 @@ exports.default = {
         { path: '/user/list',            action: 'user:list' },
         { path: '/person/list',          action: 'person:list' },
         { path: '/message/list',         action: 'message:list' },
+        { path: '/messageCommand/list',  action: 'messageCommand:list' },
       ],
 
       post: [

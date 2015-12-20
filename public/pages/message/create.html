@@ -15,8 +15,8 @@
     </div>
 
     <div class="form-group">
-      <select name="to" id="to" class="form-control" ng-model="formData.to">
-        <option ng-repeat="person in $root.people" value="{{person.phoneNumber}}">{{person.firstName}} {{person.lastName}}</option>
+      <select name="to" id="to" class="form-control" ng-model="formData.personId">
+        <option ng-repeat="person in $root.people" value="{{person.id}}">{{person.firstName}} {{person.lastName}}</option>
       </select>
     </div>
 
