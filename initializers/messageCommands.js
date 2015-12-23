@@ -9,7 +9,6 @@ module.exports = {
 
       runAll: function(messageId, callback){
         var jobs = [];
-        var toRun = false;
         var person, message, team;
 
         jobs.push(function(done){
@@ -33,22 +32,14 @@ module.exports = {
             teamId: team.id,
             phoneNumber: message.from
           }}).then(function(_person){
-            if(!_person){
-              return done(); // this message is not from a registered person
-            }else if(_person.canUseCommands !== true){
-              var body = 'You are not authorized to run commands.  Contact a team administrator';
-              api.twilio.sendMessage(team, _person, body, done);
-            }else{
-              person = _person;
-              toRun = true;
-              done();
-            }
+            if(_person){ person = _person; }
+            done();
           }).catch(done);
         });
 
         async.series(jobs, function(error){
           if(error){ return callback(error); }
-          if(!toRun){ return callback(); }
+          if(!person){ return callback(); }
 
           var enqueueCommandCheck = function(command){
             commandJobs.push(function(done){
@@ -62,7 +53,10 @@ module.exports = {
             enqueueCommandCheck(command);
           }
 
-          async.series(commandJobs, callback);
+          async.series(commandJobs, function(error){
+            if(error){ api.twilio.sendMessage(team, person, error.message, callback); }
+            else{ callback(); }
+          });
         });
       },
 
@@ -73,7 +67,9 @@ module.exports = {
           if(message.message.match(regexp)){ matched = true; }
         });
 
-        if(matched){ 
+        if(matched && person.canUseCommands !== true){
+          return callback(new Error('You are not authorized to run commands.  Contact a team administrator'));
+        }else if(matched){ 
           api.log('[message command] running `' + command.name + '` for message #' + message.id);
           return command.run(api, message, team, person, callback); 
         }else{ 
