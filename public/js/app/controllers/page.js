@@ -7,10 +7,11 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
       $rootScope.user      = data.user; 
       $rootScope.csrfToken = data.csrfToken; 
 
-      if($location.path() === '/' || $location.path() === '/home'){
-        $location.path('/account');
-      }
-      
+      if($rootScope.user.requirePasswordChange){ $location.path('/new-password'); }
+      if(!$rootScope.user.requirePasswordChange && $location.path() === '/new-password'){ $location.path('/people'); }
+      if($location.path() === '/'){      $location.path('/people'); }
+      if($location.path() === '/login'){ $location.path('/people'); }
+
       $rootScope.actionHelper($scope, {}, '/api/team', 'GET', function(data){
         if(data.team){ $rootScope.team = data.team;  }
       });

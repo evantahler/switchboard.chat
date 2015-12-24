@@ -12,6 +12,7 @@ var routes = [
   [ '/logout',           'pages/session/destroy.html',      'switchboard: Log Out',         false ],
   [ '/forgot-password',  'pages/user/forgot-password.html', 'switchboard: Forgot Password', false ],
   [ '/reset-password',   'pages/user/reset-password.html',  'switchboard: Reset Password',  false ],
+  [ '/new-password',     'pages/user/new-password.html',    'switchboard: Change Password', false ],
   [ '/commands',         'pages/messageCommand.html',       'switchboard: Commands',        false ],
   [ '/people',           'pages/people.html',               'switchboard: People',          true  ],
   [ '/people/:personId', 'pages/people.html',               'switchboard: People',          true  ],

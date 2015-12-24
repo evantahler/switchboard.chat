@@ -83,7 +83,7 @@ module.exports = {
             '----------------------------------',
           ],
           cta: 'Log in Now',
-          ctaLink: 'https://switchboard.chat/#/login',
+          ctaLink: process.env.PUBLIC_URL + '/#/login',
           signoff: 'Thanks, the switchboard.chat team.',
           greeting: 'Hi, ' + user.firstName,
         };

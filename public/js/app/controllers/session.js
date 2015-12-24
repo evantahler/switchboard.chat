@@ -2,7 +2,11 @@ app.controller('session:create', ['$scope', '$rootScope', '$location', function(
   $scope.formData    = {};
 
   if($rootScope.user){
-    $location.path('/account');
+    if($rootScope.user.requirePasswordChange){
+      $location.path('/new-password');
+    }else{
+      $location.path('/people');
+    }
   }
 
   $scope.processForm = function(){

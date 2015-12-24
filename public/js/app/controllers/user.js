@@ -17,6 +17,17 @@ app.controller('user:forgot-password', ['$scope', '$rootScope', '$location', fun
   };
 }]);
 
+app.controller('user:new-password', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+  $scope.formData    = {};
+  $scope.processForm = function(){
+    $scope.formData.userId = $rootScope.user.id;
+    $scope.formData.requirePasswordChange = false;
+    $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'PUT', function(data){
+      location.reload();
+    });
+  };
+}]);
+
 app.controller('user:reset-password', ['$scope', '$rootScope', '$location', '$routeParams', function($scope, $rootScope, $location, $routeParams){
   $scope.formData    = {};
   $scope.processForm = function(){

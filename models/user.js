@@ -28,6 +28,11 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    'requirePasswordChange': {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     'firstName': {
       type: DataTypes.STRING(191),
       allowNull: false,
@@ -84,12 +89,13 @@ module.exports = function(sequelize, DataTypes){
 
       apiData: function(api){
         return {
-          id:          this.id,
-          teamId:      this.teamId,
-          email:       this.email,
-          phoneNumber: this.phoneNumber,
-          firstName:   this.firstName,
-          lastName:    this.lastName,
+          id:                    this.id,
+          teamId:                this.teamId,
+          email:                 this.email,
+          phoneNumber:           this.phoneNumber,
+          firstName:             this.firstName,
+          lastName:              this.lastName,
+          requirePasswordChange: this.requirePasswordChange,
         };
       }
     }

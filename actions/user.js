@@ -13,6 +13,10 @@ exports.userCreate = {
     firstName:   { required: true },
     lastName:    { required: true },
     teamId:      { required: true },
+    requirePasswordChange: {
+      required: false,
+      default: true
+    },
   },
 
   run: function(api, data, next){
@@ -45,7 +49,7 @@ exports.userCreate = {
                 'Visit switchboard.chat to get started'
               ],
               cta: 'Log in Now',
-              ctaLink: 'https://switchboard.chat/#/login',
+              ctaLink: process.env.PUBLIC_URL + '/#/login',
               signoff: 'Thanks, the switchboard.chat team.',
               greeting: 'Hi, ' + data.params.firstName,
             };
@@ -117,11 +121,12 @@ exports.userEdit = {
       required: true,
       formatter: function(p){ return parseInt(p); }
     },
-    email:       { required: false },
-    phoneNumber: { required: false },
-    password:    { required: false },
-    firstName:   { required: false },
-    lastName:    { required: false },
+    email:                 { required: false },
+    phoneNumber:           { required: false },
+    password:              { required: false },
+    firstName:             { required: false },
+    lastName:              { required: false },
+    requirePasswordChange: { required: false },
   },
 
   run: function(api, data, next){
@@ -134,11 +139,16 @@ exports.userEdit = {
       user.updateAttributes(data.params).then(function(){
         data.response.user = user.apiData(api);
         if(data.params.password){
-          user.updatePassword(data.params.password, function(error){
+          user.checkPassword(data.params.password, function(error, match){
             if(error){ return next(error); }
-            user.save().then(function(){
-              next();
-            }).catch(next);
+            if(match){ return next(new Error('Passwords are the same')); }
+
+            user.updatePassword(data.params.password, function(error){
+              if(error){ return next(error); }
+              user.save().then(function(){
+                next();
+              }).catch(next);
+            });
           });
         }else{
           next();
@@ -172,7 +182,7 @@ exports.userForgotPassword = {
               'You have requested a link to update your password.',
             ],
             cta: 'Update Password',
-            ctaLink: 'https://switchboard.chat/#/reset-password?userId=' + user.id + '&token=' + token,
+            ctaLink: process.env.PUBLIC_URL + '/#/reset-password?userId=' + user.id + '&token=' + token,
             signoff: 'Thanks, the switchboard.chat team.',
             greeting: 'Hi, ' + user.firstName,
           };

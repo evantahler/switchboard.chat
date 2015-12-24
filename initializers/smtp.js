@@ -17,6 +17,7 @@ module.exports = {
 
     api.smtp.send = function(to, subject, data, callback){
       subject = '[switchboard.chat] ' + subject;
+      data.publicUrl = process.env.PUBLIC_URL;
       var html = mustache.render(api.smtp.template.toString(), data);
 
       var email = {
