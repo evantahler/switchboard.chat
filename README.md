@@ -11,6 +11,7 @@
 - when you sign up, we need some sort of "welcome" page
 - When there are no users in your team, the messages page makes no sense
 - complete the `about` page
+- edit contacts
 - TESTS
 
 ## Production Vendors

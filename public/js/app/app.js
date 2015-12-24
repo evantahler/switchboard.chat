@@ -13,7 +13,6 @@ var routes = [
   [ '/forgot-password',  'pages/user/forgot-password.html', 'switchboard: Forgot Password', false ],
   [ '/reset-password',   'pages/user/reset-password.html',  'switchboard: Reset Password',  false ],
   [ '/commands',         'pages/messageCommand.html',       'switchboard: Commands',        false ],
-  [ '/messages',         'pages/messages.html',             'switchboard: Messages',        true  ],
   [ '/people',           'pages/people.html',               'switchboard: People',          true  ],
   [ '/people/:personId', 'pages/people.html',               'switchboard: People',          true  ],
   [ '/account',          'pages/account.html',              'switchboard: Account',         true  ],
@@ -45,7 +44,6 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
   $rootScope.user   = null;
   $rootScope.team   = null;
-  $rootScope.people = null;
   $rootScope.routes = routes;
 
   $rootScope.actionHelper = function($scope, data, path, verb, successCallback, errorCallback){
@@ -98,23 +96,9 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
   };
 
   $rootScope.formatters = {
-    phoneNumber: function(p, toName){
+    phoneNumber: function(p){
       p = p.replace(/\D+/g, '');
       if(p.length === 10){ p = '1' + p; }
-
-      if(toName !== false){
-        if(String(p) === $rootScope.team.phoneNumber){
-          return '{{' + $rootScope.team.name + '}}';
-        }
-
-        for(var i in $rootScope.people){
-          var person = $rootScope.people[i];
-          if(String(person.phoneNumber) === String(p)){
-            return person.firstName + ' ' + person.lastName;
-          }
-        }
-      }
-
       p = p.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '$2.$3.$4');
       return p;
     },

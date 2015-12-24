@@ -1,21 +1,32 @@
-<h1>People</h1>
+<div ng-controller="person:combined">
+  <h1>People</h1>
 
-<div class="container">
+  <div class="container">
 
-  <div class="col-md-3">
+    <div class="col-md-4">
 
-    <div class="col-centered thick-bordered">
       <div ng-include="'pages/person/create.html'"></div> 
+      <div ng-include="'pages/person/edit.html'"></div> 
+      <div ng-include="'pages/person/group-message.html'"></div> 
+
+      <div class="col-centered thick-bordered">
+        <div ng-include="'pages/person/list.html'"></div> 
+
+        <div class="btn-toolbar">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPersonModal">
+              Add Person
+            </button>
+            <button type="button" ng-if="people.length > 0" class="btn btn-info btn-sm" data-toggle="modal" data-target="#groupMessageModal">
+              Group Message
+            </button>
+        </div>
+      </div>
+
     </div>
 
-    <div class="col-centered thick-bordered">
-      <div ng-include="'pages/person/list.html'"></div> 
+    <div class="col-md-8" id="threadContainer">
+      <div ng-include="'pages/person/thread.html'"></div> 
     </div>
 
   </div>
-
-  <div class="col-md-9" id="threadContainer">
-    <div ng-include="'pages/person/thread.html'"></div> 
-  </div>
-
 </div>

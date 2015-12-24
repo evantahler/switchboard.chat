@@ -25,7 +25,7 @@ app.controller('team:edit', ['$scope', '$rootScope', '$location', function($scop
   $rootScope.actionHelper($scope, {
     userId: $rootScope.user.id, teamId: $rootScope.user.teamId
   }, '/api/team', 'GET', function(data){
-    data.team.phoneNumber = $rootScope.formatters.phoneNumber(data.team.phoneNumber, false);
+    data.team.phoneNumber = $rootScope.formatters.phoneNumber(data.team.phoneNumber);
     $scope.formData = data.team;
   });
     

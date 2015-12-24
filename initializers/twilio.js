@@ -41,6 +41,20 @@ module.exports = {
         api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.messageUrl}, callback);
       },
 
+      decorateMessage: function(team, message, callback){
+        var formattedMessage = message.apiData(api);
+        api.models.person.findAll({where: {teamId: team.id}}).then(function(people){
+          people.forEach(function(person){
+            if(formattedMessage.to   === person.phoneNumber){ formattedMessage.toString = person.firstName + ' ' + person.lastName; }
+            if(formattedMessage.from === person.phoneNumber){ formattedMessage.fromString = person.firstName + ' ' + person.lastName; }
+          });
+          if(formattedMessage.to   === team.phoneNumber){ formattedMessage.toString = team.name; }
+          if(formattedMessage.from === team.phoneNumber){ formattedMessage.fromString = team.name; }
+
+          callback(null, formattedMessage);
+        }).catch(callback);
+      },
+
       sendMessage: function(team, person, body, callback){
         var from = api.twilio.sanitize(team.phoneNumber);
         var to   = api.twilio.sanitize(person.phoneNumber);
@@ -63,8 +77,11 @@ module.exports = {
               body: message.message
             }, function(error){
               if(error){ return callback(error); }
-              api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData(api) );
-              callback();
+              api.twilio.decorateMessage(team, message, function(error, formattedMessage){
+                if(error){ return callback(error); }
+                api.chatRoom.broadcast({}, 'team:' + team.id, formattedMessage );
+                callback();
+              });              
             });
           }, 500);
         }).catch(callback);

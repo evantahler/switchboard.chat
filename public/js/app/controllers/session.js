@@ -2,7 +2,7 @@ app.controller('session:create', ['$scope', '$rootScope', '$location', function(
   $scope.formData    = {};
 
   if($rootScope.user){
-    $location.path('/messages');
+    $location.path('/account');
   }
 
   $scope.processForm = function(){

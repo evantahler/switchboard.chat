@@ -8,15 +8,11 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
       $rootScope.csrfToken = data.csrfToken; 
 
       if($location.path() === '/' || $location.path() === '/home'){
-        $location.path('/messages');
+        $location.path('/account');
       }
       
       $rootScope.actionHelper($scope, {}, '/api/team', 'GET', function(data){
         if(data.team){ $rootScope.team = data.team;  }
-      });
-
-      $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
-        if(data.people){ $rootScope.people = data.people;  }
       });
     }
   }, function(error){

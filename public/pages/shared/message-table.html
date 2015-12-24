@@ -12,16 +12,16 @@
 
   <tbody ng-repeat="message in messages">
     <tr ng-if="message.direction === 'in'" class="animated zoomIn info">
-      <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
+      <td ng-if="message.fromString">{{ message.fromString }}</td><td ng-if="!message.fromString">{{ $root.formatters.phoneNumber( message.from ) }}</td>
       <td><span class="glyphicon glyphicon-chevron-right"></span></td>
-      <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
+      <td ng-if="message.toString">{{ message.toString }}</td><td ng-if="!message.toString">{{ $root.formatters.phoneNumber( message.to ) }}</td>
       <td>{{ message.message }}</td>
       <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
     </tr>
     <tr ng-if="message.direction === 'out'" class="animated zoomIn warning">
-      <td>{{ $root.formatters.phoneNumber( message.from ) }}</td>
+      <td ng-if="message.fromString">{{ message.fromString }}</td><td ng-if="!message.fromString">{{ $root.formatters.phoneNumber( message.from ) }}</td>
       <td><span class="glyphicon glyphicon-chevron-right"></span></td>
-      <td>{{ $root.formatters.phoneNumber( message.to ) }}</td>
+      <td ng-if="message.toString">{{ message.toString }}</td><td ng-if="!message.toString">{{ $root.formatters.phoneNumber( message.to ) }}</td>
       <td>{{ message.message }}</td>
       <td>{{ $root.formatters.timestamp( message.createdAt ) }}</td>
     </tr>

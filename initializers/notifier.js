@@ -32,8 +32,6 @@ module.exports = {
           if(messages.length === 0){ return done(); }
 
           var emailDeltaMinutes = (new Date() - messages[0].createdAt) / 1000 / 60;
-          console.log((notification.lastEmailNotificationAt))
-          console.log((messages[0].createdAt))
           if(
             notification.notifyByEmail && 
             (!notification.lastEmailNotificationAt || notification.lastEmailNotificationAt < messages[0].createdAt) &&
