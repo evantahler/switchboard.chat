@@ -65,6 +65,8 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
     }
 
     if(personIds.length === 0){
+      $scope.forms.groupMessage.body = null;
+      
       return setTimeout(function(){
         $scope.groupMessageStatus = [0,0];
         $scope.clearModals('#groupMessageModal');
