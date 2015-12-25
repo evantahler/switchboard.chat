@@ -1,6 +1,6 @@
-exports.personView = {
-  name:                   'report:list',
-  description:            'report:list',
+exports.reportUsage = {
+  name:                   'report:usage',
+  description:            'report:usage',
   outputExample:          {},
   middleware:             [ 'logged-in-session' ],
 
@@ -24,7 +24,7 @@ exports.personView = {
       query += ' LEFT JOIN people AS peopleTo   ON peopleTo.phoneNumber = messages.to     ';
       query += ' LEFT JOIN people AS peopleFrom ON peopleFrom.phoneNumber = messages.from ';
       query += ' WHERE messages.teamId = :teamId                                          ';
-      query += ' GROUP BY YEAR, MONTH, peopleTo.id, peopleFrom.id                         ';
+      query += ' GROUP BY year, month, peopleTo.id, peopleFrom.id                         ';
 
       api.sequelize.sequelize.query(query,{
         replacements: { teamId: team.id }, 
@@ -39,6 +39,47 @@ exports.personView = {
           if(!data.response.reports[name]){ data.response.reports[name] = {}; }
           if(!data.response.reports[name][date] ){ data.response.reports[name][date] = 0; }
           data.response.reports[name][date] = data.response.reports[name][date] + row.count;
+        });
+
+        next();
+      }).catch(next);
+    });
+  }
+};
+
+exports.reportBilling = {
+  name:                   'report:billing',
+  description:            'report:billing',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {},
+
+  run: function(api, data, next){
+    data.response.reports = {};
+    api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
+      if(!team){ return next(new Error('team not found')); }
+      
+      var query = '';
+      query += ' SELECT                                  ';
+      query += '   count(1) AS "count",                  ';
+      query += '   YEAR(messages.createdAt) AS "year",   ';
+      query += '   MONTH(messages.createdAt) AS "month"  ';
+      query += ' FROM messages                           ';
+      query += ' WHERE messages.teamId = :teamId         ';
+      query += ' GROUP BY year, month                    ';
+
+      api.sequelize.sequelize.query(query,{
+        replacements: { teamId: team.id }, 
+        type: api.sequelize.sequelize.QueryTypes.SELECT }
+      ).then(function(rows) {
+        rows.forEach(function(row){
+          var date = row.year + ' - ' + row.month;
+          data.response.reports[date] = {
+            date: date,
+            count: row.count,
+            bill: api.billing.calculateMonthlyBill(row.count)
+          };
         });
 
         next();

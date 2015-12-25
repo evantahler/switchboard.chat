@@ -12,7 +12,8 @@ exports.default = {
         { path: '/person/unread',        action: 'person:unreadCount' },
         { path: '/message/list',         action: 'message:list' },
         { path: '/messageCommand/list',  action: 'messageCommand:list' },
-        { path: '/report/list',          action: 'report:list' },
+        { path: '/report/usage',         action: 'report:usage' },
+        { path: '/report/billing',       action: 'report:billing' },
       ],
 
       post: [
