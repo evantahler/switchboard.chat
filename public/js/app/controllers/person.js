@@ -94,7 +94,12 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
 
   $scope.loadPeople = function(){
     $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
-      if(data.people){ $scope.people = data.people; }
+      if(data.people){ 
+        $scope.people = data.people; 
+        $scope.people.forEach(function(person){
+          $scope.checkUnreadCount(person.id);
+        });
+      }
     });
   };
 
@@ -118,6 +123,19 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
         alert(e);
       });
     }
+  };
+
+  $scope.checkUnreadCount = function(personId){    
+    $rootScope.actionHelper($scope, {
+      personId: personId,
+      teamId: $rootScope.team.id,
+    }, '/api/person/unread', 'GET', function(data){
+      if(data.unreadCount > 0){
+        $scope.blinkPerson(data.person.phoneNumber);
+      }
+    }, function(e){
+      alert(e);
+    });
   };
 
   $scope.loadThread = function(personId){    
@@ -216,7 +234,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
         });
       });
     }
-  }
+  };
 
   ////////////
   // EVENTS //

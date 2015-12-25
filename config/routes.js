@@ -9,6 +9,7 @@ exports.default = {
         { path: '/notification',         action: 'notification:view' },
         { path: '/user/list',            action: 'user:list' },
         { path: '/person/list',          action: 'person:list' },
+        { path: '/person/unread',        action: 'person:unreadCount' },
         { path: '/message/list',         action: 'message:list' },
         { path: '/messageCommand/list',  action: 'messageCommand:list' },
         { path: '/report/list',          action: 'report:list' },

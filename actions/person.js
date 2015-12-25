@@ -56,9 +56,7 @@ exports.personView = {
       if(!person){ return next(new Error('person not found')); }
       data.response.person = person.apiData(api);
       next();
-    })
-    .catch(next)
-    ;
+    }).catch(next);
   }
 };
 
@@ -77,9 +75,42 @@ exports.personList = {
         data.response.people.push( person.apiData(api) );
       });
       next();
-    })
-    .catch(next)
-    ;
+    }).catch(next);
+  }
+};
+
+exports.personUnreadCount = {
+  name:                   'person:unreadCount',
+  description:            'person:unreadCount',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {
+    personId: {
+      required: true,
+      formatter: function(p){ return parseInt(p); }
+    },
+  },
+
+  run: function(api, data, next){
+    api.models.person.findOne({where: {
+      id: data.params.personId,
+      teamId: data.session.teamId,
+    }}).then(function(person){
+      if(!person){ return next(new Error('person not found')); }
+      api.models.message.count({where: {
+        $or: [
+          {to: person.phoneNumber},
+          {from: person.phoneNumber}
+        ],
+        teamId: data.session.teamId,
+        read: false,
+      }}).then(function(unreadCount){
+        data.response.person = person.apiData(api);
+        data.response.unreadCount = unreadCount;
+        next();
+      }).catch(next);
+    }).catch(next);
   }
 };
 
@@ -117,9 +148,7 @@ exports.personEdit = {
         data.response.person = person.apiData(api);
         next();
       }).catch(next);
-    })
-    .catch(next)
-    ;
+    }).catch(next);
   }
 };
 
@@ -140,8 +169,6 @@ exports.personDelete = {
     api.models.person.findOne({where: {id: data.params.personId, teamId: data.session.teamId}}).then(function(person){
       if(!person){ return next(new Error('person not found')); }
       person.destroy().then(function(){ next(); }).catch(next);
-    })
-    .catch(next)
-    ;
+    }).catch(next);
   }
 };

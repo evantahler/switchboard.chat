@@ -30,8 +30,7 @@
 
 <div ng-if="person" ng-include="'pages/shared/message-table.html'"></div> 
 
-<div ng-if="!person">
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  <p>Choose people from the list (or create one) to see your messages.</p>
+<div ng-if="!person" align="center">
+  <h1><span class="glyphicon glyphicon-phone-alt">&nbsp;</span></h1>
+  <p class="text-primary">Choose a person from the list (or create one) to see your messages.</p>
 </div>
