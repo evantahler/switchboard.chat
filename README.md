@@ -15,8 +15,12 @@
 - TESTS
 
 ## Production Vendors
-- Hosted on Heroku (evantahler@gmail.com)
+- Hosted on Digital Ocean
+  - evantahler@gmail.com
 - instantssl.com
   - switchboard.chat / 2390ugwjialsGGgwg3
 - sendgrid
   - switchboard.chat / admin@switchboard.chat / t0u2gwHIGOBWE
+- mailchimp
+  - mailchimp@switchboard.chat
+  - q38tywghoeignowR~3
