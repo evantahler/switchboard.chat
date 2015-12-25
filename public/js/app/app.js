@@ -15,6 +15,7 @@ var routes = [
   [ '/new-password',     'pages/user/new-password.html',    'switchboard: Change Password', false ],
   [ '/commands',         'pages/messageCommand.html',       'switchboard: Commands',        false ],
   [ '/people',           'pages/people.html',               'switchboard: People',          true  ],
+  [ '/report',           'pages/report.html',               'switchboard: Report',          true  ],
   [ '/people/:personId', 'pages/people.html',               'switchboard: People',          true  ],
   [ '/account',          'pages/account.html',              'switchboard: Account',         true  ],
   [ '/team',             'pages/team.html',                 'switchboard: Team',            true  ],

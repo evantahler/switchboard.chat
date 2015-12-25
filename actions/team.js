@@ -106,36 +106,6 @@ exports.teamCreate = {
   }
 };
 
-// exports.teamCreate = {
-//   name:                   'team:create',
-//   description:            'team:create',
-//   outputExample:          {},
-//   middleware:             [],
-
-//   inputs: {
-//     name:     { required: true },
-//     areaCode: { 
-//       required: true,
-//       formatter: function(p){ return parseInt(p); }
-//     },
-//   },
-
-//   run: function(api, data, next){
-//     var team = api.models.team.build(data.params);
-    
-//     api.twilio.registerTeamPhoneNumber(team, function(error){
-//       team.save().then(
-//         api.models.team.findOne({where: {name: data.params.name}})
-//       ).then(function(teamObj){
-//         data.response.team = teamObj.apiData(api);
-//         next(error);
-//       }).catch(function(errors){
-//         next(errors.errors[0].message);
-//       });
-//     });    
-//   }
-// };
-
 exports.teamView = {
   name:                   'team:view',
   description:            'team:view',

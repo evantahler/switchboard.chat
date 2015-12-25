@@ -15,12 +15,13 @@
       
       <ul class="nav navbar-nav">
         <li><a><strong>Hello, <span>{{ $root.user.firstName }}</span></strong></a></li>
-        <li ng-class="getNavigationHighlight('people')"><a href="/#/people"><span class="glyphicon glyphicon-phone-alt">&nbsp;</span>People</a></li>        
+        <li ng-class="getNavigationHighlight('people')"><a href="/#/people"><span class="glyphicon glyphicon-phone-alt">&nbsp;</span>People</a></li>
+        <li ng-class="getNavigationHighlight('report')"><a href="/#/report"><span class="glyphicon glyphicon-signal">&nbsp;</span>Report</a></li> 
+        <li ng-class="getNavigationHighlight('team')"><a href="/#/team"><span class="glyphicon glyphicon-wrench">&nbsp;</span>Team</a></li>
+        <li ng-class="getNavigationHighlight('account')"><a href="/#/account"><span class="glyphicon glyphicon-user">&nbsp;</span>Account</a></li>      
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li ng-class="getNavigationHighlight('team')"><a href="/#/team"><span class="glyphicon glyphicon-wrench">&nbsp;</span>Team</a></li>
-        <li ng-class="getNavigationHighlight('account')"><a href="/#/account"><span class="glyphicon glyphicon-user">&nbsp;</span>Account</a></li>
         <li ng-class="getNavigationHighlight('commands')"><a href="/#/commands"><span class="glyphicon glyphicon-earphone">&nbsp;</span>Commands</a></li>
         <li ng-class="getNavigationHighlight('api')"><a target="_blank" href="/swagger.html"><span class="glyphicon glyphicon-cloud">&nbsp;</span>API</a></li>
         <li ng-class="getNavigationHighlight('logout')"><a href="/#/logout"><span class="glyphicon glyphicon-off">&nbsp;</span>Log Out</a></li>

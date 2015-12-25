@@ -1,0 +1,36 @@
+<div ng-controller="report:list">
+
+  <h1>Team Reports</h1>
+  <hr />
+
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Usage Reports by Person</h2>
+
+      <p ng-bind-html="legend"></p>
+
+      <p>
+        <ul>
+          <li>All reports are in the UTC Timezone</li>
+          <li>Messages both `to` and `from` a person are counted</li>
+          <li>All messages to/from users who have been removed (or whose numbers have changed) are counted against "Unknown Person"</li>
+        </ul>
+      </p>
+    </div>
+    <div class="col-md-9">
+      <div id="chartReport" width="300" height="300" style="width: 100%; height: auto;"></div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col-md-3">
+      Billing History
+    </div>
+    <div class="col-md-9">
+      Coming Soon
+    </div>
+  </div>
+
+</div>
