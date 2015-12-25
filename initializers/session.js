@@ -5,7 +5,7 @@ module.exports = {
     
     api.session = {
       prefix: 'session:',
-      ttl: 60 * 60 * 24, // 1 day
+      ttl: 1000 * 60 * 60 * 24, // 1 day
       
       load: function(connection, callback){
         var key = api.session.prefix + connection.fingerprint;
