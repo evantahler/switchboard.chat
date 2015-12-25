@@ -30,7 +30,7 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
       plotOptions: {
         line: {
           dataLabels: { enabled: true },
-          enableMouseTracking: false
+          enableMouseTracking: true
         }
       },
       tooltip: { valueSuffix: ' messages' },
@@ -60,7 +60,7 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
     }
 
     chartData.series.push({
-      name: 'total',
+      name: 'Total',
       data: toalData,
       lineWidth: 5,
     });
