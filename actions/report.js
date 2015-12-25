@@ -31,7 +31,7 @@ exports.personView = {
         type: api.sequelize.sequelize.QueryTypes.SELECT }
       ).then(function(rows) {
         rows.forEach(function(row){
-          var date = row.year + ' ' + row.month;
+          var date = row.year + ' - ' + row.month;
           var name = 'Unknown Person';
           if(row.toId){ name = row.toName; }
           if(row.fromId){ name = row.fromName; }
