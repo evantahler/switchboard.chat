@@ -2,6 +2,10 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
   
   $scope.date = new Date();
 
+  $rootScope.actionHelper($scope, {}, '/api/billing/rates', 'GET', function(data){
+    $rootScope.billing.rates = data.billing.rates;
+  });
+
   $rootScope.actionHelper($scope, {}, '/api/session', 'PUT', function(data){
     if(data.user){
       $rootScope.user      = data.user; 

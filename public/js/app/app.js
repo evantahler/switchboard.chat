@@ -44,9 +44,10 @@ app.config(function($routeProvider, $locationProvider){
 
 app.run(['$rootScope', '$http', function($rootScope, $http){
 
-  $rootScope.user   = null;
-  $rootScope.team   = null;
-  $rootScope.routes = routes;
+  $rootScope.user    = null;
+  $rootScope.team    = null;
+  $rootScope.billing = {};
+  $rootScope.routes  = routes;
 
   $rootScope.actionHelper = function($scope, data, path, verb, successCallback, errorCallback){
     var i;

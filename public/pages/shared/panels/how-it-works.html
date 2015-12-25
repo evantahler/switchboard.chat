@@ -7,7 +7,7 @@
 
     <p>Each team has 1 phone number used for SMS communication.  You can have unlimited members of your team, and unlimited people in your address book whom you are communicating with.</p>
 
-    <p>Registering a team costs $5.00/month.  This covers the cost of your phone number and the fist 100 SMS messages.  Every additional message after that costs 1 cent.</p>
+    <p>Registering a team costs ${{ $root.billing.rates.pricePerMonth }}/month.  This covers the cost of your phone number and the fist {{ $root.billing.rates.includedMessagesPerMonth }} SMS messages.  Every additional message after that costs ${{ $root.billing.rates.pricePerMessage }}.</p>
 
     <p>When you create your team, you will be randomly assigned a phone number within the area code you choose.  This service only works within the United States at this time.</p>
   </div>

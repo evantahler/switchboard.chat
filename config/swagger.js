@@ -17,6 +17,8 @@ exports['default'] = {
         'notification'    : [ 'notification' ],
         'message'         : [ 'message' ],
         'messageCommand'  : [ 'messageCommand' ],
+        'billing'         : [ 'billing' ],
+        'report'          : [ 'report' ],
       },
       // Generate documentation for simple actions specified by action-name
       documentSimpleRoutes: false,

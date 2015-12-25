@@ -14,6 +14,7 @@ exports.default = {
         { path: '/messageCommand/list',  action: 'messageCommand:list' },
         { path: '/report/usage',         action: 'report:usage' },
         { path: '/report/billing',       action: 'report:billing' },
+        { path: '/billing/rates',        action: 'billing:rates' },
       ],
 
       post: [

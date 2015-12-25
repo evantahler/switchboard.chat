@@ -66,7 +66,10 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
       lineWidth: 5,
     });
 
-    $('#reportUsage').highcharts(chartData);
+    // hadck to defer loading to next cycle
+    setTimeout(function(){
+      $('#reportUsage').highcharts(chartData);
+    }, 1);
   });
 
 
