@@ -19,7 +19,7 @@ exports.personView = {
       query += '   peopleTo.id AS "toId",                                                 ';
       query += '   CONCAT(peopleTo.firstName, " ", peopleTo.lastName) AS "toName",        ';
       query += '   peopleFrom.id AS "fromId",                                             ';
-      query += '   CONCAT(peoplefrom.firstName, " ", peopleFrom.lastName) AS "fromName"   ';
+      query += '   CONCAT(peopleFrom.firstName, " ", peopleFrom.lastName) AS "fromName"   ';
       query += ' FROM messages                                                            ';
       query += ' LEFT JOIN people AS peopleTo   ON peopleTo.phoneNumber = messages.to     ';
       query += ' LEFT JOIN people AS peopleFrom ON peopleFrom.phoneNumber = messages.from ';
