@@ -37,7 +37,8 @@ exports.personView = {
           if(row.fromId){ name = row.fromName; }
 
           if(!data.response.reports[name]){ data.response.reports[name] = {}; }
-          data.response.reports[name][date] = row.count;        
+          if(!data.response.reports[name][date] ){ data.response.reports[name][date] = 0; }
+          data.response.reports[name][date] = data.response.reports[name][date] + row.count;
         });
 
         next();
