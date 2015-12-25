@@ -14,7 +14,8 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
 
     var chartData = {
       title: {
-        text: $rootScope.team.name + ' messages'
+        text: $rootScope.team.name + ' messages',
+        align: 'left',
       },
       xAxis: {
         categories: categories
