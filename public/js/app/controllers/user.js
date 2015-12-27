@@ -11,9 +11,7 @@ app.controller('user:create', ['$scope', '$rootScope', '$location', function($sc
 app.controller('user:forgot-password', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
   $scope.formData    = {};
   $scope.processForm = function(){
-    $rootScope.actionHelper($scope, $scope.formData, '/api/user/forgot-password', 'POST', function(data){
-      $scope.success = data.message;
-    });
+    $rootScope.actionHelper($scope, $scope.formData, '/api/user/forgot-password', 'POST');
   };
 }]);
 
@@ -39,7 +37,7 @@ app.controller('user:reset-password', ['$scope', '$rootScope', '$location', '$ro
   };
 }]);
 
-app.controller('user:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+app.controller('user:list', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   var loadTeamUsers = function(){
     $rootScope.actionHelper($scope, {}, '/api/user/list', 'GET', function(data){
       $scope.users = data.users;
@@ -54,47 +52,44 @@ app.controller('user:list', ['$scope', '$rootScope', '$location', function($scop
         userId: userId,
         teamId: $rootScope.team.id,
       }, '/api/user', 'DELETE', function(data){
+        ngNotify.set('Team Member Deleted', 'success');
         loadTeamUsers();
-      }, function(e){
-        alert(e);
       });
     }
   };
 }]);
 
-app.controller('user:edit', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+app.controller('user:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   $scope.formData = $rootScope.user;
 
   $rootScope.actionHelper($scope, {userId: $rootScope.user.id}, '/api/user', 'GET', function(data){
     $scope.formData = data.user;
   });
-    
+
   $scope.processForm = function(){
-    delete $scope.success;
     $scope.formData.userId = $rootScope.user.id;
     $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'PUT', function(data){
-      if(data.user){ 
-        $rootScope.user = data.user; 
+      if(data.user){
+        ngNotify.set('Account Updated', 'success');
+        $rootScope.user = data.user;
         $scope.formData = data.user;
       }
-      $scope.success = 'Updated!';
     });
   };
 }]);
 
-app.controller('notification:edit', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+app.controller('notification:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   $rootScope.actionHelper($scope, {userId: $rootScope.user.id}, '/api/notification', 'GET', function(data){
     $scope.formData = data.notification;
   });
-    
+
   $scope.processForm = function(){
-    delete $scope.success;
     $scope.formData.userId = $rootScope.user.id;
     $rootScope.actionHelper($scope, $scope.formData, '/api/notification', 'PUT', function(data){
-      if(data.notification){ 
-        $scope.formData = data.notification; 
+      ngNotify.set('Notifications Updated', 'success');
+      if(data.notification){
+        $scope.formData = data.notification;
       }
-      $scope.success = 'Updated!';
     });
   };
 }]);

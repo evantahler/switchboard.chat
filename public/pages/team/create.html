@@ -1,20 +1,10 @@
 <h1>Sign up for Switchboard.chat</h1>
 
-<div ng-include="'pages/shared/panels/how-it-works.html'"></div> 
-<div ng-include="'pages/shared/panels/no-new-teams.html'"></div> 
+<div ng-include="'pages/shared/panels/how-it-works.html'"></div>
+<div ng-include="'pages/shared/panels/no-new-teams.html'"></div>
 
 <div ng-controller="team:create" class="col-md-12 col-centered thick-bordered">
   <form ng-submit="processForm()">
-
-    <div class="alert alert-dismissible alert-danger" ng-show="error">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      {{ error }}
-    </div>
-
-    <div class="alert alert-dismissible alert-success" ng-show="success">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      {{ success }}
-    </div>
 
     <div class="row">
       <div class="col-md-4">
@@ -55,7 +45,7 @@
         <div class="form-group">
           <label>Area Code</label>
           <input type="number" name="teamName" class="form-control" placeholder="412" ng-model="formData.areaCode">
-        </div>      
+        </div>
 
       </div>
 
@@ -68,8 +58,8 @@
           <input type="text" name="promoCode" class="form-control" placeholder="abc-123" ng-model="formData.promoCode">
         </div>
 
-      </div>  
-    </div>  
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-md-12">

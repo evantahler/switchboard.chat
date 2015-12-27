@@ -2,5 +2,5 @@ app.controller('messageCommand:list', ['$scope', '$rootScope', '$location', func
     $scope.messageCommands = [];
     $rootScope.actionHelper($scope, {}, '/api/messageCommand/list', 'GET', function(data){
       $scope.messageCommands = data.messageCommands;
-    }, function(error){ alert(error); });
+    });
 }]);

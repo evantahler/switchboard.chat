@@ -15,7 +15,7 @@ exports.teamCreate = {
 
     // team stuff
     name:     { required: true },
-    areaCode: { 
+    areaCode: {
       required: true,
       formatter: function(p){ return parseInt(p); }
     },
@@ -93,9 +93,9 @@ exports.teamCreate = {
         // roll it back
         try{ user.destroy(); }catch(e){ api.log(e, 'error'); }
         try{ team.destroy(); }catch(e){ api.log(e, 'error'); }
-        
+
         if(error.errors){
-          next(errors.errors[0].message);
+          next(error.errors[0].message);
         }else{
           next(error);
         }

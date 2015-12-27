@@ -25,16 +25,16 @@ var routes = [
 // APPLICATION //
 /////////////////
 
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ngRoute', 'ngNotify']);
 
 app.config(function($routeProvider, $locationProvider){
-  
+
   routes.forEach(function(collection){
     var route = collection[0];
     var page  = collection[1];
     var title = collection[2];
     $routeProvider.when(route, {
-      'templateUrl': page, 
+      'templateUrl': page,
       'pageTitle': title
     });
   });
@@ -42,22 +42,38 @@ app.config(function($routeProvider, $locationProvider){
   // $locationProvider.html5Mode(true);
 });
 
-app.run(['$rootScope', '$http', function($rootScope, $http){
+app.run(['$rootScope', '$http', 'ngNotify', function($rootScope, $http, ngNotify){
 
   $rootScope.user    = null;
   $rootScope.team    = null;
   $rootScope.billing = {};
   $rootScope.routes  = routes;
 
+  ngNotify.config({
+    theme: 'pure',
+    position: 'bottom',
+    duration: 3000,
+    type: 'info',
+    sticky: false,
+    button: true,
+    html: false
+  });
+
   $rootScope.actionHelper = function($scope, data, path, verb, successCallback, errorCallback){
     var i;
 
     $('button').prop('disabled', true);
 
-    if(typeof errorCallback !== 'function'){
-      errorCallback = function(errorMessage){
-        $scope.error = errorMessage;
+    if(typeof successCallback !== 'function'){
+      successCallback = function(data){
+        var successMessage = 'OK!';
+        if(data.message){ successMessage = data.message; }
+        ngNotify.set(successMessage, 'success');
       };
+    }
+
+    if(typeof errorCallback !== 'function'){
+      errorCallback = function(errorMessage){ ngNotify.set(errorMessage, 'error'); };
     }
 
     if(!data.csrfToken){ data.csrfToken = $rootScope.csrfToken; }
@@ -68,9 +84,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     if(Object.keys(data).length > 0 && (verb === 'get' || verb === 'GET') && path.indexOf('?') < 0){
       path += '?';
-      for(i in data){
-        path += i + '=' + data[i] + '&';
-      }
+      for(i in data){ path += i + '=' + data[i] + '&'; }
     }
 
     $http({
@@ -79,8 +93,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
       data    : $.param(data),  // pass in data as strings
       headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
      }).success(function(data){
+       $('button').prop('disabled', false);
       successCallback(data);
-      $('button').prop('disabled', false);
     }).catch(function(data){
       var errorMessage = '';
       if(data.data && data.data.error){
@@ -89,7 +103,9 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         errorMessage = data.statusText + ' | ' + data.status;
       }
       errorCallback(errorMessage);
-      $('button').prop('disabled', false);
+      setTimeout(function(){
+        $('button').prop('disabled', false);
+      }, 500);
     });
   };
 

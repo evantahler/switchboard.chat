@@ -1,5 +1,5 @@
 app.controller('team:create', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
-  
+
   if($rootScope.user){
     $location.path('/account');
     location.reload(); // <- hack to force the CSRF Token to hydrate
@@ -7,11 +7,10 @@ app.controller('team:create', ['$scope', '$rootScope', '$location', function($sc
 
   $scope.formData    = {};
   $scope.processForm = function(){
-    delete $scope.success;
     $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'POST', function(data){
       $rootScope.actionHelper($scope, $scope.formData, '/api/session', 'POST', function(data){
-        if(data.user){ 
-          $rootScope.user = data.user; 
+        if(data.user){
+          $rootScope.user = data.user;
           location.reload();
         }
       });
@@ -19,7 +18,7 @@ app.controller('team:create', ['$scope', '$rootScope', '$location', function($sc
   };
 }]);
 
-app.controller('team:edit', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+app.controller('team:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   $scope.formData = {};
 
   $rootScope.actionHelper($scope, {
@@ -28,11 +27,10 @@ app.controller('team:edit', ['$scope', '$rootScope', '$location', function($scop
     data.team.phoneNumber = $rootScope.formatters.phoneNumber(data.team.phoneNumber);
     $scope.formData = data.team;
   });
-    
+
   $scope.processForm = function(){
-    delete $scope.success;
     $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'PUT', function(data){
-      $scope.success = 'Updated!';
+      ngNotify.set('Updated', 'success');
       $rootScope.team = data.team;
     });
   };

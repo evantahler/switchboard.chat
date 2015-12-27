@@ -13,16 +13,18 @@
     <link rel="stylesheet" href="/css/superhero.min.css">
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/ng-notify.min.css">
 
     <!-- Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="/js/bootstrap/bootstrap.min.js"></script>
     <script src="/js/angular/angular.min.js"></script>
     <script src="/js/angular/angular-route.min.js"></script>
-    <script src="/js/actionheroClient.min.js"></script>
-    <script src="/js/moment.min.js"></script>
-    <script src="/js/highcharts.js"></script>
-    
+    <script src="/js/angular/ng-notify.min.js"></script>
+    <script src="/js/actionhero/actionheroClient.min.js"></script>
+    <script src="/js/misc/moment.min.js"></script>
+    <script src="/js/misc/highcharts.js"></script>
+
     <!-- App -->
     <script src="/js/app/app.js"></script>
     <script src="/js/app/controllers/page.js"></script>
@@ -38,8 +40,8 @@
   <body ng-controller="pageController">
 
     <header id="nav-container" class="container">
-      <div ng-if="$root.user"  ng-include="'pages/shared/nav-logged-in.html'"></div>        
-      <div ng-if="!$root.user" ng-include="'pages/shared/nav-logged-out.html'"></div>        
+      <div ng-if="$root.user"  ng-include="'pages/shared/nav-logged-in.html'"></div>
+      <div ng-if="!$root.user" ng-include="'pages/shared/nav-logged-out.html'"></div>
     </header>
 
     <div id="main" class="container">

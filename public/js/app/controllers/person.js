@@ -1,5 +1,5 @@
-app.controller('person:combined', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
-  
+app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
+
   $scope.person = null;
   $scope.people = [];
   $scope.messages = [];
@@ -20,13 +20,14 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
   ///////////
   // FORMS //
   ///////////
-  
+
   $scope.processCreateForm = function(){
     $scope.forms.create.teamId = $rootScope.user.teamId;
     $rootScope.actionHelper($scope, $scope.forms.create, '/api/person', 'POST', function(data){
       $scope.clearModals('#addPersonModal');
       $scope.forms.create = {};
       $scope.loadPeople();
+      ngNotify.set('Person Added', 'success');
     });
   };
 
@@ -37,6 +38,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
       $scope.forms.edit = {};
       $scope.loadPeople();
       if($scope.person){ $scope.loadPerson($scope.person.id); }
+      ngNotify.set('Person Updated', 'success');
     });
   };
 
@@ -47,7 +49,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
     });
   };
 
-  $scope.processGroupMessageForm = function(personIds){    
+  $scope.processGroupMessageForm = function(personIds){
     if(!personIds){
       $scope.groupMessageStatus = [0,0];
       personIds = [];
@@ -66,15 +68,15 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
 
     if(personIds.length === 0){
       $scope.forms.groupMessage.body = null;
-      
+
       return setTimeout(function(){
         $scope.groupMessageStatus = [0,0];
         $scope.clearModals('#groupMessageModal');
-      }, 500);
+      }, 1000);
     }
 
     $rootScope.actionHelper($scope, {
-      personId: personIds.pop(), 
+      personId: personIds.pop(),
       body: $scope.forms.groupMessage.body
     }, '/api/message/out', 'POST', function(){
       $scope.groupMessageStatus[0]++;
@@ -94,8 +96,8 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
 
   $scope.loadPeople = function(){
     $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
-      if(data.people){ 
-        $scope.people = data.people; 
+      if(data.people){
+        $scope.people = data.people;
         $scope.people.forEach(function(person){
           $scope.checkUnreadCount(person.id);
         });
@@ -118,14 +120,13 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
         personId: personId,
         teamId: $rootScope.team.id,
       }, '/api/person', 'DELETE', function(data){
+        ngNotify.set('Person Deleted', 'success');
         $scope.loadPeople();
-      }, function(e){
-        alert(e);
       });
     }
   };
 
-  $scope.checkUnreadCount = function(personId){    
+  $scope.checkUnreadCount = function(personId){
     $rootScope.actionHelper($scope, {
       personId: personId,
       teamId: $rootScope.team.id,
@@ -133,12 +134,10 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
       if(data.unreadCount > 0){
         $scope.blinkPerson(data.person.phoneNumber);
       }
-    }, function(e){
-      alert(e);
     });
   };
 
-  $scope.loadThread = function(personId){    
+  $scope.loadThread = function(personId){
     $scope.loadPerson(personId);
     for(var i in $scope.people){
       if(personId === $scope.people[i].id){
@@ -182,11 +181,11 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
         $scope.paginationData.page  = String((data.offset / data.limit) + 1);
         $scope.paginationData.limit = String(data.limit);
         $scope.paginationData.possiblePages = [];
-        
+
         var counter = 0;
         while((counter * $scope.paginationData.limit) < data.total){
           $scope.paginationData.possiblePages.push((counter + 1));
-          counter++; 
+          counter++;
         }
       });
     }
@@ -199,20 +198,20 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', function
   $scope.connectWS = function(){
     if(!$scope.client){
 
-      $scope.client = new ActionheroClient;
+      $scope.client = new ActionheroClient();
 
       $scope.client.on('connected',    function(){    console.log('connected!');       });
       $scope.client.on('error',        function(err){ console.log('error', err.stack); });
       $scope.client.on('reconnect',    function(){    console.log('reconnect');        });
       $scope.client.on('reconnecting', function(){    console.log('reconnecting');     });
-      
+
       $scope.client.on('say', function(payload){
         if(payload.message.direction === 'in'){ $rootScope.audio[1].play(); }
         if(payload.message.direction === 'out'){ $rootScope.audio[2].play(); }
         $scope.client.action('message:read', {messageId: payload.message.id});
         if(
           $scope.person && (
-            String(payload.message.to) === String($scope.person.phoneNumber) || 
+            String(payload.message.to) === String($scope.person.phoneNumber) ||
             String(payload.message.from) === String($scope.person.phoneNumber)
           )
         ){

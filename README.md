@@ -2,6 +2,9 @@
 
 ## Local development
 
+- `brew install redis && redis-server start`
+- `brew install mysql && mysql.server start`
+- `mysql -e "create database switchboard_development"`
 - `cp .env.example .env` and fill in your local config
 - `source .env && npm start`
 
@@ -9,9 +12,7 @@
 
 - billing
 - when you sign up, we need some sort of "welcome" page
-- When there are no users in your team, the messages page makes no sense
 - complete the `about` page
-- edit contacts
 - TESTS
 
 ## Production Vendors
