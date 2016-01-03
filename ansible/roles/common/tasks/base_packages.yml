@@ -17,6 +17,8 @@
      - python-pip
      - python-dev
      - logrotate
+     - libpam0g
+     - libpam0g-dev
      - libmysqlclient-dev
 
 - apt: name=apparmor state=absent

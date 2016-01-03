@@ -1,8 +1,25 @@
 ansible_ssh_user: root
 deploy_user: deploy
 cluster_env: production
+application: switchboard.chat
 database: switchboard_production
 git_branch: master
+node_env: production
+
+monit_version: "5.11"
+monit_alert_email: admin@switchboard.chat
+monit_gmail_user: evan@delicioushat.com
+monit_gmail_pass: big red button
+
+monit_system_alert_memory_usage: '85% for 10 cycles'
+monit_system_alert_cpu_usage_user: '85% for 10 cycles'
+monit_system_alert_cpu_usage_system: '50% for 10 cycles'
+monit_system_alert_cpu_usage_wait: '20% for 10 cycles'
+monit_system_alert_loadavg_5_min: '10 for 10 cycles'
+monit_system_alert_disk_utilization_percent: '80%'
+monit_system_alert_network_upload: "5000 kB/s for 5 cycles"
+monit_system_alert_network_download: "5000 kB/s for 5 cycles"
+monit_system_alert_network_throughput: "1024 MB in last 5 minutes for 3 cycles"
 
 logrotate_paths:
   - { name: application,   path: /home/deploy/www/*/shared/log/*.log }

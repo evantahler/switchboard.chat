@@ -32,4 +32,8 @@
   notify:
     - restart nginx
 
+- name: run nginx with monit
+  template: src=roles/monit/templates/monit/nginx.conf.j2 dest=/etc/monit/conf.d/nginx.conf
+  notify: reload monit
+
 - meta: flush_handlers

@@ -10,5 +10,9 @@
 - name: install redis-server
   apt: 'name=redis-server=3:3.0* state=present'
 
+- name: run redis-server with monit
+  template: src=roles/monit/templates/monit/redis-server.conf.j2 dest=/etc/monit/conf.d/redis-server.conf
+  notify: reload monit
+
 - name: flush handlers
   meta: flush_handlers

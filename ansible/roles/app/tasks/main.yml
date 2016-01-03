@@ -3,7 +3,6 @@
   register: timestamp
   run_once: true
 
-- set_fact: "application='switchboard.chat'"
 - set_fact: "release_path='/home/{{ deploy_user }}/www/{{ application }}/releases/{{ timestamp.stdout }}'"
 - set_fact: "shared_path='/home/{{ deploy_user }}/www/{{ application }}/shared'"
 - set_fact: "current_path='/home/{{ deploy_user }}/www/{{ application }}/current'"
@@ -27,9 +26,9 @@
   stat: "path=/home/{{ deploy_user }}/www/{{ application }}/shared/cached-copy/.git"
 
 - name: git clone
-  git: 
-    accept_hostkey: True 
-    repo: "git@github.com:evantahler/{{ application }}.git" 
+  git:
+    accept_hostkey: True
+    repo: "git@github.com:evantahler/{{ application }}.git"
     version: "{{ git_branch | default('master') }}"
     dest: "/home/{{ deploy_user }}/www/{{ application }}/shared/cached-copy"
   sudo: yes
@@ -40,7 +39,7 @@
   shell: "git fetch && git reset --hard origin/master"
   sudo: yes
   sudo_user: '{{ deploy_user }}'
-  args: 
+  args:
     chdir: "{{ shared_path }}/cached-copy"
 
 - name: Create release directory
@@ -57,14 +56,14 @@
   shell: "git checkout origin/{{ git_branch }}"
   sudo: yes
   sudo_user: '{{ deploy_user }}'
-  args: 
+  args:
     chdir: "{{ release_path }}"
 
 - name: symlinks
   shell: "rm -rf {{ item.dest }} && ln -s {{ item.src }} {{ item.dest }}"
   sudo: yes
   sudo_user: '{{ deploy_user }}'
-  with_items: 
+  with_items:
     - { src: '{{ shared_path }}/log',          dest: '{{ release_path }}/log'           }
     - { src: '{{ shared_path }}/pids',         dest: '{{ release_path }}/pids'          }
     - { src: '{{ shared_path }}/sockets',      dest: '{{ release_path }}/sockets'       }
@@ -88,10 +87,10 @@
   stat: "path=/home/{{ deploy_user }}/www/{{ application }}/current/pids/cluster_pidfile"
 
 - name: start actionhero
-  shell: > 
-    rm -f rm /home/deploy/www/switchboard.chat/shared/sockets/actionhero.sock && 
-    . /home/{{ deploy_user }}/.profile && 
-    cd {{ current_path }} && 
+  shell: >
+    rm -f rm /home/deploy/www/switchboard.chat/shared/sockets/actionhero.sock &&
+    . /home/{{ deploy_user }}/.profile &&
+    cd {{ current_path }} &&
     ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}
   sudo: yes
   sudo_user: '{{ deploy_user }}'
@@ -103,5 +102,9 @@
   sudo: yes
   sudo_user: '{{ deploy_user }}'
   when: "actionhero_running_check.stat.exists"
+
+- name: run actionhero with monit
+  template: src=roles/monit/templates/monit/actionhero.conf.j2 dest=/etc/monit/conf.d/actionhero.conf
+  notify: reload monit
 
 - meta: flush_handlers

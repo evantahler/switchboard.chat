@@ -1,10 +1,11 @@
 - hosts: all
   gather_facts: yes
   roles:
-    - { role: common,      tags: ['common'],    sudo: yes }
-    - { role: environment, tags: ['environment'],  sudo: yes }
-    - { role: iptables,    tags: ['iptables'],  sudo: yes }
-    - { role: nginx,       tags: ['nginx'],     sudo: yes }
-    - { role: redis,       tags: ['redis'],     sudo: yes }
-    - { role: mysql,       tags: ['mysql'],     sudo: yes }
-    - { role: app,         tags: ['app'],       sudo: yes }
+    - { role: common,      tags: ['common'],      sudo: yes }
+    - { role: environment, tags: ['environment'], sudo: yes }
+    - { role: monit,       tags: ['monit'],       sudo: yes }
+    - { role: iptables,    tags: ['iptables'],    sudo: yes }
+    - { role: nginx,       tags: ['nginx'],       sudo: yes }
+    - { role: redis,       tags: ['redis'],       sudo: yes }
+    - { role: mysql,       tags: ['mysql'],       sudo: yes }
+    - { role: app,         tags: ['app'],         sudo: yes }

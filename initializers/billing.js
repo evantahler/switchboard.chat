@@ -1,4 +1,4 @@
-var Stripe = require('Stripe');
+var Stripe = require('stripe');
 var async = require('async');
 var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
