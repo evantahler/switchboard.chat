@@ -21,7 +21,8 @@ app.controller('user:new-password', ['$scope', '$rootScope', '$location', functi
     $scope.formData.userId = $rootScope.user.id;
     $scope.formData.requirePasswordChange = false;
     $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'PUT', function(data){
-      location.reload();
+      $location.path('/welcome');
+      location.reload(); // <- hack to force the CSRF Token to hydrate
     });
   };
 }]);

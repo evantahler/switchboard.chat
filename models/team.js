@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING(191),
       allowNull: true,
     },
+    'stripeToken': {
+      type: DataTypes.STRING(191),
+      allowNull: true,
+    },
   }, {
     indexes: [
       {
@@ -27,7 +31,7 @@ module.exports = function(sequelize, DataTypes){
         fields: ['name']
       },
     ],
-    
+
     instanceMethods: {
       apiData: function(api){
         return {

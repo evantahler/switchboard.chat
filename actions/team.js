@@ -22,25 +22,23 @@ exports.teamCreate = {
 
     // billing stuff
     promoCode:   { required: false },
+    stripeToken: { required: true },
   },
 
   run: function(api, data, next){
     var jobs = [];
 
     var team = api.models.team.build({
-      name:      data.params.name,
-      areaCode:  data.params.areaCode,
-      promoCode: data.params.promoCode,
+      name:        data.params.name,
+      areaCode:    data.params.areaCode,
+      promoCode:   data.params.promoCode,
+      // stripeToken: data.params.stripeToken,
     });
 
     var user = api.models.user.build({
       email:     data.params.email,
       firstName: data.params.firstName,
       lastName:  data.params.lastName,
-    });
-
-    jobs.push(function(done){
-      api.billing.register(team, done);
     });
 
     jobs.push(function(done){
@@ -51,6 +49,10 @@ exports.teamCreate = {
       team.save().then(function(){
         done();
       }).catch(done);
+    });
+
+    jobs.push(function(done){
+      api.billing.register(team, data.params.stripeToken, data.params.email, done);
     });
 
     jobs.push(function(done){

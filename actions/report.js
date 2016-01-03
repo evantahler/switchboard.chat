@@ -10,7 +10,7 @@ exports.reportUsage = {
     data.response.reports = {};
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
-      
+
       var query = '';
       query += ' SELECT                                                                   ';
       query += '   count(1) AS "count",                                                   ';
@@ -27,7 +27,7 @@ exports.reportUsage = {
       query += ' GROUP BY year, month, peopleTo.id, peopleFrom.id                         ';
 
       api.sequelize.sequelize.query(query,{
-        replacements: { teamId: team.id }, 
+        replacements: { teamId: team.id },
         type: api.sequelize.sequelize.QueryTypes.SELECT }
       ).then(function(rows) {
         rows.forEach(function(row){
@@ -56,30 +56,17 @@ exports.reportBilling = {
   inputs: {},
 
   run: function(api, data, next){
-    data.response.reports = {};
+    data.response.reports = {
+      charges: []
+    };
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
-      
-      var query = '';
-      query += ' SELECT                                  ';
-      query += '   count(1) AS "count",                  ';
-      query += '   YEAR(messages.createdAt) AS "year",   ';
-      query += '   MONTH(messages.createdAt) AS "month"  ';
-      query += ' FROM messages                           ';
-      query += ' WHERE messages.teamId = :teamId         ';
-      query += ' GROUP BY year, month                    ';
-
-      api.sequelize.sequelize.query(query,{
-        replacements: { teamId: team.id }, 
-        type: api.sequelize.sequelize.QueryTypes.SELECT }
-      ).then(function(rows) {
-        rows.forEach(function(row){
-          var date = row.year + ' - ' + row.month;
-          data.response.reports[date] = {
-            date: date,
-            count: row.count,
-            bill: api.billing.calculateMonthlyBill(row.count)
-          };
+      api.models.charge.findAll({
+        where: {teamId: team.id},
+        order: 'paidAt desc',
+      }).then(function(charges){
+        charges.forEach(function(charge){
+          data.response.reports.charges.push( charge.apiData(api) );
         });
 
         next();

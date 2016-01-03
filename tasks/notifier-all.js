@@ -17,7 +17,7 @@ exports.task = {
         });
       });
 
-      async.parallel(jobs, next);
+      async.parallel(jobs, function(error){ next(error); });
     }).catch(next);
   }
 };
