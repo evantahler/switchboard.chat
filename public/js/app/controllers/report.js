@@ -10,8 +10,6 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
       }
     }
 
-    if(categories.length === 1){ categories[1] = categories[0]; }
-
     var chartData = {
       title: {
         text: $rootScope.team.name + ' messages',
