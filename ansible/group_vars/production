@@ -56,6 +56,13 @@ application_env:
   - MYSQL_PASS=""
 
   ############
+  ## STRIPE ##
+  ############
+
+  - STRIPE_API_SECRET_KEY="sk_live_OsooH0740na08XgPEJGbZe4E"
+  - STRIPE_API_PUBLISHABLE_KEY="pk_live_sxpTuPW4S79nW6FMAGclq3QD"
+
+  ############
   ## TWILIO ##
   ############
 

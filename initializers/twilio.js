@@ -15,19 +15,27 @@ module.exports = {
         var countryCode = 'US';
 
         api.twilio.client.availablePhoneNumbers(countryCode).local.list({ areaCode: team.areaCode }, function(error, numbers){
-          if(error){ return callback(error); }
-          if(numbers.length === 0 || !numbers.available_phone_numbers[0]){ 
-            return callback(new Error('No phone numbers availalbe for this area code')); 
+          if(error){
+            if(error.message.match(/Test Account Credentials/)){
+              team.sid = 'test';
+              team.phoneNumber = api.twilio.sanitize('1.111.111.1111');
+              team.save().then(function(){ callback(); });
+            }else{
+              return callback(error);
+            }
           }
-
-          var phoneNumber = numbers.available_phone_numbers[0].phone_number;
-          team.phoneNumber = api.twilio.sanitize(phoneNumber);
-          api.twilio.client.incomingPhoneNumbers.create({phoneNumber: phoneNumber}, function(err, purchasedNumber){
-            team.sid = purchasedNumber.sid;
-            team.save().then(function(){ 
-              api.twilio.updateIncommingUrl(team, callback);
-            }).catch(callback);
-          });
+          else if(numbers.length === 0 || !numbers.available_phone_numbers[0]){
+            return callback(new Error('No phone numbers availalbe for this area code'));
+          }else{
+            var phoneNumber = numbers.available_phone_numbers[0].phone_number;
+            team.phoneNumber = api.twilio.sanitize(phoneNumber);
+            api.twilio.client.incomingPhoneNumbers.create({phoneNumber: phoneNumber}, function(error, purchasedNumber){
+              team.sid = purchasedNumber.sid;
+              team.save().then(function(){
+                api.twilio.updateIncommingUrl(team, callback);
+              }).catch(callback);
+            });
+          }
         });
       },
 
@@ -37,8 +45,10 @@ module.exports = {
 
       updateIncommingUrl: function(team, callback){
         var url = api.config.twilio.messageUrl;
-        url.replace(/https/, 'http'); //hack for twilio and bad HTTPS certs
-        api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.messageUrl}, callback);
+        // url.replace(/https/, 'http'); //hack for twilio and bad HTTPS certs
+        api.twilio.client.incomingPhoneNumbers(team.sid).update({smsUrl: api.config.twilio.messageUrl}, function(error){
+          callback(error);
+        });
       },
 
       decorateMessage: function(team, message, callback){
@@ -71,9 +81,9 @@ module.exports = {
         message.save().then(function(){
           // sleep between message to attempt to have them send in order
           setTimeout(function(){
-            api.twilio.client.sendMessage({ 
-              to: to, 
-              from: from, 
+            api.twilio.client.sendMessage({
+              to: to,
+              from: from,
               body: message.message
             }, function(error){
               if(error){ return callback(error); }
@@ -81,7 +91,7 @@ module.exports = {
                 if(error){ return callback(error); }
                 api.chatRoom.broadcast({}, 'team:' + team.id, formattedMessage );
                 callback();
-              });              
+              });
             });
           }, 500);
         }).catch(callback);

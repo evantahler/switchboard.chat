@@ -1,4 +1,4 @@
-app.controller('report:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){  
+app.controller('report:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
   $rootScope.actionHelper($scope, {}, '/api/report/usage', 'GET', function(data){
     var name, yearMonth, i, j;
     var categories = [];
@@ -74,6 +74,6 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
 
 
   $rootScope.actionHelper($scope, {}, '/api/report/billing', 'GET', function(data){
-    $scope.billingReport = data.reports;
+    $scope.charges = data.reports.charges;
   });
 }]);

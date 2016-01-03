@@ -8,6 +8,9 @@ exports.billingRates = {
 
   run: function(api, data, next){
     data.response.billing = {
+      stripe: {
+        PublishableKey : api.config.billing.stripe_api_publishable_key,
+      },
       rates: {
         includedMessagesPerMonth: api.config.billing.includedMessagesPerMonth,
         pricePerMessage:          api.config.billing.pricePerMessage,

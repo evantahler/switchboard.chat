@@ -1,12 +1,29 @@
-app.controller('team:create', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+app.controller('team:create', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
 
   if($rootScope.user){
-    $location.path('/account');
+    $location.path('/welcome');
     location.reload(); // <- hack to force the CSRF Token to hydrate
   }
 
   $scope.formData    = {};
-  $scope.processForm = function(){
+
+  var processCard = function(callback){
+    Stripe.card.createToken({
+      number: $scope.formData.cardNumber,
+      cvc: $scope.formData.cvc,
+      exp_month: $scope.formData.expMonth,
+      exp_year: $scope.formData.expYear
+    }, function(status, response){
+      if(response.error){
+        ngNotify.set(response.error.message, 'error');
+      }else{
+        $scope.formData.stripeToken = response.id;
+        callback();
+      }
+    });
+  };
+
+  var processApi = function(){
     $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'POST', function(data){
       $rootScope.actionHelper($scope, $scope.formData, '/api/session', 'POST', function(data){
         if(data.user){
@@ -15,6 +32,10 @@ app.controller('team:create', ['$scope', '$rootScope', '$location', function($sc
         }
       });
     });
+  };
+
+  $scope.processForm = function(){
+    processCard(processApi);
   };
 }]);
 

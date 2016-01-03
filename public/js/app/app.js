@@ -19,6 +19,7 @@ var routes = [
   [ '/people/:personId', 'pages/people.html',               'switchboard: People',          true  ],
   [ '/account',          'pages/account.html',              'switchboard: Account',         true  ],
   [ '/team',             'pages/team.html',                 'switchboard: Team',            true  ],
+  [ '/welcome',          'pages/welcome.html',              'switchboard: Welcome',         true  ],
 ];
 
 /////////////////
