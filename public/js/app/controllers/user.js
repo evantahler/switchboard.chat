@@ -2,7 +2,7 @@ app.controller('user:create', ['$scope', '$rootScope', '$location', function($sc
   $scope.formData    = {};
   $scope.processForm = function(){
     $scope.formData.teamId = $rootScope.team.id;
-    $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'POST', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.formData, '/api/user', 'POST', function(data){
       location.reload();
     });
   };
@@ -40,7 +40,7 @@ app.controller('user:reset-password', ['$scope', '$rootScope', '$location', '$ro
 
 app.controller('user:list', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   var loadTeamUsers = function(){
-    $rootScope.actionHelper($scope, {}, '/api/user/list', 'GET', function(data){
+    $rootScope.authenticatedActionHelper($scope, {}, '/api/user/list', 'GET', function(data){
       $scope.users = data.users;
     });
   };
@@ -49,7 +49,7 @@ app.controller('user:list', ['$scope', '$rootScope', '$location', 'ngNotify', fu
 
   $scope.deleteTeamUser = function(userId){
     if(confirm('Are you sure?')){
-      $rootScope.actionHelper($scope, {
+      $rootScope.authenticatedActionHelper($scope, {
         userId: userId,
         teamId: $rootScope.team.id,
       }, '/api/user', 'DELETE', function(data){
@@ -63,13 +63,13 @@ app.controller('user:list', ['$scope', '$rootScope', '$location', 'ngNotify', fu
 app.controller('user:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   $scope.formData = $rootScope.user;
 
-  $rootScope.actionHelper($scope, {userId: $rootScope.user.id}, '/api/user', 'GET', function(data){
+  $rootScope.authenticatedActionHelper($scope, {userId: $rootScope.user.id}, '/api/user', 'GET', function(data){
     $scope.formData = data.user;
   });
 
   $scope.processForm = function(){
     $scope.formData.userId = $rootScope.user.id;
-    $rootScope.actionHelper($scope, $scope.formData, '/api/user', 'PUT', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.formData, '/api/user', 'PUT', function(data){
       if(data.user){
         ngNotify.set('Account Updated', 'success');
         $rootScope.user = data.user;
@@ -80,13 +80,13 @@ app.controller('user:edit', ['$scope', '$rootScope', '$location', 'ngNotify', fu
 }]);
 
 app.controller('notification:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
-  $rootScope.actionHelper($scope, {userId: $rootScope.user.id}, '/api/notification', 'GET', function(data){
+  $rootScope.authenticatedActionHelper($scope, {userId: $rootScope.user.id}, '/api/notification', 'GET', function(data){
     $scope.formData = data.notification;
   });
 
   $scope.processForm = function(){
     $scope.formData.userId = $rootScope.user.id;
-    $rootScope.actionHelper($scope, $scope.formData, '/api/notification', 'PUT', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.formData, '/api/notification', 'PUT', function(data){
       ngNotify.set('Notifications Updated', 'success');
       if(data.notification){
         $scope.formData = data.notification;

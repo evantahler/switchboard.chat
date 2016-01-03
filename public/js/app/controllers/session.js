@@ -17,7 +17,7 @@ app.controller('session:create', ['$scope', '$rootScope', '$location', function(
   };
 }]);
 
-app.controller('session:destroy', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){  
+app.controller('session:destroy', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
   $scope.submitForm = function(){
     $scope.processForm.call(this);
   };

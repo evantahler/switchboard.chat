@@ -42,7 +42,7 @@ app.controller('team:create', ['$scope', '$rootScope', '$location', 'ngNotify', 
 app.controller('team:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   $scope.formData = {};
 
-  $rootScope.actionHelper($scope, {
+  $rootScope.authenticatedActionHelper($scope, {
     userId: $rootScope.user.id, teamId: $rootScope.user.teamId
   }, '/api/team', 'GET', function(data){
     data.team.phoneNumber = $rootScope.formatters.phoneNumber(data.team.phoneNumber);
@@ -50,7 +50,7 @@ app.controller('team:edit', ['$scope', '$rootScope', '$location', 'ngNotify', fu
   });
 
   $scope.processForm = function(){
-    $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'PUT', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.formData, '/api/team', 'PUT', function(data){
       ngNotify.set('Updated', 'success');
       $rootScope.team = data.team;
     });

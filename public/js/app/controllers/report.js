@@ -1,5 +1,5 @@
 app.controller('report:list', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
-  $rootScope.actionHelper($scope, {}, '/api/report/usage', 'GET', function(data){
+  $rootScope.authenticatedActionHelper($scope, {}, '/api/report/usage', 'GET', function(data){
     var name, yearMonth, i, j;
     var categories = [];
     var toalData = [];
@@ -67,11 +67,11 @@ app.controller('report:list', ['$scope', '$rootScope', '$location', function($sc
     // hadck to defer loading to next cycle
     setTimeout(function(){
       $('#reportUsage').highcharts(chartData);
-    }, 1);
+    }, 10);
   });
 
 
-  $rootScope.actionHelper($scope, {}, '/api/report/billing', 'GET', function(data){
+  $rootScope.authenticatedActionHelper($scope, {}, '/api/report/billing', 'GET', function(data){
     $scope.charges = data.reports.charges;
   });
 }]);

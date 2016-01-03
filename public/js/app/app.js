@@ -60,6 +60,17 @@ app.run(['$rootScope', '$http', 'ngNotify', function($rootScope, $http, ngNotify
     html: false
   });
 
+  $rootScope.authenticatedActionHelper = function($scope, data, path, verb, successCallback, errorCallback){
+    if(!$rootScope.csrfToken){
+      setTimeout(function(){
+        console.log('await csrfToken for ' + path)
+        $rootScope.authenticatedActionHelper($scope, data, path, verb, successCallback, errorCallback);
+      }, 1000);
+    }else{
+      $rootScope.actionHelper($scope, data, path, verb, successCallback, errorCallback);
+    }
+  };
+
   $rootScope.actionHelper = function($scope, data, path, verb, successCallback, errorCallback){
     var i;
 

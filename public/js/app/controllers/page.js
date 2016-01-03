@@ -2,11 +2,6 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
 
   $scope.date = new Date();
 
-  $rootScope.actionHelper($scope, {}, '/api/billing/rates', 'GET', function(data){
-    $rootScope.billing.rates = data.billing.rates;
-    Stripe.setPublishableKey(data.billing.stripe.PublishableKey);
-  });
-
   $rootScope.actionHelper($scope, {}, '/api/session', 'PUT', function(data){
     if(data.user){
       $rootScope.user      = data.user;
@@ -36,6 +31,11 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
     }else{
       $location.path('/');
     }
+  });
+
+  $rootScope.actionHelper($scope, {}, '/api/billing/rates', 'GET', function(data){
+    $rootScope.billing.rates = data.billing.rates;
+    Stripe.setPublishableKey(data.billing.stripe.PublishableKey);
   });
 
   $scope.getNavigationHighlight = function(path){

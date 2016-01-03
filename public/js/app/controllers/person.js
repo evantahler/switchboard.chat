@@ -23,7 +23,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
 
   $scope.processCreateForm = function(){
     $scope.forms.create.teamId = $rootScope.user.teamId;
-    $rootScope.actionHelper($scope, $scope.forms.create, '/api/person', 'POST', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.create, '/api/person', 'POST', function(data){
       $scope.clearModals('#addPersonModal');
       $scope.forms.create = {};
       $scope.loadPeople();
@@ -33,7 +33,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
 
   $scope.processEditForm = function(){
     $scope.forms.edit.personId = $scope.forms.edit.id;
-    $rootScope.actionHelper($scope, $scope.forms.edit, '/api/person', 'PUT', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.edit, '/api/person', 'PUT', function(data){
       $scope.clearModals('#editPersonModal');
       $scope.forms.edit = {};
       $scope.loadPeople();
@@ -44,7 +44,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
 
   $scope.processMessageForm = function(){
     $scope.forms.message.personId = $scope.person.id;
-    $rootScope.actionHelper($scope, $scope.forms.message, '/api/message/out', 'POST', function(data){
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.message, '/api/message/out', 'POST', function(data){
       $scope.forms.message = {};
     });
   };
@@ -75,7 +75,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
       }, 1000);
     }
 
-    $rootScope.actionHelper($scope, {
+    $rootScope.authenticatedActionHelper($scope, {
       personId: personIds.pop(),
       body: $scope.forms.groupMessage.body
     }, '/api/message/out', 'POST', function(){
@@ -95,7 +95,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   };
 
   $scope.loadPeople = function(){
-    $rootScope.actionHelper($scope, {}, '/api/person/list', 'GET', function(data){
+    $rootScope.authenticatedActionHelper($scope, {}, '/api/person/list', 'GET', function(data){
       if(data.people){
         $scope.people = data.people;
         $scope.people.forEach(function(person){
@@ -108,7 +108,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   $scope.editPerson = function(personId){
     $scope.forms.edit = {};
     $('#editPersonModal').modal('show');
-    $rootScope.actionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
+    $rootScope.authenticatedActionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
       $scope.forms.edit = data.person;
     });
   };
@@ -116,7 +116,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   $scope.deletePerson = function(personId){
     if(confirm('Are you sure?')){
       $scope.clearModals('#editPersonModal');
-      $rootScope.actionHelper($scope, {
+      $rootScope.authenticatedActionHelper($scope, {
         personId: personId,
         teamId: $rootScope.team.id,
       }, '/api/person', 'DELETE', function(data){
@@ -127,7 +127,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   };
 
   $scope.checkUnreadCount = function(personId){
-    $rootScope.actionHelper($scope, {
+    $rootScope.authenticatedActionHelper($scope, {
       personId: personId,
       teamId: $rootScope.team.id,
     }, '/api/person/unread', 'GET', function(data){
@@ -158,7 +158,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   };
 
   $scope.loadPerson = function(personId){
-    $rootScope.actionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
+    $rootScope.authenticatedActionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
       $scope.person = data.person;
       $scope.loadMessages();
     });
@@ -171,7 +171,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
 
       var offset = ($scope.paginationData.page - 1) * $scope.paginationData.limit;
 
-      $rootScope.actionHelper($scope, {
+      $rootScope.authenticatedActionHelper($scope, {
         limit: $scope.paginationData.limit,
         offset: offset,
         personIds: [ $scope.person.id ],
