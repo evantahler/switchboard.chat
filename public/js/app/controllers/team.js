@@ -74,6 +74,7 @@ app.controller('team:edit_billing', ['$scope', '$rootScope', '$location', 'ngNot
 
   var processApi = function(){
     $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'PUT', function(){
+      ngNotify.set('Billing Information Updated', 'success');
       $scope.formData = {};
       loadBillingInfo();
     });
