@@ -34,6 +34,10 @@ module.exports = {
         }).catch(callback);
       },
 
+      loadStripeData: function(team, callback){
+        api.billing.stripe.customers.retrieve(team.stripeToken, callback);
+      },
+
       createMonthlyBillCharge: function(now, team, callback){
         var type = 'monthlyTeamCharge';
         var description = 'switchboard.chat monthly charge for `' + team.name + '`';

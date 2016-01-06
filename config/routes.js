@@ -1,7 +1,7 @@
-exports.default = { 
+exports.default = {
   routes: function(api){
     return {
-      
+
       get: [
         { path: '/user',                 action: 'user:view' },
         { path: '/team',                 action: 'team:view' },
@@ -15,6 +15,7 @@ exports.default = {
         { path: '/report/usage',         action: 'report:usage' },
         { path: '/report/billing',       action: 'report:billing' },
         { path: '/billing/rates',        action: 'billing:rates' },
+        { path: '/team/billing',         action: 'team:billingInfo' },
       ],
 
       post: [
@@ -43,7 +44,7 @@ exports.default = {
         { path: '/team',                 action: 'team:delete' },
         { path: '/person',               action: 'person:delete' },
       ],
-            
+
     };
   }
 };

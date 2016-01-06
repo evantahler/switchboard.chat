@@ -132,7 +132,8 @@ exports.teamEdit = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    name: { required: false },
+    name:        { required: false },
+    stripeToken: { required: false },
   },
 
   run: function(api, data, next){
@@ -140,7 +141,14 @@ exports.teamEdit = {
       if(!team){ return next(new Error('team not found')); }
       team.updateAttributes(data.params).then(function(){
         data.response.team = team.apiData(api);
-        next();
+        if(data.params.stripeToken){
+          api.models.user.findOne({where: {id: data.session.userId}}).then(function(user){
+            if(!user){ return next(new Error('user not found')); }
+            api.billing.register(team, data.params.stripeToken, user.email, next);
+          }).catch(next);
+        }else{
+          return next();
+        }
       }).catch(next);
     }).catch(next);
   }
@@ -163,6 +171,26 @@ exports.teamDelete = {
           next();
         }).catch(next);
       }).catch(next);
+    }).catch(next);
+  }
+};
+
+exports.teamBillingInfo = {
+  name:                   'team:billingInfo',
+  description:            'team:billingInfo',
+  outputExample:          {},
+  middleware:             [ 'logged-in-session' ],
+
+  inputs: {},
+
+  run: function(api, data, next){
+    api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
+      if(!team){ return next(new Error('team not found')); }
+      api.billing.loadStripeData(team, function(error, customer){
+        if(error){ return callback(error); }
+        data.response.customer = customer;
+        next();
+      });
     }).catch(next);
   }
 };

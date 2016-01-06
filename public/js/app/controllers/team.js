@@ -39,6 +39,53 @@ app.controller('team:create', ['$scope', '$rootScope', '$location', 'ngNotify', 
   };
 }]);
 
+app.controller('team:edit_billing', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
+
+  $scope.formData     = {};
+  $scope.existingCard = {};
+
+  var loadBillingInfo = function(callback){
+    $scope.existingCard = {};
+    $rootScope.actionHelper($scope, {}, '/api/team/billing', 'GET', function(data){
+      $scope.existingCard = data.customer.sources.data[0];
+      var createdAt = new Date(data.customer.created * 1000);
+      $scope.createdString = 'Entered by ' + data.customer.email + ' at ' + createdAt.getFullYear() + '-' + (createdAt.getMonth() + 1) + '-' + createdAt.getDate();
+      $scope.formData.cardNumber = 'xxxx-xxxx-xxxx-' + $scope.existingCard.last4;
+      $scope.formData.expMonth   = String($scope.existingCard.exp_month);
+      $scope.formData.expYear    = String($scope.existingCard.exp_year);
+    });
+  };
+
+  var processCard = function(callback){
+    Stripe.card.createToken({
+      number: $scope.formData.cardNumber,
+      cvc: $scope.formData.cvc,
+      exp_month: $scope.formData.expMonth,
+      exp_year: $scope.formData.expYear
+    }, function(status, response){
+      if(response.error){
+        ngNotify.set(response.error.message, 'error');
+      }else{
+        $scope.formData.stripeToken = response.id;
+        callback();
+      }
+    });
+  };
+
+  var processApi = function(){
+    $rootScope.actionHelper($scope, $scope.formData, '/api/team', 'PUT', function(){
+      $scope.formData = {};
+      loadBillingInfo();
+    });
+  };
+
+  $scope.processForm = function(){
+    processCard(processApi);
+  };
+
+  loadBillingInfo();
+}]);
+
 app.controller('team:edit', ['$scope', '$rootScope', '$location', 'ngNotify', function($scope, $rootScope, $location, ngNotify){
   $scope.formData = {};
 

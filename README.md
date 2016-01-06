@@ -29,3 +29,5 @@
   - q38tywghoeignowR~3
 - stripe
   - admin@switchboard.chat / 2tugwihBR0935EAIJ~!@FGRWdf
+- uptimerobot.com
+  - admin@switchboard.chat | 3tguwhioJNK$EFH5

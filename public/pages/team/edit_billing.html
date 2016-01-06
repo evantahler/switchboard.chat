@@ -1,0 +1,49 @@
+<div ng-controller="team:edit_billing">
+  <form ng-submit="processForm()">
+
+    <div class="form-group">
+      <label>Credit Card Number</label>
+      <input type="text" name="cardNumber" class="form-control" placeholder="1234-1234-1234-1234" ng-model="formData.cardNumber">
+      <span ng-if="createdString">{{ createdString }}</span>
+    </div>
+
+    <div class="form-group">
+      <label>CVC</label>
+      <input type="text" name="cvc" class="form-control" placeholder="123" ng-model="formData.cvc">
+    </div>
+
+    <div class="form-group">
+      <label>Experation Month</label>
+      <select ng-model="formData.expMonth">
+        <option value="1">Jan - 1</option>
+        <option value="2">Feb - 2</option>
+        <option value="3">Mar - 3</option>
+        <option value="4">Apr - 4</option>
+        <option value="5">May - 5</option>
+        <option value="6">Jun - 6</option>
+        <option value="7">Jul - 7</option>
+        <option value="8">Aug - 8</option>
+        <option value="9">Sep - 9</option>
+        <option value="10">Oct - 10</option>
+        <option value="11">Nov - 11</option>
+        <option value="12">Dec - 12</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Experation Year</label>
+      <select ng-model="formData.expYear">
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg btn-block">
+      <span class="glyphicon glyphicon-flash"></span> Submit!
+    </button>
+  </form>
+
+</div>
