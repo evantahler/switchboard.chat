@@ -12,6 +12,7 @@ exports.teamCreate = {
     password:    { required: true },
     firstName:   { required: true },
     lastName:    { required: true },
+    companyName: { required: false },
 
     // team stuff
     name:     { required: true },
@@ -36,9 +37,14 @@ exports.teamCreate = {
     });
 
     var user = api.models.user.build({
-      email:     data.params.email,
-      firstName: data.params.firstName,
-      lastName:  data.params.lastName,
+      email:       data.params.email,
+      firstName:   data.params.firstName,
+      lastName:    data.params.lastName,
+      companyName: data.params.companyName,
+    });
+
+    var folder = api.models.folder.build({
+      name: 'default folder'
     });
 
     jobs.push(function(done){
@@ -58,6 +64,13 @@ exports.teamCreate = {
     jobs.push(function(done){
       user.teamId = team.id;
       user.save().then(function(){
+        done();
+      }).catch(done);
+    });
+
+    jobs.push(function(done){
+      folder.teamId = team.id;
+      folder.save().then(function(){
         done();
       }).catch(done);
     });
@@ -87,14 +100,16 @@ exports.teamCreate = {
     jobs.push(function(done){
       data.response.user = user.apiData(api);
       data.response.team = team.apiData(api);
+      data.response.folder = folder.apiData(api);
       done();
     });
 
     async.series(jobs, function(error){
       if(error){
         // roll it back
-        try{ user.destroy(); }catch(e){ api.log(e, 'error'); }
-        try{ team.destroy(); }catch(e){ api.log(e, 'error'); }
+        try{ user.destroy();   }catch(e){ api.log(e, 'error'); }
+        try{ team.destroy();   }catch(e){ api.log(e, 'error'); }
+        try{ folder.destroy(); }catch(e){ api.log(e, 'error'); }
 
         if(error.errors){
           next(error.errors[0].message);

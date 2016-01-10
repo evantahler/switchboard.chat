@@ -1,0 +1,29 @@
+<div ng-controller="person:combined">
+
+  <div ng-include="'pages/person/create-person.html'"></div>
+  <div ng-include="'pages/person/create-folder.html'"></div>
+  <div ng-include="'pages/person/edit-person.html'"></div>
+  <div ng-include="'pages/person/edit-folder.html'"></div>
+
+  <h1>{{$root.team.name}}'s Address Book</h1>
+
+  <div class="container">
+
+    <div class="col-md-12">
+      <div class="btn-toolbar">
+          <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addPersonModal">Add Person</button>
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addFolderModal">Add Folder</button>
+      </div>
+      <hr />
+    </div>
+
+    <div class="col-md-3">
+      <div ng-include="'pages/person/folders.html'"></div>
+    </div>
+
+    <div class="col-md-9">
+      <div ng-include="'pages/person/address-book-list.html'"></div>
+    </div>
+
+  </div>
+</div>

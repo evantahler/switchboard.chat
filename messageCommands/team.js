@@ -2,14 +2,14 @@ var async = require('async');
 
 exports.messageCommand = {
   name: '/team',
-  matchers: [ 
+  matchers: [
     /^\/team/,
     /^\/Team/,
     /^\/TEAM/,
   ],
   description: 'Return information about your team',
   example: '/team',
-  exampleResponse: 'Team Name: Switchboard Test Team\r\nYour most receent recieved message was @ Sat Dec 19 2015 15:22:17 (read)',
+  exampleResponse: 'Team Name: Switchboard Test Team\r\nYour most recent received message was @ Sat Dec 19 2015 15:22:17 (read)',
 
   run: function(api, message, team, person, callback){
     var jobs = [];
@@ -27,10 +27,10 @@ exports.messageCommand = {
         order: 'createdAt desc',
         limit: 2,
       }).then(function(messages){
-        if(messages.length < 2){ 
-          body = 'You team has not recieved any messages'; 
+        if(messages.length < 2){
+          body = 'You team has not received any messages';
         }else{
-          body = 'Your most receent recieved message was @ ' + messages[1].createdAt + ' ' + (messages[1].read ? '(read)' : '(undread)');
+          body = 'Your most recent received message was @ ' + messages[1].createdAt + ' ' + (messages[1].read ? '(read)' : '(undread)');
         }
         api.twilio.sendMessage(team, person, body, done);
       }).catch(done);

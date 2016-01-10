@@ -16,6 +16,8 @@ exports.default = {
         { path: '/report/billing',       action: 'report:billing' },
         { path: '/billing/rates',        action: 'billing:rates' },
         { path: '/team/billing',         action: 'team:billingInfo' },
+        { path: '/folder',               action: 'folder:view' },
+        { path: '/folder/list',          action: 'folder:list' },
       ],
 
       post: [
@@ -27,6 +29,7 @@ exports.default = {
         { path: '/person',               action: 'person:create' },
         { path: '/message/in',           action: 'message:in' },
         { path: '/message/out',          action: 'message:out' },
+        { path: '/folder',               action: 'folder:create' },
       ],
 
       put: [
@@ -36,6 +39,7 @@ exports.default = {
         { path: '/person',               action: 'person:edit' },
         { path: '/notification',         action: 'notification:edit' },
         { path: '/message/read',         action: 'message:read' },
+        { path: '/folder',               action: 'folder:edit' },
       ],
 
       delete: [
@@ -43,6 +47,7 @@ exports.default = {
         { path: '/user',                 action: 'user:delete' },
         { path: '/team',                 action: 'team:delete' },
         { path: '/person',               action: 'person:delete' },
+        { path: '/folder',               action: 'folder:destroy' },
       ],
 
     };

@@ -12,7 +12,7 @@
     "node": "4.2.x"
   },
   "dependencies": {
-    "actionhero": "12.3.0",
+    "actionhero": "12.4.1",
     "ah-swagger-plugin": "0.0.15",
     "async": "^1.5.0",
     "bcrypt": "^0.8.5",
@@ -36,6 +36,6 @@
     "start": "actionhero start",
     "actionhero": "actionhero",
     "startCluster": "actionhero startCluster",
-    "test": "mocha"
+    "test": "NODE_ENV=test mocha"
   }
 }

@@ -9,7 +9,8 @@ exports.personCreate = {
     firstName:      { required: true },
     lastName:       { required: true },
     teamId:         { required: true },
-    canUseCommands: { 
+    folderId:       { required: true },
+    canUseCommands: {
       required: false,
       default: function(){ return 0; }
     },
@@ -21,17 +22,13 @@ exports.personCreate = {
       firstName: data.params.firstName,
       lastName: data.params.lastName,
       teamId: data.session.teamId,
+      folderId: data.params.folderId,
       canUseCommands: data.params.canUseCommands,
     });
 
     person.save().then(function(){
-      api.models.person.findOne({where: {
-        phoneNumber: api.twilio.sanitize(data.params.phoneNumber), 
-        teamId: data.session.teamId}
-      }).then(function(pesronObj){
-        data.response.person = pesronObj.apiData(api);
-        next();
-      }).catch(next);
+      data.response.person = person.apiData(api);
+      next();
     }).catch(function(errors){
       next(errors.errors[0].message);
     });
@@ -129,21 +126,22 @@ exports.personEdit = {
     firstName:      { required: false },
     lastName:       { required: false },
     canUseCommands: { required: false },
+    folderId:       { required: false },
   },
 
   run: function(api, data, next){
     api.models.person.findOne({where: {
-      id: data.params.personId, 
+      id: data.params.personId,
       teamId: data.session.teamId}
     }).then(function(person){
       if(!person){ return next(new Error('person not found')); }
-      
+
       person.updateAttributes({
         phoneNumber: api.twilio.sanitize(data.params.phoneNumber),
         firstName: data.params.firstName,
         lastName: data.params.lastName,
         canUseCommands: data.params.canUseCommands,
-        teamId: data.session.teamId,
+        folderId: data.params.folderId,
       }).then(function(){
         data.response.person = person.apiData(api);
         next();

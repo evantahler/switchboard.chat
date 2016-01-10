@@ -12,6 +12,7 @@ exports.userCreate = {
     password:    { required: true },
     firstName:   { required: true },
     lastName:    { required: true },
+    companyName: { required: false },
     teamId:      { required: true },
     requirePasswordChange: {
       required: false,
@@ -20,7 +21,7 @@ exports.userCreate = {
   },
 
   run: function(api, data, next){
-    if(data.params.phoneNumber){  
+    if(data.params.phoneNumber){
       data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber);
     }
 
@@ -57,7 +58,7 @@ exports.userCreate = {
             api.smtp.send(user.email, subject, emailData, next);
           }).catch(function(errors){
             next(errors.errors[0].message);
-          });        
+          });
         }).catch(function(errors){
           next(errors.errors[0].message);
         });
@@ -126,14 +127,15 @@ exports.userEdit = {
     password:              { required: false },
     firstName:             { required: false },
     lastName:              { required: false },
+    companyName:           { required: false },
     requirePasswordChange: { required: false },
   },
 
   run: function(api, data, next){
-    if(data.params.phoneNumber){  
+    if(data.params.phoneNumber){
       data.params.phoneNumber = api.twilio.sanitize(data.params.phoneNumber);
     }
-    
+
     api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
       user.updateAttributes(data.params).then(function(){
@@ -246,7 +248,7 @@ exports.userDelete = {
 
     api.models.user.findOne({where: {id: data.params.userId, teamId: data.session.teamId}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
-      user.destroy().then(function(){ 
+      user.destroy().then(function(){
         api.models.notification.findOne({where: {userId: data.params.userId}}).then(function(notification){
           notification.destroy().then(function(){
             next();

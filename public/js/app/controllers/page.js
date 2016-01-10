@@ -8,9 +8,9 @@ app.controller('pageController', ['$scope', '$rootScope', '$location', function(
       $rootScope.csrfToken = data.csrfToken;
 
       if($rootScope.user.requirePasswordChange){ $location.path('/new-password'); }
-      if(!$rootScope.user.requirePasswordChange && $location.path() === '/new-password'){ $location.path('/people'); }
-      if($location.path() === '/'){      $location.path('/people'); }
-      if($location.path() === '/login'){ $location.path('/people'); }
+      if(!$rootScope.user.requirePasswordChange && $location.path() === '/new-password'){ $location.path('/messages'); }
+      if($location.path() === '/'){      $location.path('/messages'); }
+      if($location.path() === '/login'){ $location.path('/messages'); }
 
       $rootScope.actionHelper($scope, {}, '/api/team', 'GET', function(data){
         if(data.team){ $rootScope.team = data.team;  }

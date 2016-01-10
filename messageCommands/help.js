@@ -2,12 +2,12 @@ var async = require('async');
 
 exports.messageCommand = {
   name: '/help',
-  matchers: [ 
+  matchers: [
     /^\/help/,
     /^\/Help/,
     /^\/HELP/,
   ],
-  description: 'The system will responsd with help about how to use these commands',
+  description: 'The system will respond with help about how to use these commands',
   example: '/help',
   exampleResponse: 'The commands you can run are:\r\n/all: Send a message to all people in this team\'s address book\r\n/help: The system will responsd with help about how to use these commands\r\n/team: Return information about your team',
 

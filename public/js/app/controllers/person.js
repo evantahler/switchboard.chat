@@ -2,17 +2,20 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
 
   $scope.person = null;
   $scope.people = [];
+  $scope.folders = [];
   $scope.messages = [];
   $scope.client = null;
   $scope.groupMessageStatus = [0,0];
   $scope.totalMessages = null;
   $scope.showPagination = true;
   $scope.paginationData = {
-    limit: '50', page: '1', possiblePages: [],
+    limit: '50', page: '1', possiblePages: [], folderId: '',
   };
   $scope.forms = {
-    create: {},
-    edit: {},
+    createPerson: {},
+    createFolder: {},
+    editPerson: {},
+    editFolder: {},
     message: {},
     groupMessage: {},
   };
@@ -21,24 +24,47 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   // FORMS //
   ///////////
 
-  $scope.processCreateForm = function(){
-    $scope.forms.create.teamId = $rootScope.user.teamId;
-    $rootScope.authenticatedActionHelper($scope, $scope.forms.create, '/api/person', 'POST', function(data){
+  $scope.processCreatePersonForm = function(){
+    $scope.forms.createPerson.teamId = $rootScope.user.teamId;
+    if($scope.folders.length === 1 && !$scope.forms.createPerson.folderId){
+      $scope.forms.createPerson.folderId = $scope.folders[0].id;
+    }
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.createPerson, '/api/person', 'POST', function(data){
       $scope.clearModals('#addPersonModal');
-      $scope.forms.create = {};
+      $scope.forms.createPerson = {};
       $scope.loadPeople();
       ngNotify.set('Person Added', 'success');
     });
   };
 
-  $scope.processEditForm = function(){
-    $scope.forms.edit.personId = $scope.forms.edit.id;
-    $rootScope.authenticatedActionHelper($scope, $scope.forms.edit, '/api/person', 'PUT', function(data){
+  $scope.processCreateFolderForm = function(){
+    $scope.forms.createFolder.teamId = $rootScope.user.teamId;
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.createFolder, '/api/folder', 'POST', function(data){
+      $scope.clearModals('#addFolderModal');
+      $scope.forms.createFolder = {};
+      $scope.loadFolders();
+      ngNotify.set('Folder Added', 'success');
+    });
+  };
+
+  $scope.processEditPersonForm = function(){
+    $scope.forms.editPerson.personId = $scope.forms.editPerson.id;
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.editPerson, '/api/person', 'PUT', function(data){
       $scope.clearModals('#editPersonModal');
-      $scope.forms.edit = {};
+      $scope.forms.editPerson = {};
       $scope.loadPeople();
       if($scope.person){ $scope.loadPerson($scope.person.id); }
       ngNotify.set('Person Updated', 'success');
+    });
+  };
+
+  $scope.processEditFolderForm = function(){
+    $scope.forms.editFolder.folderId = $scope.forms.editFolder.id;
+    $rootScope.authenticatedActionHelper($scope, $scope.forms.editFolder, '/api/folder', 'PUT', function(data){
+      $scope.clearModals('#editFolderModal');
+      $scope.forms.editFolder = {};
+      $scope.loadFolders();
+      ngNotify.set('Folder Updated', 'success');
     });
   };
 
@@ -98,18 +124,36 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
     $rootScope.authenticatedActionHelper($scope, {}, '/api/person/list', 'GET', function(data){
       if(data.people){
         $scope.people = data.people;
-        $scope.people.forEach(function(person){
-          $scope.checkUnreadCount(person.id);
-        });
+
+        if($location.path() === '/messages'){
+          $scope.people.forEach(function(person){
+            $scope.checkUnreadCount(person.id);
+          });
+        }
       }
     });
   };
 
+  $scope.loadFolders = function(){
+    $rootScope.authenticatedActionHelper($scope, {}, '/api/folder/list', 'GET', function(data){
+      $scope.folders = data.folders;
+    });
+  };
+
   $scope.editPerson = function(personId){
-    $scope.forms.edit = {};
+    $scope.forms.editPerson = {};
     $('#editPersonModal').modal('show');
     $rootScope.authenticatedActionHelper($scope, {personId: personId}, '/api/person', 'GET', function(data){
-      $scope.forms.edit = data.person;
+      $scope.forms.editPerson = data.person;
+      $scope.forms.editPerson.folderId = String($scope.forms.editPerson.folderId);
+    });
+  };
+
+  $scope.editFolder= function(folderId){
+    $scope.forms.editFolder = {};
+    $('#editFolderModal').modal('show');
+    $rootScope.authenticatedActionHelper($scope, {folderId: folderId}, '/api/folder', 'GET', function(data){
+      $scope.forms.editFolder = data.folder;
     });
   };
 
@@ -122,6 +166,19 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
       }, '/api/person', 'DELETE', function(data){
         ngNotify.set('Person Deleted', 'success');
         $scope.loadPeople();
+      });
+    }
+  };
+
+  $scope.deleteFolder = function(folderId){
+    if(confirm('Are you sure?')){
+      $scope.clearModals('#editPersonModal');
+      $rootScope.authenticatedActionHelper($scope, {
+        folderId: folderId,
+        teamId: $rootScope.team.id,
+      }, '/api/folder', 'DELETE', function(data){
+        ngNotify.set('Folder Deleted', 'success');
+        $scope.loadFolders();
       });
     }
   };
@@ -239,14 +296,24 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   // EVENTS //
   ////////////
 
-  $scope.$watch('paginationData.limit', $scope.loadMessages);
-  $scope.$watch('paginationData.page' , $scope.loadMessages);
+  $scope.$watch('paginationData.limit',  $scope.loadMessages);
+  $scope.$watch('paginationData.page' ,  $scope.loadMessages);
+  $scope.$watch('paginationData.folderId' , function(){
+    $scope.paginationData.folderIdAsInt = parseInt($scope.paginationData.folderId);
+  });
 
   //////////
   // INIT //
   //////////
 
-  $scope.loadPeople();
-  $scope.connectWS();
+  if($location.path() === '/messages'){
+    $scope.loadFolders();
+    $scope.loadPeople();
+    $scope.connectWS();
+  }
 
+  if($location.path() === '/address-book'){
+    $scope.loadFolders();
+    $scope.loadPeople();
+  }
 }]);

@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes){
     'email': {
       type: DataTypes.STRING(191),
       allowNull: false,
-      validate: { isEmail: true }, 
+      validate: { isEmail: true },
     },
     'phoneNumber': {
       type: DataTypes.STRING(191),
@@ -40,6 +40,10 @@ module.exports = function(sequelize, DataTypes){
     'lastName': {
       type: DataTypes.STRING(191),
       allowNull: false,
+    },
+    'companyName': {
+      type: DataTypes.STRING(191),
+      allowNull: true,
     },
     'lastLoginAt': {
       type: DataTypes.DATE,
@@ -95,6 +99,7 @@ module.exports = function(sequelize, DataTypes){
           phoneNumber:           this.phoneNumber,
           firstName:             this.firstName,
           lastName:              this.lastName,
+          companyName:           this.companyName,
           requirePasswordChange: this.requirePasswordChange,
         };
       }

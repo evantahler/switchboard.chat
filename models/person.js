@@ -4,6 +4,10 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    'folderId': {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     'firstName': {
       type: DataTypes.STRING(191),
       allowNull: false,
@@ -38,6 +42,7 @@ module.exports = function(sequelize, DataTypes){
         return {
           id:             this.id,
           teamId:         this.teamId,
+          folderId:       this.folderId,
           firstName:      this.firstName,
           lastName:       this.lastName,
           phoneNumber:    this.phoneNumber,

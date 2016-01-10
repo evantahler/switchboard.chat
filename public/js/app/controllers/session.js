@@ -5,7 +5,7 @@ app.controller('session:create', ['$scope', '$rootScope', '$location', function(
     if($rootScope.user.requirePasswordChange){
       $location.path('/new-password');
     }else{
-      $location.path('/people');
+      $location.path('/messages');
     }
   }
 

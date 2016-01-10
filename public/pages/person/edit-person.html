@@ -6,43 +6,44 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Edit Person</h4>
       </div>
-      
+
       <div class="modal-body">
-        <form ng-submit="processEditForm()">
+        <form ng-submit="processEditPersonForm()">
 
           <div class="form-group">
             <label>First Name</label>
-            <input type="text" name="firstName" class="form-control" placeholder="George" ng-model="forms.edit.firstName">
+            <input type="text" name="firstName" class="form-control" placeholder="George" ng-model="forms.editPerson.firstName">
           </div>
 
           <div class="form-group">
             <label>Last Name</label>
-            <input type="text" name="lastName" class="form-control" placeholder="Washington" ng-model="forms.edit.lastName">
+            <input type="text" name="lastName" class="form-control" placeholder="Washington" ng-model="forms.editPerson.lastName">
           </div>
 
           <div class="form-group">
             <label>Phone Number</label>
-            <input type="tel" name="phoneNumber" class="form-control" placeholder="xxx.xxx.xxxx" ng-model="forms.edit.phoneNumber">
+            <input type="tel" name="phoneNumber" class="form-control" placeholder="xxx.xxx.xxxx" ng-model="forms.editPerson.phoneNumber">
+          </div>
+
+          <div class="form-group" ng-if="folders.length > 0">
+            <label for="select" class="control-label">Address Book Folder</label>
+            <select name="folder" class="form-control" ng-model="forms.editPerson.folderId">
+              <option ng-repeat="f in folders" value="{{f.id}}">{{f.name}}</option>
+            </select>
           </div>
 
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="canUseCommands" ng-model="forms.edit.canUseCommands" />
+              <input type="checkbox" name="canUseCommands" ng-model="forms.editPerson.canUseCommands" />
               Can Use Commands?
             </label>
           </div>
 
           <div class="row">
 
-            <div class="col-md-8">
+            <div class="col-md-12">
               <button type="submit" class="btn btn-success btn-lg btn-block">
                 <span class="glyphicon glyphicon-flash"></span> Submit!
-              </button>
-            </div>
-
-            <div class="col-md-4">
-              <button ng-click="deletePerson(forms.edit.id)" class="btn btn-danger btn-lg btn-block">
-                Delete
               </button>
             </div>
 

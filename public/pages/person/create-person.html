@@ -8,26 +8,33 @@
       </div>
 
       <div class="modal-body">
-        <form ng-submit="processCreateForm()">
+        <form ng-submit="processCreatePersonForm()">
 
           <div class="form-group">
             <label>First Name</label>
-            <input type="text" name="firstName" class="form-control" placeholder="George" ng-model="forms.create.firstName">
+            <input type="text" name="firstName" class="form-control" placeholder="George" ng-model="forms.createPerson.firstName">
           </div>
 
           <div class="form-group">
             <label>Last Name</label>
-            <input type="text" name="lastName" class="form-control" placeholder="Washington" ng-model="forms.create.lastName">
+            <input type="text" name="lastName" class="form-control" placeholder="Washington" ng-model="forms.createPerson.lastName">
           </div>
 
           <div class="form-group">
             <label>Phone Number</label>
-            <input type="tel" name="phoneNumber" class="form-control" placeholder="xxx.xxx.xxxx" ng-model="forms.create.phoneNumber">
+            <input type="tel" name="phoneNumber" class="form-control" placeholder="xxx.xxx.xxxx" ng-model="forms.createPerson.phoneNumber">
+          </div>
+
+          <div class="form-group" ng-if="folders.length > 1">
+            <label for="select" class="control-label">Address Book Folder</label>
+            <select name="folder" class="form-control" ng-model="forms.createPerson.folderId">
+              <option ng-repeat="f in folders" value="{{f.id}}">{{f.name}}</option>
+            </select>
           </div>
 
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="canUseCommands" ng-model="forms.create.canUseCommands" />
+              <input type="checkbox" name="canUseCommands" ng-model="forms.createPerson.canUseCommands" />
               Can Use Commands?
             </label>
           </div>

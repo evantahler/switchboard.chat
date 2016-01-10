@@ -86,7 +86,11 @@ module.exports = {
               from: from,
               body: message.message
             }, function(error){
-              if(error){ return callback(error); }
+              if(error){
+                message.destroy();
+                var prettyError = new Error(error.message);
+                return callback(prettyError);
+              }
               api.twilio.decorateMessage(team, message, function(error, formattedMessage){
                 if(error){ return callback(error); }
                 api.chatRoom.broadcast({}, 'team:' + team.id, formattedMessage );
