@@ -21,7 +21,7 @@
           <div class="form-group">
             <label>People</label>
             <select multiple="" class="form-control" ng-model="forms.groupMessage.personIds">
-              <option ng-repeat="p in people" value="{{p.id}}">{{p.firstName}} {{p.lastName}}</option>
+              <option ng-if="(paginationData.folderId === '' || paginationData.folderIdAsInt === p.folderId)" ng-repeat="p in people" value="{{p.id}}">{{p.firstName}} {{p.lastName}}</option>
             </select>
           </div>
 

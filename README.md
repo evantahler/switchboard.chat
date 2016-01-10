@@ -10,9 +10,9 @@
 
 ## TODO:
 
-- billing
-- when you sign up, we need some sort of "welcome" page
-- complete the `about` page
+- email notifications should use person's name
+- host the static site on S3?
+- OPS stuff
 - TESTS
 
 ## Production Vendors
