@@ -82,10 +82,10 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
 
       try{
         personIds = $scope.forms.groupMessage.personIds.slice();
-      }catch(e){}
+      }catch(e){ }
 
       if(personIds.length === 0){
-        $scope.error = 'chose at least one team member to send a message to';
+        ngNotify.set('Chose at least one team member to send a message to', 'error');
         return;
       }
 
