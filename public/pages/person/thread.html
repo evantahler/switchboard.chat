@@ -1,9 +1,15 @@
 <div ng-if="person">
 
-  <h2>Messages with {{person.firstName}} {{person.lastName}}</h2>
-  <p>{{totalMessages}} total messages with this person ({{ $root.formatters.phoneNumber(person.phoneNumber) }})</p>
+  <div ng-if="person !== 'All'">
+    <h2>Messages with {{person.firstName}} {{person.lastName}}</h2>
+    <p>{{totalMessages}} total messages with this person ({{ $root.formatters.phoneNumber(person.phoneNumber) }})</p>
+  </div>
 
-  <div class="well">
+  <div ng-if="person === 'All'">
+    <h2>All Messages: {{ folderName }}</h2>
+  </div>
+
+  <div class="well" ng-if="person !== 'All'">
     <form ng-submit="processMessageForm()">
       <div class="form-group">
         <label>Message</label>

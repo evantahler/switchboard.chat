@@ -59,8 +59,8 @@ exports.messageOut = {
 
   inputs: {
     personId: { required: true },
-    body:     { 
-      required: true, 
+    body:     {
+      required: true,
       validator: function(p){
         if(p.length > 150){ return 'message too long'; }
         return true;
@@ -89,25 +89,25 @@ exports.messageList = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    limit:       { 
+    limit:       {
       required: true,
       default: 100,
       formatter: function(p){ return parseInt(p); }
     },
-    offset:      { 
+    offset:      {
       required: true,
       default: 0,
       formatter: function(p){ return parseInt(p); }
     },
-    personIds: { 
+    personIds: {
       required: false,
-      formatter: function(p){ 
+      formatter: function(p){
         var strings = p.split(',');
         var numbers = [];
         strings.forEach(function(s){
           numbers.push( parseInt(s) );
         });
-        return numbers; 
+        return numbers;
       }
     },
   },
@@ -134,7 +134,7 @@ exports.messageList = {
             }
             if(d.to   === team.phoneNumber){ d.toString = team.name; }
             if(d.from === team.phoneNumber){ d.fromString = team.name; }
-            
+
             formatedRecords.push(d);
           });
 
@@ -164,11 +164,11 @@ exports.messageList = {
         });
 
         q = {
-          where: { 
+          where: {
             teamId: data.session.teamId,
             $or: numbers
           },
-          limit: data.params.limit, 
+          limit: data.params.limit,
           offset: data.params.offset,
           order: 'createdAt desc',
         };
@@ -177,10 +177,10 @@ exports.messageList = {
       }).catch(next);
 
     }else{
-      
+
       q = {
         where: { teamId: data.session.teamId },
-        limit: data.params.limit, 
+        limit: data.params.limit,
         offset: data.params.offset,
         order: 'createdAt desc',
       };
@@ -197,7 +197,7 @@ exports.messageRead = {
   middleware:             [ 'logged-in-session' ],
 
   inputs: {
-    messageId:       { 
+    messageId:       {
       required: true,
       formatter: function(p){ return parseInt(p); }
     }

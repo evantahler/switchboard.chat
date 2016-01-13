@@ -3,6 +3,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   $scope.person = null;
   $scope.people = [];
   $scope.folders = [];
+  $scope.folderName = 'All';
   $scope.messages = [];
   $scope.client = null;
   $scope.groupMessageStatus = [0,0];
@@ -204,6 +205,11 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
     }
   };
 
+  $scope.loadAllMessages = function(){
+    $scope.person = 'All';
+    $scope.loadMessages();
+  };
+
   $scope.blinkPerson = function(to, from){
     for(var i in $scope.people){
       var person = $scope.people[i];
@@ -222,17 +228,33 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   };
 
   $scope.loadMessages = function(){
-    if($scope.person){
+    if($scope.person || $scope.person === 'All'){
       $scope.totalMessages = null;
       $scope.messages = [];
 
       var offset = ($scope.paginationData.page - 1) * $scope.paginationData.limit;
-
-      $rootScope.authenticatedActionHelper($scope, {
+      var params = {
         limit: $scope.paginationData.limit,
-        offset: offset,
-        personIds: [ $scope.person.id ],
-      }, '/api/message/list', 'GET', function(data){
+        offset: offset
+      };
+
+      if($scope.person.id){
+        params.personIds = [$scope.person.id];
+      }
+
+      if($scope.person === 'All' && $scope.folderName !== 'All'){
+        params.personIds = [];
+        $scope.people.forEach(function(p){
+          if(p.folderId === $scope.paginationData.folderIdAsInt){ params.personIds.push(p.id); }
+        });
+
+        if(params.personIds.length === 0){
+          ngNotify.set('No people are in this team', 'error');
+          return;
+        }
+      }
+
+      $rootScope.authenticatedActionHelper($scope, params, '/api/message/list', 'GET', function(data){
         $scope.messages = data.messages;
         $scope.totalMessages = data.total;
         $scope.paginationData.page  = String((data.offset / data.limit) + 1);
@@ -299,7 +321,13 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
   $scope.$watch('paginationData.limit',  $scope.loadMessages);
   $scope.$watch('paginationData.page' ,  $scope.loadMessages);
   $scope.$watch('paginationData.folderId' , function(){
+    $scope.folderName = 'All';
     $scope.paginationData.folderIdAsInt = parseInt($scope.paginationData.folderId);
+    $scope.folders.forEach(function(f){
+      if(f.id === $scope.paginationData.folderIdAsInt){ $scope.folderName = f.name; }
+    });
+
+    if($scope.person === 'All'){ $scope.loadMessages(); }
   });
 
   //////////
