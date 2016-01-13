@@ -178,14 +178,27 @@ exports.messageList = {
 
     }else{
 
-      q = {
-        where: { teamId: data.session.teamId },
-        limit: data.params.limit,
-        offset: data.params.offset,
-        order: 'createdAt desc',
-      };
+      api.models.person.findAll({
+        where: { teamId: data.session.teamId }
+      }).then(function(_people){
+        people = _people;
+        var numbers = [];
 
-      findMessages();
+        people.forEach(function(person){
+          numbers.push({to: api.twilio.sanitize(person.phoneNumber)});
+          numbers.push({from: api.twilio.sanitize(person.phoneNumber)});
+        });
+
+        q = {
+          where: { teamId: data.session.teamId },
+          limit: data.params.limit,
+          offset: data.params.offset,
+          order: 'createdAt desc',
+        };
+
+        findMessages();
+      }).catch(next);
+
     }
   }
 };
