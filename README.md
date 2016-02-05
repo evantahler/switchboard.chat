@@ -9,7 +9,7 @@
 - `source .env && npm start`
 
 ## TODO:
-
+- Monit cannot start actionhero, deploys can... something about ENV?
 - email notifications should use person's name
 - host the static site on S3?
 - OPS stuff

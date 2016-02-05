@@ -54,6 +54,8 @@ http {
       ssl_certificate_key  domain.key;
       ssl_prefer_server_ciphers On;
       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      ssl_session_cache shared:SSL:10m;
+      ssl_dhparam dhparam.pem;
 
       return 301 https://switchboard.chat$request_uri;
   }
@@ -69,6 +71,8 @@ http {
       ssl_certificate_key  domain.key;
       ssl_prefer_server_ciphers On;
       ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      ssl_session_cache shared:SSL:10m;
+      ssl_dhparam dhparam.pem;
 
       access_log  /var/log/nginx/access.switchboard_chat.log  main;
       error_log   /var/log/nginx/error.switchboard_chat.log;
