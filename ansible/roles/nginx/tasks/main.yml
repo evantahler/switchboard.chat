@@ -18,17 +18,18 @@
     - reload nginx
 
 - name: SSL KEYs
-  template: src=certs/switchboard_chat.key dest=/etc/nginx/switchboard_chat.key
+  template: src=certs/chained.pem dest=/etc/nginx/chained.pem
   notify:
     - reload nginx
 
 - name: SSL PEMs
-  template: src=certs/switchboard_chat.pem dest=/etc/nginx/switchboard_chat.pem
+  template: src=certs/domain.key dest=/etc/nginx/domain.key
   notify:
     - reload nginx
 
 - name: install nginx
-  apt: pkg=nginx=1.8.0-1+trusty1 state=present
+  # apt: pkg=nginx=1.8.0-1+trusty1 state=present
+  apt: pkg=nginx state=present
   notify:
     - restart nginx
 

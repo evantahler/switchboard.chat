@@ -31,3 +31,6 @@
   - admin@switchboard.chat / 2tugwihBR0935EAIJ~!@FGRWdf
 - uptimerobot.com
   - admin@switchboard.chat | 3tguwhioJNK$EFH5
+
+## HTTPS moved to letsEncrypt!
+- Use the helper website -> https://gethttpsforfree.com
