@@ -1,11 +1,12 @@
 - hosts: all
   gather_facts: yes
   roles:
-    - { role: common,      tags: ['common'],      become: yes }
-    - { role: environment, tags: ['environment'], become: yes }
-    - { role: monit,       tags: ['monit'],       become: yes }
-    - { role: iptables,    tags: ['iptables'],    become: yes }
-    - { role: nginx,       tags: ['nginx'],       become: yes }
-    - { role: redis,       tags: ['redis'],       become: yes }
-    - { role: mysql,       tags: ['mysql'],       become: yes }
-    - { role: app,         tags: ['app'],         become: yes }
+    - { role: common,       tags: ['common'],        become: yes }
+    - { role: environment,  tags: ['environment'],   become: yes }
+    - { role: monit,        tags: ['monit'],         become: yes }
+    - { role: iptables,     tags: ['iptables'],      become: yes }
+    - { role: nginx,        tags: ['nginx'],         become: yes }
+    - { role: redis,        tags: ['redis'],         become: yes }
+    - { role: mysql,        tags: ['mysql'],         become: yes }
+    - { role: mysql-backup, tags: ['mysql-backup'],  become: yes }
+    - { role: app,          tags: ['app'],           become: yes }

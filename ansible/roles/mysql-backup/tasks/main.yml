@@ -1,0 +1,8 @@
+- name: create backups directory
+  file: "path=/opt/mysql_backups/ state=directory owner=mysql"
+
+- name: build mysql backup script
+  template: src=local_mysql_backup.rb.j2 dest=/root/local_mysql_backup.rb mode=0766
+
+- name: cron the mysql backup script
+  cron: name="backup mysql" minute="0" hour="6" job='/root/local_mysql_backup.rb > /dev/null 2>&1'
