@@ -4,7 +4,7 @@ CHECK PROCESS actionhero-{{ application }}
 
   WITH PIDFILE /home/{{ deploy_user }}/www/{{ application }}/shared/pids/cluster_pidfile
 
-  START PROGRAM "/bin/bash -c 'cd /home/{{ deploy_user }}/www/{{ application }}/current && HOME=/home/{{ deploy_user }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH NODE_ENV={{ node_env }} ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}'"
+  START PROGRAM "/bin/bash -c 'source /home/deploy/.profile && cd /home/{{ deploy_user }}/www/{{ application }}/current && HOME=/home/{{ deploy_user }} ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}'"
     as uid {{ deploy_user }}
     with timeout 30 seconds
 
