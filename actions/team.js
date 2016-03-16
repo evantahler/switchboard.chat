@@ -28,6 +28,7 @@ exports.teamCreate = {
 
   run: function(api, data, next){
     var jobs = [];
+    var charge;
 
     var team = api.models.team.build({
       name:        data.params.name,
@@ -58,7 +59,10 @@ exports.teamCreate = {
     });
 
     jobs.push(function(done){
-      api.billing.register(team, data.params.stripeToken, data.params.email, done);
+      api.billing.register(team, data.params.stripeToken, data.params.email, function(error, c){
+        charge = c;
+        done(error);
+      });
     });
 
     jobs.push(function(done){
@@ -110,6 +114,12 @@ exports.teamCreate = {
         try{ user.destroy();   }catch(e){ api.log(e, 'error'); }
         try{ team.destroy();   }catch(e){ api.log(e, 'error'); }
         try{ folder.destroy(); }catch(e){ api.log(e, 'error'); }
+
+        if(charge){
+          api.billing.refund(charge, function(error){
+            if(error){ api.log(e, 'error'); }
+          });
+        }
 
         if(error.errors){
           next(error.errors[0].message);

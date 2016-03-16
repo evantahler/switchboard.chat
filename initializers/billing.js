@@ -83,6 +83,25 @@ module.exports = {
         }).catch(callback);
       },
 
+      refund: function(charge, callback){
+        var chargeId;
+        try{
+          chargeId = JSON.parse(charge.payload).id;
+        }catch(e){  }
+
+        if(!chargeId){ return callback(new Error('no charge id')); }
+
+        api.billing.stripe.refunds.create({charge: chargeId}, function(error){
+          if(error){ return callback(error); }
+          charge.updateAttributes({
+            refunded: true,
+            refundedAt: new Date(),
+          }).then(function(){
+            callback();
+          }).catch(callback);
+        });
+      },
+
       // should not be called directly!
       createCharge: function(team, unitValueInCents, unitCount, description, type, discountValueInCents, billingPeriod, callback){
         var jobs = [];

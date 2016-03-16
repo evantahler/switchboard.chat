@@ -13,6 +13,14 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.DATE,
       allowNull: true,
     },
+    'refunded': {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    'refundedAt': {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     'billingPeriod': {
       type: DataTypes.DATE,
       allowNull: true,
