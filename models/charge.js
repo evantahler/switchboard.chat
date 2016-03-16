@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes){
     'refunded': {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false
     },
     'refundedAt': {
       type: DataTypes.DATE,
