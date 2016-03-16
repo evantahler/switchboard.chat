@@ -117,7 +117,7 @@ exports.teamCreate = {
 
         if(charge){
           api.billing.refund(charge, function(error){
-            if(error){ api.log(e, 'error'); }
+            if(error){ api.log(error, 'error'); }
           });
         }
 
