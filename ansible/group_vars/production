@@ -40,6 +40,10 @@ ssh_deploy_users:
 
 actionhero_workers: 2
 
+s3_backup_bucket: switchboard.chat
+s3_backup_access_key: AKIAJP7ZV4VYDQO4QTFQ
+s3_backup_access_secret: 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
+
 application_env:
 
   #############

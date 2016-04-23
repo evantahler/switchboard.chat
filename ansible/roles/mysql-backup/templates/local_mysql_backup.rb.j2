@@ -5,13 +5,26 @@ USERNAME     = "root"
 PASSWORD     = nil
 BIN          = "/usr/bin/innobackupex"
 XTRABACKUP   = "/usr/bin/xtrabackup"
+MYSQLDUMP    = "/usr/bin/mysqldump"
 CONF         = "/etc/mysql/my.cnf"
 DESTINATION  = "/opt/mysql_backups"
+DATABASE     = "{{ database }}"
 MEMORY       = "100M"
-BACKUP_COUNT = 5
+BACKUP_COUNT = 10
+S3_BUCKET    = "{{ s3_backup_bucket }}"
+S3_KEY       = "{{ s3_backup_access_key }}"
+S3_SECRET    = "{{ s3_backup_access_secret }}"
+FILENAME     = "#{Time.now.strftime("%m-%d_%H-%M-%S")}.sql.gz"
 
 def list_dirs(d)
   dirs = Dir.entries(d).select {|entry| File.directory? File.join(d, entry) and !(entry =='.' || entry == '..') }
+  dirs.map!{|entry| "#{d}/#{entry}" }
+  dirs.sort!
+  dirs
+end
+
+def list_files(d)
+  dirs = Dir.entries(d).select {|entry| File.file? File.join(d, entry) and !(entry =='.' || entry == '..') }
   dirs.map!{|entry| "#{d}/#{entry}" }
   dirs.sort!
   dirs
@@ -32,20 +45,36 @@ end
 ##################### GO!
 
 # Make the innodb backup
-run("#{BIN} --defaults-file=#{CONF} --ibbackup=#{XTRABACKUP} --user=#{USERNAME} --password=#{PASSWORD} --slave-info #{DESTINATION}")
+run("#{BIN} --defaults-file=#{CONF} --ibbackup=#{XTRABACKUP} --user=#{USERNAME} --password=#{PASSWORD} --slave-info #{DESTINATION}/innodb")
 
 # Find the latest entry
-this_backup = list_dirs(DESTINATION).last
+this_backup = list_dirs("#{DESTINATION}/innodb").last
 
 # apply any transient logs (do it 2x, just in case of write drift)
 2.times do
   run("#{BIN} --ibbackup=#{XTRABACKUP} --apply-log --use-memory=#{MEMORY} #{this_backup}")
 end
 
+# Make a mySQLdump backup
+run("#{MYSQLDUMP} --user=#{USERNAME} --password=#{PASSWORD} #{DATABASE} | gzip > #{DESTINATION}/dumps/#{FILENAME}")
+
 # Only keep 10 backups
-while list_dirs(DESTINATION).count > BACKUP_COUNT
-  dir = list_dirs(DESTINATION).first
-  run("rm -rf #{dir}")
+while list_dirs("#{DESTINATION}/innodb").count > BACKUP_COUNT
+  old = list_dirs("#{DESTINATION}/innodb").first
+  run("rm -rf #{old}")
+end
+while list_files("#{DESTINATION}/dumps").count > BACKUP_COUNT
+  old = list_files("#{DESTINATION}/dumps").first
+  run("rm -rf #{old}")
+end
+
+# Upload them to S3
+[
+  "#{DESTINATION}/innodb",
+  "#{DESTINATION}/dumps"
+].each do |folder|
+  last_part = folder.split('/').last
+  run("AWS_ACCESS_KEY_ID=#{S3_KEY} AWS_SECRET_ACCESS_KEY=#{S3_SECRET} aws s3 sync #{folder} s3://#{S3_BUCKET}/#{last_part} --region us-east-1 --delete")
 end
 
 Process.exit

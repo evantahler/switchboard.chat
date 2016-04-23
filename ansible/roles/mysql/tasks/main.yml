@@ -1,3 +1,2 @@
 - include: install.yml
-- include: dump.yml
 - include: monit.yml
