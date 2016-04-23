@@ -12,33 +12,30 @@ exports.reportUsage = {
       if(!team){ return next(new Error('team not found')); }
 
       var query = '';
-      query += ' SELECT                                                                   ';
-      query += '   count(1) AS "count",                                                   ';
-      query += '   YEAR(messages.createdAt) AS "year",                                    ';
-      query += '   MONTH(messages.createdAt) AS "month",                                  ';
-      query += '   peopleTo.id AS "toId",                                                 ';
-      query += '   CONCAT(peopleTo.firstName, " ", peopleTo.lastName) AS "toName",        ';
-      query += '   peopleFrom.id AS "fromId",                                             ';
-      query += '   CONCAT(peopleFrom.firstName, " ", peopleFrom.lastName) AS "fromName"   ';
-      query += ' FROM messages                                                            ';
-      query += ' LEFT JOIN people AS peopleTo   ON peopleTo.phoneNumber = messages.to     ';
-      query += ' LEFT JOIN people AS peopleFrom ON peopleFrom.phoneNumber = messages.from ';
-      query += ' WHERE messages.teamId = :teamId                                          ';
-      query += ' GROUP BY year, month, peopleTo.id, peopleFrom.id                         ';
+      query += ' SELECT                                                                                                       ';
+      query += '   count(1) AS "count"                                                                                        ';
+      query += '   , YEAR(X.createdAt) AS "year"                                                                              ';
+      query += '   , MONTH(X.createdAt) AS "month"                                                                            ';
+      query += '   , people.id AS "personId"                                                                                  ';
+      query += '   , CONCAT(firstName, " ", lastName) AS "name"                                                               ';
+      query += ' FROM (                                                                                                       ';
+      query += ' 	SELECT *,                                                                                                   ';
+      query += ' 	  CASE WHEN messages.from = :teamPhoneNumber THEN messages.to ELSE messages.from END AS "personPhoneNumber" ';
+      query += ' 	  FROM messages                                                                                             ';
+      query += ' 	  WHERE teamId = :teamId                                                                                    ';
+      query += ' ) AS X                                                                                                       ';
+      query += ' LEFT JOIN people ON people.phoneNumber = X.personPhoneNumber                                                 ';
+      query += ' WHERE people.teamId = :teamId                                                                                ';
+      query += ' GROUP BY people.id, YEAR(X.createdAt), MONTH(X.createdAt);                                                   ';
 
       api.sequelize.sequelize.query(query,{
-        replacements: { teamId: team.id },
+        replacements: { teamId: team.id, teamPhoneNumber: team.phoneNumber },
         type: api.sequelize.sequelize.QueryTypes.SELECT }
       ).then(function(rows) {
         rows.forEach(function(row){
           var date = row.year + ' - ' + row.month;
-          var name = 'Unknown Person';
-          if(row.toId){ name = row.toName; }
-          if(row.fromId){ name = row.fromName; }
-
-          if(!data.response.reports[name]){ data.response.reports[name] = {}; }
-          if(!data.response.reports[name][date] ){ data.response.reports[name][date] = 0; }
-          data.response.reports[name][date] = data.response.reports[name][date] + row.count;
+          if(!data.response.reports[row.name]){ data.response.reports[row.name] = {}; }
+          data.response.reports[row.name][date] = row.count;
         });
 
         next();
