@@ -31,9 +31,12 @@ exports.teamCreate = {
     var charge;
 
     var team = api.models.team.build({
-      name:        data.params.name,
-      areaCode:    data.params.areaCode,
-      promoCode:   data.params.promoCode,
+      name:                     data.params.name,
+      areaCode:                 data.params.areaCode,
+      promoCode:                data.params.promoCode,
+      pricePerMonth:            api.config.billing.pricePerMonth,
+      pricePerMessage:          api.config.billing.pricePerMessage,
+      includedMessagesPerMonth: api.config.billing.includedMessagesPerMonth,
       // stripeToken: data.params.stripeToken,
     });
 

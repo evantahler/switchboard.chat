@@ -24,6 +24,18 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING(191),
       allowNull: true,
     },
+    'pricePerMonth': {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    'pricePerMessage': {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
+    ,'includedMessagesPerMonth': {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     indexes: [
       {

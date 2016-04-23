@@ -51,8 +51,8 @@ module.exports = {
           now.getFullYear()
         ]}).then(function(charge){
           if(charge.length > 0){ return callback(null, charge); }
-          if(team.promoCode){ discountValueInCents = api.config.billing.pricePerMonth; }
-          api.billing.createCharge(team, api.config.billing.pricePerMonth, 1, description, type, discountValueInCents, now, callback);
+          if(team.promoCode){ discountValueInCents = team.pricePerMonth; }
+          api.billing.createCharge(team, team.pricePerMonth, 1, description, type, discountValueInCents, now, callback);
         }).catch(callback);
       },
 
@@ -70,15 +70,16 @@ module.exports = {
         ]}).then(function(charge){
           if(charge.length > 0){ return callback(null, charge); }
           api.models.message.count({where: [
-              'teamId = ? AND month(createdAt) = ? AND year(createdAt) = ?',
-              team.id,
-              (now.getMonth() + 1),
-              now.getFullYear()
-            ]}).then(function(messagesCount){
-            if(messagesCount === 0){ return callback(); }
-            if(team.promoCode){ discountValueInCents = (messagesCount * api.config.billing.pricePerMessage); }
-            description = description + ' (' + messagesCount + ' messages)';
-            api.billing.createCharge(team, api.config.billing.pricePerMessage, messagesCount, description, type, discountValueInCents, now, callback);
+            'teamId = ? AND month(createdAt) = ? AND year(createdAt) = ?',
+            team.id,
+            (now.getMonth() + 1),
+            now.getFullYear()
+          ]}).then(function(messagesCount){
+            var billedMessagesCount = team.includedMessagesPerMonth - messagesCount;
+            if(billedMessagesCount <= 0){ return callback(); }
+            if(team.promoCode){ discountValueInCents = (billedMessagesCount * team.pricePerMessage); }
+            description = description + ' (' + billedMessagesCount + ' messages)';
+            api.billing.createCharge(team, team.pricePerMessage, billedMessagesCount, description, type, discountValueInCents, now, callback);
           }).catch(callback);
         }).catch(callback);
       },
