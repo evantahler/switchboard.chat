@@ -214,8 +214,13 @@ exports.teamBillingInfo = {
   run: function(api, data, next){
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
+      data.response.billingRates = {
+        pricePerMonth: team.pricePerMonth,
+        pricePerMessage: team.pricePerMessage,
+        includedMessagesPerMonth: team.includedMessagesPerMonth,
+      }
       api.billing.loadStripeData(team, function(error, customer){
-        if(error){ return callback(error); }
+        if(error){ return next(error); }
         data.response.customer = customer;
         next();
       });

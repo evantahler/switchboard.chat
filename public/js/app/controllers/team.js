@@ -43,10 +43,13 @@ app.controller('team:edit_billing', ['$scope', '$rootScope', '$location', 'ngNot
 
   $scope.formData     = {};
   $scope.existingCard = {};
+  $scope.billingRates = {};
 
   var loadBillingInfo = function(callback){
     $scope.existingCard = {};
     $rootScope.actionHelper($scope, {}, '/api/team/billing', 'GET', function(data){
+      if(data.billingRates){ $scope.billingRates = data.billingRates; }
+
       $scope.existingCard = data.customer.sources.data[0];
       var createdAt = new Date(data.customer.created * 1000);
       $scope.createdString = 'Entered by ' + data.customer.email + ' at ' + createdAt.getFullYear() + '-' + (createdAt.getMonth() + 1) + '-' + createdAt.getDate();
