@@ -26,6 +26,7 @@ app.controller('session:destroy', ['$scope', '$rootScope', '$location', function
     $rootScope.actionHelper($scope, {}, '/api/session', 'DELETE', function(data){
       delete $rootScope.user;
       $location.path('/');
+      setTimeout(window.location.reload, 500); // to ensure that any WS connections are terminated. 
     });
   };
 }]);

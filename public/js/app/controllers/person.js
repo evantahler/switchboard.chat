@@ -307,7 +307,7 @@ app.controller('person:combined', ['$scope', '$rootScope', '$location', 'ngNotif
       $scope.client.connect(function(err, details){
         if(err){ return console.log(err); }
         $scope.client.action('session:wsAuthenticate', {}, function(data){
-          if(data.error){ return console.log(error); }
+          if(data.error){ return console.log(data.error); }
           $scope.client.roomAdd('team:' + $rootScope.user.teamId);
         });
       });
