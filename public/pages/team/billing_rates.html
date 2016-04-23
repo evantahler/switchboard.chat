@@ -6,7 +6,7 @@
     <p>
       <ul>
         <li><strong>Team Price per Month</strong>: ${{ billingRates.pricePerMonth / 100 }}</li>
-        <li><strong>SMS Messages included per Month</strong>: ${{ billingRates.includedMessagesPerMonth / 100 }}</li>
+        <li><strong>SMS Messages included per Month</strong>: {{ billingRates.includedMessagesPerMonth }}</li>
         <li><strong>Additional Cost per SMS Message</strong>: ${{ billingRates.pricePerMessage / 100 }}</li>
       </ul>
     </p>
