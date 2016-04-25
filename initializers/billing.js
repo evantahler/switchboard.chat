@@ -49,8 +49,8 @@ module.exports = {
           type,
           (now.getMonth() + 1),
           now.getFullYear()
-        ]}).then(function(charge){
-          if(charge.length > 0){ return callback(null, charge); }
+        ]}).then(function(charges){
+          if(charges.length > 0){ return callback(null, charges[0]); }
           if(team.promoCode){ discountValueInCents = team.pricePerMonth; }
           api.billing.createCharge(team, team.pricePerMonth, 1, description, type, discountValueInCents, now, callback);
         }).catch(callback);
@@ -67,8 +67,8 @@ module.exports = {
           type,
           (now.getMonth() + 1),
           now.getFullYear()
-        ]}).then(function(charge){
-          if(charge.length > 0){ return callback(null, charge); }
+        ]}).then(function(charges){
+          if(charges.length > 0){ return callback(null, charges[0]); }
           api.models.message.count({where: [
             'teamId = ? AND month(createdAt) = ? AND year(createdAt) = ?',
             team.id,
