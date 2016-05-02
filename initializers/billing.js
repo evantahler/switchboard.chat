@@ -75,7 +75,7 @@ module.exports = {
             (now.getMonth() + 1),
             now.getFullYear()
           ]}).then(function(messagesCount){
-            var billedMessagesCount = team.includedMessagesPerMonth - messagesCount;
+            var billedMessagesCount = messagesCount - team.includedMessagesPerMonth;
             if(billedMessagesCount <= 0){ return callback(); }
             if(team.promoCode){ discountValueInCents = (billedMessagesCount * team.pricePerMessage); }
             description = description + ' (' + billedMessagesCount + ' messages)';
