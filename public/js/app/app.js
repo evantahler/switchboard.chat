@@ -139,7 +139,12 @@ app.run(['$rootScope', '$http', 'ngNotify', function($rootScope, $http, ngNotify
     }
   };
 
-  $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+  $rootScope.$on('$routeChangeSuccess', function (event, current, previous){
+    // change page title
     $rootScope.pageTitle = current.$$route.pageTitle;
+
+    // notifiy google analyttics
+    ga('set', 'page', current.$$route.originalPath);
+    ga('send', 'pageview');
   });
 }]);
