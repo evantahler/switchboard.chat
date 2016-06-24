@@ -12,12 +12,13 @@
     "node": "4.2.x"
   },
   "dependencies": {
-    "actionhero": "13.4.1",
+    "actionhero": "14.0.2",
     "ah-swagger-plugin": "0.0.15",
     "async": "^1.5.0",
     "bcrypt": "^0.8.5",
     "glob": "^7.0.0",
     "grunt": "latest",
+    "ioredis": "^2.1.0",
     "mustache": "^2.2.1",
     "mysql": "^2.9.0",
     "nodemailer": "^2.2.1",
