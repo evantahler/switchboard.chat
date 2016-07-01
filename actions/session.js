@@ -12,22 +12,25 @@ exports.sessionCreate = {
     data.response.success = false;
     api.models.user.findOne({where: {email: data.params.email}}).then(function(user){
       if(!user){ return next(new Error('user not found')); }
-      user.checkPassword(data.params.password, function(error, match){
-        if(error){ return next(error); }
-        else if(!match){ return next(new Error('password does not match')); }
-        else{
-          api.session.create(data.connection, user, function(error, sessionData){
-            if(error){ return next(error); }
-            data.response.user      = user.apiData(api);
-            data.response.success   = true;
-            data.response.csrfToken = sessionData.csrfToken;
-            next();
-          });
-        }
-      });
-    })
-    .catch(next)
-    ;
+      api.models.team.findOne({where: {id: user.teamId}}).then(function(team){
+        if(!team){ return next(new Error('team not found')); }
+        if(!team.enabled){ return next(new Error('team is disabled')); }
+
+        user.checkPassword(data.params.password, function(error, match){
+          if(error){ return next(error); }
+          else if(!match){ return next(new Error('password does not match')); }
+          else{
+            api.session.create(data.connection, user, function(error, sessionData){
+              if(error){ return next(error); }
+              data.response.user      = user.apiData(api);
+              data.response.success   = true;
+              data.response.csrfToken = sessionData.csrfToken;
+              next();
+            });
+          }
+        });
+      }).catch(next);
+    }).catch(next);
   }
 };
 
@@ -62,6 +65,7 @@ exports.sessionCheck = {
           api.models.team.findOne({where: {id: user.teamId}}).then(function(team){
             if(!team){ return next(new Error('team not found')); }
             if(!team.enabled){ return next(new Error('team is disabled')); }
+            
             data.response.user      = user.apiData(api);
             data.response.csrfToken = sessionData.csrfToken;
             data.response.success   = true;
