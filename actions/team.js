@@ -37,6 +37,7 @@ exports.teamCreate = {
       pricePerMonth:            api.config.billing.pricePerMonth,
       pricePerMessage:          api.config.billing.pricePerMessage,
       includedMessagesPerMonth: api.config.billing.includedMessagesPerMonth,
+      enabled:                  true,
       // stripeToken: data.params.stripeToken,
     });
 
@@ -147,6 +148,7 @@ exports.teamView = {
   run: function(api, data, next){
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
+      if(!team.enabled){ return next(new Error('team is disabled')); }
       data.response.team = team.apiData(api);
       next();
     }).catch(next);
@@ -167,6 +169,7 @@ exports.teamEdit = {
   run: function(api, data, next){
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
+      if(!team.enabled){ return next(new Error('team is disabled')); }
       team.updateAttributes(data.params).then(function(){
         data.response.team = team.apiData(api);
         if(data.params.stripeToken){
@@ -182,26 +185,26 @@ exports.teamEdit = {
   }
 };
 
-exports.teamDelete = {
-  name:                   'team:delete',
-  description:            'team:delete',
-  outputExample:          {},
-  middleware:             [ 'logged-in-session' ],
-
-  inputs: {},
-
-  run: function(api, data, next){
-    api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
-      if(!team){ return next(new Error('team not found')); }
-      team.destroy().then(function(){
-        api.models.users.findAll({where: {teamId: data.session.teamId}}).then(function(users){
-          users.forEach(function(user){ user.destroy(); });
-          next();
-        }).catch(next);
-      }).catch(next);
-    }).catch(next);
-  }
-};
+// exports.teamDelete = {
+//   name:                   'team:delete',
+//   description:            'team:delete',
+//   outputExample:          {},
+//   middleware:             [ 'logged-in-session' ],
+//
+//   inputs: {},
+//
+//   run: function(api, data, next){
+//     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
+//       if(!team){ return next(new Error('team not found')); }
+//       team.destroy().then(function(){
+//         api.models.users.findAll({where: {teamId: data.session.teamId}}).then(function(users){
+//           users.forEach(function(user){ user.destroy(); });
+//           next();
+//         }).catch(next);
+//       }).catch(next);
+//     }).catch(next);
+//   }
+// };
 
 exports.teamBillingInfo = {
   name:                   'team:billingInfo',
@@ -214,6 +217,7 @@ exports.teamBillingInfo = {
   run: function(api, data, next){
     api.models.team.findOne({where: {id: data.session.teamId}}).then(function(team){
       if(!team){ return next(new Error('team not found')); }
+      if(!team.enabled){ return next(new Error('team is disabled')); }
       data.response.billingRates = {
         pricePerMonth: team.pricePerMonth,
         pricePerMessage: team.pricePerMessage,

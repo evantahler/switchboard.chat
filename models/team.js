@@ -35,7 +35,12 @@ module.exports = function(sequelize, DataTypes){
     ,'includedMessagesPerMonth': {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
+    }
+    ,'enabled': {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: true
+    }
   }, {
     indexes: [
       {
@@ -52,6 +57,7 @@ module.exports = function(sequelize, DataTypes){
           phoneNumber: this.phoneNumber,
           areaCode:    this.areaCode,
           sid:         this.sid,
+          enabled:     this.enabled,
         };
       }
     }
