@@ -31,6 +31,7 @@ exports.userCreate = {
 
       api.models.team.findOne({where: {id: data.params.teamId}}).then(function(team){
         if(!team){ return next(new Error('team not found')); }
+        if(!team.enabled){ return next(new Error('team is disabled')); }
 
         user.save().then(
           api.models.user.findOne({where: {email: data.params.email}})

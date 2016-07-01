@@ -54,15 +54,19 @@ exports.sessionCheck = {
   run: function(api, data, next){
     api.session.load(data.connection, function(error, sessionData){
       if(error){ return next(error); }
-      else if(!sessionData){ 
-        return next(new Error('Please log in to continue')); 
-      }else{ 
+      else if(!sessionData){
+        return next(new Error('Please log in to continue'));
+      }else{
         api.models.user.findOne({where: {id: sessionData.userId}}).then(function(user){
           if(!user){ return next(new Error('user not found')); }
-          data.response.user      = user.apiData(api);
-          data.response.csrfToken = sessionData.csrfToken;
-          data.response.success   = true;
-          next();
+          api.models.team.findOne({where: {id: user.teamId}}).then(function(team){
+            if(!team){ return next(new Error('team not found')); }
+            if(!team.enabled){ return next(new Error('team is disabled')); }
+            data.response.user      = user.apiData(api);
+            data.response.csrfToken = sessionData.csrfToken;
+            data.response.success   = true;
+            next();
+          }).catch(next);
         }).catch(next);
       }
     });
@@ -80,9 +84,9 @@ exports.sessionWSAuthenticate = {
   run: function(api, data, next){
     api.session.load(data.connection, function(error, sessionData){
       if(error){ return next(error); }
-      else if(!sessionData){ 
-        return next(new Error('Please log in to continue')); 
-      }else{ 
+      else if(!sessionData){
+        return next(new Error('Please log in to continue'));
+      }else{
         data.connection.session = sessionData;
         next();
       }

@@ -17,7 +17,7 @@ exports.task = {
 
     api.models.team.findAll().then(function(teams){
       teams.forEach(function(team){
-        if(lastMonth >= team.createdAt){
+        if(team.enabled && lastMonth >= team.createdAt){
           jobs.push(function(done){
             api.billing.createMonthlyBillCharge(lastMonth, team, done);
           });
