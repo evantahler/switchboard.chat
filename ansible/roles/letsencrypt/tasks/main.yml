@@ -21,10 +21,21 @@
     url=https://dl.eff.org/certbot-auto
     dest=/home/{{ deploy_user }}/certbot-auto
 
-- name: generate certs
+- name: chcek if we've generated a cert already
+  stat: path=/etc/letsencrypt/live/switchboard.chat/fullchain.pem
+  register: cert_stats
+
+- name: generate certs (first time)
+  become: yes
+  # become_user: '{{ deploy_user }}'
+  shell: "/home/{{ deploy_user }}/certbot-auto certonly --standalone {{ letsencrypt_domain_flags | join(' ') }} --email {{ letsencrypt_email}} --non-interactive --agree-tos"
+  when: cert_stats.stat.exists == True
+
+- name: generate certs (subsequent time)
   become: yes
   # become_user: '{{ deploy_user }}'
   shell: "/home/{{ deploy_user }}/certbot-auto certonly --webroot -w /home/{{ deploy_user }}/www/switchboard.chat/current/public {{ letsencrypt_domain_flags | join(' ') }} --email {{ letsencrypt_email}} --non-interactive --agree-tos"
+  when: cert_stats.stat.exists == True
 
 - name: hup nginx
   service: name=nginx state=reloaded
