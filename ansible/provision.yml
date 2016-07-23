@@ -10,3 +10,4 @@
     - { role: mysql,        tags: ['mysql'],         become: yes }
     - { role: mysql-backup, tags: ['mysql-backup'],  become: yes }
     - { role: app,          tags: ['app'],           become: yes }
+    - { role: letsencrypt,  tags: ['letsencrypt'],   become: yes }

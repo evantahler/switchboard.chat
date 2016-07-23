@@ -17,16 +17,6 @@
   notify:
     - reload nginx
 
-- name: SSL KEYs
-  template: src=certs/chained.pem dest=/etc/nginx/chained.pem
-  notify:
-    - reload nginx
-
-- name: SSL PEMs
-  template: src=certs/domain.key dest=/etc/nginx/domain.key
-  notify:
-    - reload nginx
-
 - name: DHE Keys
   template: src=certs/dhparam.pem dest=/etc/nginx/dhparam.pem
   notify:
