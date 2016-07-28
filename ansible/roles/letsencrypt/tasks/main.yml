@@ -29,7 +29,7 @@
   become: yes
   # become_user: '{{ deploy_user }}'
   shell: "/home/{{ deploy_user }}/certbot-auto certonly --standalone {{ letsencrypt_domain_flags | join(' ') }} --email {{ letsencrypt_email}} --non-interactive --agree-tos"
-  when: cert_stats.stat.exists == True
+  when: cert_stats.stat.exists == False
 
 - name: generate certs (subsequent time)
   become: yes
