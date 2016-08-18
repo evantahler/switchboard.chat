@@ -12,7 +12,7 @@
     "node": "4.2.x"
   },
   "dependencies": {
-    "actionhero": "14.0.4",
+    "actionhero": "15.0.2",
     "ah-swagger-plugin": "^1.0.0",
     "async": "^1.5.0",
     "bcrypt": "^0.8.5",
