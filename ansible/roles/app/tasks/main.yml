@@ -91,7 +91,7 @@
     rm -f rm /home/deploy/www/switchboard.chat/shared/sockets/actionhero.sock &&
     . /home/{{ deploy_user }}/.profile &&
     cd {{ current_path }} &&
-    ./node_modules/.bin/actionhero startCluster --daemon --workers={{ actionhero_workers }}
+    ./node_modules/.bin/actionhero start cluster --daemon --workers={{ actionhero_workers }}
   become: yes
   become_user: '{{ deploy_user }}'
   when: "not actionhero_running_check.stat.exists"
