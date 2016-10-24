@@ -15,5 +15,7 @@
      - iptables
      - ntp
      - logrotate
+     - libpam0g-dev # for monit
+     - libssl-dev
 
 - apt: name=apparmor state=absent

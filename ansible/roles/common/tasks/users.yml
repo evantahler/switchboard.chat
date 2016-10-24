@@ -28,7 +28,7 @@
     user: "{{ deploy_user }}"
     path: /tmp/{{ deploy_user }}/.ssh/authorized_keys_{{ deploy_user }}
     key: "{{ lookup('file', (['./ssh/public/', item, '.pub'] | join(''))) }}"
-  with_items: ssh_deploy_users
+  with_items: "{{ ssh_deploy_users }}"
 - shell: >
     cp /tmp/{{ deploy_user }}/.ssh/authorized_keys_{{ deploy_user }} /home/{{ deploy_user }}/.ssh/authorized_keys &&
     chown {{ deploy_user }} /home/{{ deploy_user }}/.ssh/authorized_keys &&
