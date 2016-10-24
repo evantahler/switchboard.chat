@@ -18,8 +18,6 @@
 ## Production Vendors
 - Hosted on Digital Ocean
   - evantahler@gmail.com
-- instantssl.com
-  - switchboard.chat / 2390ugwjialsGGgwg3
 - twilio:
   - admin@switchboard.chat / 4usjWkPhurjgQsgeKahaW7Kic
 - sendgrid

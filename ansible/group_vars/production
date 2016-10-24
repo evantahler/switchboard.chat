@@ -1,4 +1,4 @@
-ansible_ssh_user: root
+ansible_ssh_user: ubuntu
 deploy_user: deploy
 cluster_env: production
 application: switchboard.chat
@@ -8,8 +8,8 @@ node_env: production
 
 monit_version: "5.11"
 monit_alert_email: admin@switchboard.chat
-monit_gmail_user: evan@delicioushat.com
-monit_gmail_pass: big red button
+monit_gmail_user: notifications@switchboard.chat
+monit_gmail_pass: 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
 
 monit_system_alert_memory_usage: '85% for 10 cycles'
 monit_system_alert_cpu_usage_user: '85% for 10 cycles'
@@ -39,16 +39,6 @@ ssh_deploy_users:
  - evan
 
 actionhero_workers: 2
-
-s3_backup_bucket: switchboard.chat
-s3_backup_access_key: AKIAJP7ZV4VYDQO4QTFQ
-s3_backup_access_secret: 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
-
-letsencrypt_email: 'admin@switchboard.chat'
-letsencrypt_domain_flags:
-  - "-d switchboard.chat"
-  - "-d www.switchboard.chat"
-  - "-d api.switchboard.chat"
 
 application_env:
 
