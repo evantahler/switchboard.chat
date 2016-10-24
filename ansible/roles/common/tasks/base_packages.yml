@@ -14,11 +14,8 @@
      - iftop
      - iptables
      - ntp
-     - python-pip
-     - python-dev
      - logrotate
-     - libpam0g
-     - libpam0g-dev
-     - libmysqlclient-dev
+     - libpam0g-dev # for monit
+     - libssl-dev
 
 - apt: name=apparmor state=absent

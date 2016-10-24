@@ -1,4 +1,4 @@
-ansible_ssh_user: root
+ansible_ssh_user: ubuntu
 deploy_user: deploy
 cluster_env: production
 application: switchboard.chat
@@ -8,8 +8,9 @@ node_env: production
 
 monit_version: "5.11"
 monit_alert_email: admin@switchboard.chat
-monit_gmail_user: evan@delicioushat.com
-monit_gmail_pass: big red button
+monit_email_user: "apikey"
+monit_email_pass: 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
+monit_email_gateway: smtp.sendgrid.net
 
 monit_system_alert_memory_usage: '85% for 10 cycles'
 monit_system_alert_cpu_usage_user: '85% for 10 cycles'
@@ -38,17 +39,7 @@ logrotate_options:
 ssh_deploy_users:
  - evan
 
-actionhero_workers: 2
-
-s3_backup_bucket: switchboard.chat
-s3_backup_access_key: AKIAJP7ZV4VYDQO4QTFQ
-s3_backup_access_secret: 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
-
-letsencrypt_email: 'admin@switchboard.chat'
-letsencrypt_domain_flags:
-  - "-d switchboard.chat"
-  - "-d www.switchboard.chat"
-  - "-d api.switchboard.chat"
+actionhero_workers: 1
 
 application_env:
 
@@ -66,7 +57,7 @@ application_env:
   ## REDIS ##
   ###########
 
-  - REDIS_HOST="127.0.0.1"
+  - REDIS_HOST="switchboard-prod.mzduku.0001.use1.cache.amazonaws.com"
   - REDIS_PORT=6379
   - REDIS_DATABASE=0
   - REDIS_USER="root"
@@ -76,11 +67,11 @@ application_env:
   ## MYSQL ##
   ###########
 
-  - MYSQL_HOST="localhost"
+  - MYSQL_HOST="switchboard-production.cxkskijrsodt.us-east-1.rds.amazonaws.com"
   - MYSQL_PORT=3306
   - MYSQL_DATABASE="{{ database }}"
-  - MYSQL_USER="root"
-  - MYSQL_PASS=""
+  - MYSQL_USER="switchboard"
+  - MYSQL_PASS="34uy9awujha3oihjr6ik7e6u"
 
   ############
   ## STRIPE ##

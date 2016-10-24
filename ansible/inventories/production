@@ -1,3 +1,2 @@
 [production]
-
-switchboard.chat
+switchboard-production-01.switchboard.chat ansible_host=52.204.31.233

@@ -1,3 +1,0 @@
-- name: run mysql with monit
-  template: src=roles/monit/templates/monit/mysql.conf.j2 dest=/etc/monit/conf.d/mysql.conf
-  notify: reload monit

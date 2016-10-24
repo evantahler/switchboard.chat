@@ -40,67 +40,33 @@ http {
           deny all;
       }
 
-      location / {
-          rewrite ^(.*) https://www.switchboard.chat$1 permanent;
-      }
-  }
+     client_max_body_size 10M;
 
-  server {
-      listen       443;
-      server_name switchboard.chat;
+     if ($http_x_forwarded_proto = 'http') {
+       return 301 https://www.switchboard.chat;
+     }
 
-      ssl     on;
-      ssl_certificate      /etc/letsencrypt/live/switchboard.chat/fullchain.pem;
-      ssl_certificate_key  /etc/letsencrypt/live/switchboard.chat/privkey.pem;
-      ssl_prefer_server_ciphers On;
-      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-      ssl_session_cache shared:SSL:10m;
-      ssl_dhparam dhparam.pem;
+     location /primus {
+         proxy_http_version 1.1;
+         proxy_buffering off;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "Upgrade";
+         proxy_set_header Host $host;
 
-      return 301 https://www.switchboard.chat$request_uri;
-  }
+         proxy_pass http://unix:/home/{{ deploy_user }}/www/switchboard.chat/shared/sockets/actionhero.sock;
+     }
 
-  server {
-      proxy_redirect off;
+     location / {
+         root        /home/{{ deploy_user }}/www/switchboard.chat/current/public/;
+         expires 1m;
+         try_files /$uri/index.html
+                   /$uri.html
+                   /$uri
+                   @app;
+     }
 
-      listen       443 default_server;
-      server_name  _;
-
-      ssl     on;
-      ssl_certificate      /etc/letsencrypt/live/switchboard.chat/fullchain.pem;
-      ssl_certificate_key  /etc/letsencrypt/live/switchboard.chat/privkey.pem;
-      ssl_prefer_server_ciphers On;
-      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-      ssl_session_cache shared:SSL:10m;
-      ssl_dhparam dhparam.pem;
-
-      access_log  /var/log/nginx/access.switchboard_chat.log  main;
-      error_log   /var/log/nginx/error.switchboard_chat.log;
-
-      client_max_body_size 10M;
-
-      location /primus {
-          proxy_http_version 1.1;
-          proxy_buffering off;
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "Upgrade";
-          proxy_set_header Host $host;
-
-          proxy_pass http://unix:/home/{{ deploy_user }}/www/switchboard.chat/shared/sockets/actionhero.sock;
-      }
-
-      location / {
-          root        /home/{{ deploy_user }}/www/switchboard.chat/current/public/;
-          expires 1m;
-          try_files /$uri/index.html
-                    /$uri.html
-                    /$uri
-                    @app;
-      }
-
-      location @app {
-          proxy_pass http://unix:/home/{{ deploy_user }}/www/switchboard.chat/shared/sockets/actionhero.sock;
-      }
-
+     location @app {
+         proxy_pass http://unix:/home/{{ deploy_user }}/www/switchboard.chat/shared/sockets/actionhero.sock;
+     }
   }
 }
