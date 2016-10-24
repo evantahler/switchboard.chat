@@ -16,8 +16,10 @@
 - TESTS
 
 ## Production Vendors
-- Hosted on Digital Ocean
-  - evantahler@gmail.com
+- Hosted on AWS
+  - admin@switchboard.chat
+  - 480yhuaeioyjap43wohjpoe54
+
 - twilio:
   - admin@switchboard.chat / 4usjWkPhurjgQsgeKahaW7Kic
 - sendgrid
