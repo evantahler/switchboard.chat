@@ -19,7 +19,7 @@
     "glob": "^7.0.0",
     "grunt": "latest",
     "ioredis": "^2.1.0",
-    "mustache": "^2.2.1",
+    "mustache": "^2.3.0",
     "mysql": "^2.9.0",
     "nodemailer": "^2.2.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
