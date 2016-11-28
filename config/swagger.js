@@ -1,11 +1,11 @@
-var baseUrl = process.env.PUBLIC_URL || 'https://switchboard.chat';
+var baseUrl = process.env.NODE_ENV === 'production' ? 'www.switchboard.chat' : null;
 
 exports['default'] = {
   swagger: function(api){
     return {
       // Should be changed to hit www.yourserver.com.  If this is null, defaults to ip:port from
       // internal values or from hostOverride and portOverride.
-      baseUrl: baseUrl.replace('https://', ''),
+      baseUrl: baseUrl,
       // Specify routes that don't need to be displayed
       ignoreRoutes: [ '/swagger' ],
       // Specify how routes are grouped
