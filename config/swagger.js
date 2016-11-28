@@ -33,7 +33,7 @@ exports['default'] = {
       groupBySimpleActionTag: false,
       // In some cases where actionhero network topology needs to point elsewhere.  If null, uses
       // api.config.swagger.baseUrl
-      hostOverride: true,
+      hostOverride: null,
       // Same as above, if null uses the internal value set in config/server/web.js
       portOverride: null
     };
