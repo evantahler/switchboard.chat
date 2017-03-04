@@ -1,8 +1,0 @@
-- hosts: all
-  gather_facts: yes
-  roles:
-    - { role: common,       tags: ['common'],        become: yes }
-    - { role: environment,  tags: ['environment'],   become: yes }
-    - { role: monit,        tags: ['monit'],         become: yes }
-    - { role: nginx,        tags: ['nginx'],         become: yes }
-    - { role: app,          tags: ['app'],           become: yes }

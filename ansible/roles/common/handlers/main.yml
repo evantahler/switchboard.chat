@@ -1,7 +1,0 @@
----
-
-- name: restart ssh
-  service: name=ssh state=restarted
-
-- name: touch apt upgrade file
-  file: path=/root/apt_upgraded state=touch

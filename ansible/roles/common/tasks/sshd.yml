@@ -1,4 +1,0 @@
-- name: update the sshd config and restart
-  template: src=sshd_config.j2 dest=/etc/ssh/sshd_config mode=0644 owner=root
-  notify:
-    - restart ssh

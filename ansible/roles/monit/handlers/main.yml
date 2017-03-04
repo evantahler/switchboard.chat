@@ -1,8 +1,0 @@
----
-
-- name: restart monit
-  service: name=monit state=restarted
-
-- name: reload monit
-  service: name=monit state=restarted
-  ignore_errors: true

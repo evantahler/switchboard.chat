@@ -8,15 +8,9 @@
 - `cp .env.example .env` and fill in your local config
 - `source .env && npm start`
 
-## TODO:
-- Monit cannot start actionhero, deploys can... something about ENV?
-- email notifications should use person's name
-- host the static site on S3?
-- OPS stuff
-- TESTS
-
 ## Production Vendors
-- Hosted on AWS
+- App hosted on Heroku
+- DB hosted on AWS
   - admin@switchboard.chat
   - 480yhuaeioyjap43wohjpoe54
 
@@ -31,6 +25,3 @@
   - admin@switchboard.chat / 2tugwihBR0935EAIJ~!@FGRWdf
 - uptimerobot.com
   - admin@switchboard.chat | 3tguwhioJNK$EFH5
-
-## HTTPS moved to letsEncrypt!
-- Use the helper website -> https://gethttpsforfree.com
