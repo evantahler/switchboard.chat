@@ -79,19 +79,17 @@ exports.default = {
 
 exports.production = {
   servers: {
-    web: function(api){
+    web: function (api) {
       return {
-        port: '/home/deploy/www/switchboard.chat/shared/sockets/actionhero.sock',
-        bindIP: null,
         padding: null,
         metadataOptions: {
           serverInformation: false,
           requesterInformation: false
         }
-      };
+      }
     }
   }
-};
+}
 
 exports.test = {
   servers: {
