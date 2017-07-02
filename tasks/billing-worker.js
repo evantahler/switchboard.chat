@@ -1,4 +1,5 @@
 var async = require('async');
+var adminEmail = 'evan@switchboard.chat'
 
 exports.task = {
   name:          'billing-worker',
@@ -19,11 +20,39 @@ exports.task = {
       teams.forEach(function(team){
         if(team.enabled && lastMonth >= team.createdAt){
           jobs.push(function(done){
-            api.billing.createMonthlyBillCharge(lastMonth, team, done);
+            api.billing.createMonthlyBillCharge(lastMonth, team, function (error) {
+              if (error) {
+                api.log(error, 'error')
+                api.smtp.send(adminEmail, '! Billing Problem @ createMonthlyBillCharge', {
+                  paragraphs: [
+                    'Team: ' + team.id,
+                    'Error: ' + error
+                  ],
+                  signoff: 'Thanks, the switchboard.chat team.',
+                  greeting: 'Hi, ' + adminEmail
+                }, done)
+              } else {
+                done()
+              }
+            });
           });
 
           jobs.push(function(done){
-            api.billing.createExtraMessagesCharge(lastMonth, team, done);
+            api.billing.createExtraMessagesCharge(lastMonth, team, function (error) {
+              if (error) {
+                api.log(error, 'error')
+                api.smtp.send(adminEmail, '! Billing Problem @ createExtraMessagesCharge', {
+                  paragraphs: [
+                    'Team: ' + team.id,
+                    'Error: ' + error
+                  ],
+                  signoff: 'Thanks, the switchboard.chat team.',
+                  greeting: 'Hi, ' + adminEmail
+                }, done)
+              } else {
+                done()
+              }
+            });
           });
         }
       });
