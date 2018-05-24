@@ -16,7 +16,7 @@ exports['default'] = {
     // args: The arguments to pass to the constructor
     // buildNew: is it `new konstructor()` or just `konstructor()`?
 
-    if(process.env.FAKEREDIS === 'false' || process.env.REDIS_HOST !== undefined){
+    if(process.env.FAKEREDIS !== 'true'){
 
       return {
         '_toExpand': false,
