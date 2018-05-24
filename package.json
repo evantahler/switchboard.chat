@@ -9,7 +9,7 @@
   },
   "version": "0.0.1",
   "engines": {
-    "node": "4.2.x"
+    "node": "4.x.x"
   },
   "dependencies": {
     "actionhero": "15.1.0",
