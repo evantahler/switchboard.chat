@@ -54,6 +54,7 @@ jobs:
   test-api:
     docker:
       - image: circleci/node:10
+      - image: redis:4
     steps:
       - checkout
       - restore_cache:
@@ -84,7 +85,6 @@ jobs:
   test-web:
     docker:
       - image: circleci/node:10
-      - image: redis:4
       - image: selenium/standalone-chrome:latest
     steps:
       - checkout
