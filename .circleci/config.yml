@@ -1,0 +1,154 @@
+version: 2
+
+# Define common steps all parts of the test workflow use
+refrences:
+  ignored-branches: &ignored-branches
+     branches:
+      ignore:
+        - gh-pages
+
+  cache-options: &cache-options
+    key: package-cache-{{ .Branch }}-{{ .Revision }}
+
+# Define Jobs to run
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: yarn-install
+          command: yarn install
+      - run:
+          name: test-reporter-setup
+          command: yarn add jest-junit --no-save
+      - save_cache:
+          <<: *cache-options
+          paths:
+            - ./node_modules
+            - ./web/node_modules
+            - ./api/node_modules
+
+  linter-api:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: linter-api
+          command: cd api && node_modules/.bin/standard
+
+  linter-web:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: linter-web
+          command: cd web && node_modules/.bin/standard
+
+  test-api:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: display-node-version
+          command: node --version
+      - run:
+          name: display-yarn-version
+          command: yarn --version
+      - run:
+          name: test-log-setup
+          command: mkdir -p ./log
+      - run:
+          name: test-reporter-setup
+          command: mkdir ./junit
+      - run:
+          name: test
+          command: ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
+          environment:
+            NODE_ENV: test
+          when: always
+      - store_test_results:
+          path: ./reports/junit/
+      - store_artifacts:
+          path: ./reports/junit/
+
+  test-web:
+    docker:
+      - image: circleci/node:10
+      - image: redis:4
+      - image: selenium/standalone-chrome:latest
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: display-node-version
+          command: node --version
+      - run:
+          name: display-yarn-version
+          command: yarn --version
+      - run:
+          name: test-log-setup
+          command: mkdir -p ./log
+      - run:
+          name: test-reporter-setup
+          command: mkdir ./junit
+      - run:
+          name: test
+          command: ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
+          environment:
+            NODE_ENV: test
+            SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+            JEST_JUNIT_OUTPUT: reports/junit/jest.xml
+          when: always
+      - store_test_results:
+          path: ./reports/junit/
+      - store_artifacts:
+          path: ./reports/junit/
+
+
+
+# Run all the tests is parallel
+workflows:
+  version: 2
+  test-all-node-versions:
+    jobs:
+      - build:
+          filters:
+            <<: *ignored-branches
+
+      - linter-api:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - build
+
+      - linter-web:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - build
+
+      - test-api:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - linter-api
+
+      - test-web:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - linter-web
