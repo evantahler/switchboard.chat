@@ -1,7 +1,7 @@
-node_modules/*
-log/*
-pids/*
-locales/*
+node_modules
+log
+pids
+.next
 
 npm-debug.log
 .DS_Store

@@ -1,0 +1,46 @@
+{
+  "author": "Evan Tahler <evan@delicioushat.com>",
+  "name": "switchboard-www",
+  "description": "Phonez",
+  "version": "2.0.0",
+  "engines": {
+    "node": "10.x.x"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.3",
+    "next": "^7.0.2",
+    "react": "^16.6.3",
+    "react-bootstrap": "^1.0.0-beta.3",
+    "react-dom": "^16.6.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
+    "jest": "^23.6.0",
+    "react-test-renderer": "^16.6.3",
+    "standard": "^12.0.1"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "test": "jest",
+    "pretest": "standard"
+  },
+  "standard": {
+    "ignore": [
+      "static/*"
+    ],
+    "globals": [
+      "describe",
+      "test",
+      "beforeAll",
+      "beforeEach",
+      "afterAll",
+      "afterEach",
+      "expect"
+    ]
+  }
+}
