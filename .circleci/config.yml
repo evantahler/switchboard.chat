@@ -66,25 +66,20 @@ jobs:
           command: yarn --version
       - run:
           name: test-log-setup
-          command: mkdir -p ./log
-          environment:
-            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
+          command: mkdir -p /home/circleci/project/api/log
       - run:
           name: test-reporter-setup
-          command: mkdir ./junit
-          environment:
-            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
+          command: mkdir /home/circleci/project/api/junit
       - run:
           name: test
-          command: ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
+          command: cd api && ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
           environment:
-            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
             NODE_ENV: test
           when: always
       - store_test_results:
-          path: /home/circleci/project/web/reports/junit/
+          path: /home/circleci/project/api/reports/junit/
       - store_artifacts:
-          path: /home/circleci/project/web/reports/junit/
+          path: /home/circleci/project/api/reports/junit/
 
   test-web:
     docker:
@@ -103,19 +98,14 @@ jobs:
           command: yarn --version
       - run:
           name: test-log-setup
-          command: mkdir -p ./log
-          environment:
-            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
+          command: mkdir -p /home/circleci/project/web/log
       - run:
           name: test-reporter-setup
-          command: mkdir ./junit
-          environment:
-            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
+          command: mkdir /home/circleci/project/web/junit
       - run:
           name: test
-          command: ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
+          command: cd web && ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
           environment:
-            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
             NODE_ENV: test
             SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
             JEST_JUNIT_OUTPUT: reports/junit/jest.xml
