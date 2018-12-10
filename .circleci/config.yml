@@ -67,19 +67,24 @@ jobs:
       - run:
           name: test-log-setup
           command: mkdir -p ./log
+          environment:
+            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
       - run:
           name: test-reporter-setup
           command: mkdir ./junit
+          environment:
+            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
       - run:
           name: test
           command: ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
           environment:
+            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
             NODE_ENV: test
           when: always
       - store_test_results:
-          path: ./reports/junit/
+          path: /home/circleci/project/web/reports/junit/
       - store_artifacts:
-          path: ./reports/junit/
+          path: /home/circleci/project/web/reports/junit/
 
   test-web:
     docker:
@@ -99,28 +104,33 @@ jobs:
       - run:
           name: test-log-setup
           command: mkdir -p ./log
+          environment:
+            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
       - run:
           name: test-reporter-setup
           command: mkdir ./junit
+          environment:
+            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
       - run:
           name: test
           command: ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
           environment:
+            CIRCLE_WORKING_DIRECTORY: /home/circleci/project/web
             NODE_ENV: test
             SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
             JEST_JUNIT_OUTPUT: reports/junit/jest.xml
           when: always
       - store_test_results:
-          path: ./reports/junit/
+          path: /home/circleci/project/web/reports/junit/
       - store_artifacts:
-          path: ./reports/junit/
+          path: /home/circleci/project/web/reports/junit/
 
 
 
 # Run all the tests is parallel
 workflows:
   version: 2
-  test-all-node-versions:
+  test-switchboard:
     jobs:
       - build:
           filters:
