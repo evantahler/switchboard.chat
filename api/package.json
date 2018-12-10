@@ -8,7 +8,10 @@
   },
   "dependencies": {
     "actionhero": "19.0.4",
+    "ah-sequelize-plugin": "^1.1.0",
+    "bcrypt": "^3.0.2",
     "ioredis": "^4.3.0",
+    "sequelize": "^4.41.2",
     "winston": "^3.1.0",
     "ws": "^6.1.2"
   },
