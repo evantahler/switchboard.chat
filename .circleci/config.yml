@@ -55,7 +55,7 @@ jobs:
     docker:
       - image: circleci/node:10
       - image: redis:latest
-      - image: circleci/mysql:latest
+      - image: circleci/mysql:5
     steps:
       - checkout
       - restore_cache:
