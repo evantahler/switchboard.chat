@@ -54,7 +54,8 @@ jobs:
   test-api:
     docker:
       - image: circleci/node:10
-      - image: redis:4
+      - image: redis:latest
+      - image: circleci/mysql:latest
     steps:
       - checkout
       - restore_cache:
@@ -71,6 +72,9 @@ jobs:
       - run:
           name: test-reporter-setup
           command: mkdir /home/circleci/project/api/junit
+      - run:
+          name: create mysql database
+          command: mysql -e "create databse switchboard_test" -u root
       - run:
           name: test
           command: cd api && ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
