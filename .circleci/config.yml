@@ -73,6 +73,9 @@ jobs:
           name: test-reporter-setup
           command: mkdir /home/circleci/project/api/junit
       - run:
+          name: install mysql client
+          command: sudo apt install -y mysql-client
+      - run:
           name: create mysql database
           command: mysql -e "create databse switchboard_test" -u root
       - run:
