@@ -9,4 +9,5 @@
 `heroku local` - will start both the next frontend server and the actionhero backend server from Procfile
 
 ## To Test:
+`mysql -e "create database if not exists switchboard_test" #-u root`
 `npm test`

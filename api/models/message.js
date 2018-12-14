@@ -1,5 +1,5 @@
 const Message = function (sequelize, DataTypes) {
-  return sequelize.define('message', {
+  const Model = sequelize.define('Message', {
     from: {
       type: DataTypes.STRING(191),
       allowNull: false
@@ -24,20 +24,24 @@ const Message = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     }
+  }, {
+    tableName: 'messages'
   })
-}
 
-Message.prototype.apiData = (api) => {
-  return {
-    id: this.id,
-    from: this.from,
-    to: this.to,
-    message: this.message,
-    direction: this.direction,
-    read: this.read,
-    teamId: this.teamId,
-    createdAt: this.createdAt
+  Model.prototype.apiData = function () {
+    return {
+      id: this.id,
+      from: this.from,
+      to: this.to,
+      message: this.message,
+      direction: this.direction,
+      read: this.read,
+      teamId: this.teamId,
+      createdAt: this.createdAt
+    }
   }
+
+  return Model
 }
 
 module.exports = Message

@@ -9,10 +9,6 @@ module.exports = {
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
 
-      teamId: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
       folderId: {
         type: DataTypes.INTEGER,
         allowNull: false
@@ -36,7 +32,7 @@ module.exports = {
       }
     })
 
-    await migration.addIndex('contacts', ['phoneNumber', 'teamId'], {
+    await migration.addIndex('contacts', ['phoneNumber', 'folderId'], {
       indicesType: 'UNIQUE'
     })
   },

@@ -1,5 +1,5 @@
 const Folder = function (sequelize, DataTypes) {
-  return sequelize.define('folder', {
+  const Model = sequelize.define('Folder', {
     teamId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -8,19 +8,19 @@ const Folder = function (sequelize, DataTypes) {
       type: DataTypes.STRING(191),
       allowNull: false
     }
+  }, {
+    tableName: 'folders'
   })
-}
 
-Folder.prototype.apiData = (api) => {
-  return {
-    id: this.id,
-    teamId: this.teamId,
-    name: this.name
+  Model.prototype.apiData = function () {
+    return {
+      id: this.id,
+      teamId: this.teamId,
+      name: this.name
+    }
   }
-}
 
-Folder.teamFolders = async (team) => {
-  return Folder.findAll.where({ teamId: team.id })
+  return Model
 }
 
 module.exports = Folder

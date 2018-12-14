@@ -1,5 +1,5 @@
-module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('notification', {
+const Notification = function (sequelize, DataTypes) {
+  const Model = sequelize.define('Notification', {
     'userId': {
       type: DataTypes.STRING(191),
       allowNull: false
@@ -33,24 +33,21 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    indexes: [
-      {
-        unique: true,
-        fields: ['userId']
-      }
-    ],
-
-    instanceMethods: {
-      apiData: function (api) {
-        return {
-          id: this.id,
-          userId: this.userId,
-          notifyByEmail: this.notifyByEmail,
-          notifyBySMS: this.notifyBySMS,
-          notificationDelayMinutesSMS: this.notificationDelayMinutesSMS,
-          notificationDelayMinutesEmail: this.notificationDelayMinutesEmail
-        }
-      }
-    }
+    tableName: 'notifications'
   })
+
+  Model.prototype.apiData = function () {
+    return {
+      id: this.id,
+      userId: this.userId,
+      notifyByEmail: this.notifyByEmail,
+      notifyBySMS: this.notifyBySMS,
+      notificationDelayMinutesSMS: this.notificationDelayMinutesSMS,
+      notificationDelayMinutesEmail: this.notificationDelayMinutesEmail
+    }
+  }
+
+  return Model
 }
+
+module.exports = Notification

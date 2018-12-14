@@ -1,5 +1,5 @@
 const Charge = function (sequelize, DataTypes) {
-  return sequelize.define('charge', {
+  const Model = sequelize.define('Charge', {
     teamId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -53,23 +53,27 @@ const Charge = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     }
+  }, {
+    tableName: 'charges'
   })
-}
 
-Charge.prototype.apiData = (api) => {
-  return {
-    id: this.id,
-    createdAt: this.createdAt,
-    teamId: this.teamId,
-    paid: this.paid,
-    paidAt: this.paidAt,
-    type: this.type,
-    valueInCents: this.valueInCents,
-    unitValueInCents: this.unitValueInCents,
-    unitCount: this.unitCount,
-    description: this.description,
-    discountValueInCents: this.discountValueInCents
+  Model.prototype.apiData = function () {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      teamId: this.teamId,
+      paid: this.paid,
+      paidAt: this.paidAt,
+      type: this.type,
+      valueInCents: this.valueInCents,
+      unitValueInCents: this.unitValueInCents,
+      unitCount: this.unitCount,
+      description: this.description,
+      discountValueInCents: this.discountValueInCents
+    }
   }
+
+  return Model
 }
 
 module.exports = Charge

@@ -21,8 +21,8 @@ exports.test = {
     return {
       port: 3306,
       database: 'switchboard_test',
-      host: undefined,
-      username: undefined,
+      host: 'localhost',
+      username: 'root',
       password: undefined
     }
   }

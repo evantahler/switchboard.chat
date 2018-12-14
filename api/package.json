@@ -23,7 +23,7 @@
   "scripts": {
     "start": "actionhero start",
     "pretest": "standard",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "standard": {
     "ignore": [
@@ -40,6 +40,7 @@
     ]
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [ "<rootDir>/__tests__/specHelper" ]
   }
 }

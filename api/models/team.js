@@ -1,5 +1,7 @@
+const { api } = require('actionhero')
+
 const Team = function (sequelize, DataTypes) {
-  return sequelize.define('team', {
+  const Model = sequelize.define('Team', {
     name: {
       type: DataTypes.STRING(191),
       allowNull: false
@@ -41,18 +43,60 @@ const Team = function (sequelize, DataTypes) {
       allowNull: false,
       default: true
     }
+  }, {
+    tableName: 'teams'
   })
-}
 
-Team.prototype.apiData = (api) => {
-  return {
-    id: this.id,
-    name: this.name,
-    phoneNumber: this.phoneNumber,
-    areaCode: this.areaCode,
-    sid: this.sid,
-    enabled: this.enabled
+  Model.prototype.addFolder = async function (folderName) {
+    const folder = new api.models.Folder({
+      teamId: this.id,
+      name: folderName
+    })
+
+    return folder.save()
   }
+
+  Model.prototype.removeFolder = async function (folderName) {
+    const folder = await api.models.Folder.findOne({ where: {
+      teamId: this.id,
+      name: folderName
+    } })
+
+    if (!folder) { throw new Error('folder not found') }
+    return folder.destroy()
+  }
+
+  Model.prototype.folders = async function () {
+    return api.models.Folder.findAll({ where: { teamId: this.id } })
+  }
+
+  Model.prototype.users = async function () {
+    return api.models.User.findAll({ where: { teamId: this.id } })
+  }
+
+  Model.prototype.contacts = async function (folderName) {
+    const folder = await api.models.Folder.findOne({ where: {
+      teamId: this.id,
+      name: folderName
+    } })
+
+    if (!folder) { throw new Error('folder not found') }
+
+    return api.models.Contact.findAll({ where: { folderId: folder.id } })
+  }
+
+  Model.prototype.apiData = function () {
+    return {
+      id: this.id,
+      name: this.name,
+      phoneNumber: this.phoneNumber,
+      areaCode: this.areaCode,
+      sid: this.sid,
+      enabled: this.enabled
+    }
+  }
+
+  return Model
 }
 
 module.exports = Team

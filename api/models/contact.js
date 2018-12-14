@@ -1,9 +1,5 @@
 const Contact = function (sequelize, DataTypes) {
-  return sequelize.define('contact', {
-    'teamId': {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
+  const Model = sequelize.define('Contact', {
     'folderId': {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -25,19 +21,26 @@ const Contact = function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: 0
     }
+  }, {
+    tableName: 'contacts'
   })
-}
 
-Contact.prototype.apiData = (api) => {
-  return {
-    id: this.id,
-    teamId: this.teamId,
-    folderId: this.folderId,
-    firstName: this.firstName,
-    lastName: this.lastName,
-    phoneNumber: this.phoneNumber,
-    canUseCommands: this.canUseCommands
+  Model.prototype.name = function () {
+    return [this.firstName, this.lastName].join(' ')
   }
+
+  Model.prototype.apiData = function () {
+    return {
+      id: this.id,
+      folderId: this.folderId,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      phoneNumber: this.phoneNumber,
+      canUseCommands: this.canUseCommands
+    }
+  }
+
+  return Model
 }
 
 module.exports = Contact
