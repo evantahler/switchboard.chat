@@ -1,6 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import { Container, Row, Col } from 'react-bootstrap'
+import renderEmojiAsFavicon from './../../scripts/renderEmojiAsFavicon'
 
 const baseTitle = 'Switchboard.Chat'
 
@@ -16,10 +17,15 @@ class PageBase extends React.Component {
     return (
       <Head>
         <meta name='viewport' content='width=device-width' />
+        <link rel='icon' data-emoji='☎️' type='image/png' />
         <link rel='stylesheet' type='text/css' href='/static/css/bootstrap.min.css' />
         <title>{this.state.pageTitle}</title>
       </Head>
     )
+  }
+
+  async componentDidMount () {
+    await renderEmojiAsFavicon()
   }
 
   render () {

@@ -11,7 +11,7 @@ class Page extends React.Component {
           <h1>Switchboard</h1>
           <p>Centralized SMS Communication for Teams</p>
           <p>
-            <Button variant='success'  onClick={() => Router.push('/sign-up')}>Sign Up</Button>
+            <Button variant='success' onClick={() => Router.push('/sign-up')}>Sign Up</Button>
           </p>
         </Jumbotron>
 
