@@ -76,8 +76,8 @@ jobs:
           name: install mysql client
           command: sudo apt install -y mysql-client
       - run:
-          name: create mysql database
-          command: mysql -e "create database switchboard_test" -u root -h 127.0.0.1
+          name: create test databases
+          command: mysql -e "create database switchboard_test_1" -u root -h 127.0.0.1
       - run:
           name: test
           command: cd api && ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
