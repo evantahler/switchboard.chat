@@ -20,7 +20,7 @@ exports.test = {
   sequelize: (api) => {
     return {
       port: 3306,
-      database: 'switchboard_test',
+      database: `switchboard_test_${process.env.JEST_WORKER_ID || 1}`,
       host: 'localhost',
       username: 'root',
       password: undefined

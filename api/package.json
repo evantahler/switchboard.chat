@@ -23,7 +23,7 @@
   "scripts": {
     "start": "actionhero start",
     "pretest": "standard",
-    "test": "jest --runInBand"
+    "test": "jest"
   },
   "standard": {
     "ignore": [
