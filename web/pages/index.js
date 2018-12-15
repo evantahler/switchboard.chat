@@ -1,12 +1,21 @@
 import React from 'react'
-import PageLayout from './../components/layouts/page.js'
+import Router from 'next/router'
+import Layout from './../components/layouts/loggedOut.js'
+import { Jumbotron, Button } from 'react-bootstrap'
 
 class Page extends React.Component {
   render () {
     return (
-      <PageLayout>
-        <h1>Hello World</h1>
-      </PageLayout>
+      <Layout>
+        <Jumbotron>
+          <h1>Switchboard</h1>
+          <p>Centralized SMS Communication for Teams</p>
+          <p>
+            <Button variant='success'  onClick={() => Router.push('/sign-up')}>Sign Up</Button>
+          </p>
+        </Jumbotron>
+
+      </Layout>
     )
   }
 }

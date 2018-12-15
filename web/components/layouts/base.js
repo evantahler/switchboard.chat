@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 const baseTitle = 'Switchboard.Chat'
 
-class PageLayout extends React.Component {
+class PageBase extends React.Component {
   constructor (props) {
     super(props)
     const pageTitle = props.pageTitle ? `${baseTitle} - ${props.pageTitle}` : baseTitle
@@ -39,4 +39,4 @@ class PageLayout extends React.Component {
   }
 }
 
-export default PageLayout
+export default PageBase
