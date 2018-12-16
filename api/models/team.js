@@ -1,4 +1,5 @@
 const { api } = require('actionhero')
+const { Op } = require('sequelize')
 
 const Team = function (sequelize, DataTypes) {
   const Model = sequelize.define('Team', {
@@ -71,14 +72,12 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.users = async function () {
-    let users = []
     const UserTeams = await api.models.UserTeam.findAll({ where: { teamId: this.id } })
-    for (var i in UserTeams) {
-      let userTeam = UserTeams[i]
-      let user = await api.models.User.findOne({ where: { id: userTeam.userId } })
-      users.push(user)
-    }
-    return users
+    return api.models.User.findAll({ where: {
+      id: {
+        [Op.in]: UserTeams.map(t => { return t.userId })
+      }
+    } })
   }
 
   Model.prototype.contacts = async function (folderName) {

@@ -1,4 +1,5 @@
 const { api } = require('actionhero')
+const { Op } = require('sequelize')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
@@ -69,18 +70,15 @@ const User = function (sequelize, DataTypes) {
   }
 
   Model.prototype.teams = async function () {
-    const teams = []
     const userTeams = await api.models.UserTeam.findAll({
       where: { userId: this.id }
     })
 
-    for (let i in userTeams) {
-      let userTeam = userTeams[i]
-      let team = await api.models.Team.findOne({ where: { id: userTeam.id } })
-      teams.push(team)
-    }
-
-    return teams
+    return api.models.Team.findAll({ where: {
+      id: {
+        [Op.in]: userTeams.map(t => { return t.teamId })
+      }
+    } })
   }
 
   Model.prototype.apiData = function () {
