@@ -12,14 +12,12 @@ describe('serssion', () => {
   afterAll(async () => { await actionhero.stop() })
 
   beforeAll(async () => {
-    let { user } = await api.specHelper.runAction('userCreate', {
+    await api.specHelper.runAction('userCreate', {
       firstName: 'Peach',
       lastName: 'Toadstool',
       email: 'peach@example.com',
       password: 'passw0rd'
     })
-
-    peach = user
   })
 
   describe('sessionCreate', () => {

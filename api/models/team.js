@@ -71,7 +71,14 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.users = async function () {
-    return api.models.User.findAll({ where: { teamId: this.id } })
+    let users = []
+    const UserTeams = await api.models.UserTeam.findAll({ where: { teamId: this.id } })
+    for (var i in UserTeams) {
+      let userTeam = UserTeams[i]
+      let user = await api.models.User.findOne({ where: { id: userTeam.userId } })
+      users.push(user)
+    }
+    return users
   }
 
   Model.prototype.contacts = async function (folderName) {

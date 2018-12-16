@@ -43,9 +43,12 @@ describe('actionhero Tests', () => {
     user.firstName = 'Peach'
     user.lastName = 'Toadstool'
     user.email = 'peach@example.com'
-    user.teamId = team.id
-
     await user.save()
+
+    const userTeam = new api.models.UserTeam()
+    userTeam.teamId = team.id
+    userTeam.userId = user.id
+    await userTeam.save()
 
     const users = await team.users()
     expect(users.length).toEqual(1)
