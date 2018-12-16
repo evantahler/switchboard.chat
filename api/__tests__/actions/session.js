@@ -4,7 +4,6 @@ const SpecHelper = require('./../specHelper')
 const helper = new SpecHelper()
 const actionhero = new ActionHero.Process()
 let api
-let peach
 
 describe('serssion', () => {
   beforeAll(async () => { api = await actionhero.start() })
