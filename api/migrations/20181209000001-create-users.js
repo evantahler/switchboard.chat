@@ -18,10 +18,6 @@ module.exports = {
         type: DataTypes.STRING(191),
         allowNull: true
       },
-      teamId: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
       passwordHash: {
         type: DataTypes.TEXT,
         allowNull: true

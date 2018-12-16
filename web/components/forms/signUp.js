@@ -29,6 +29,18 @@ class SignUpForm extends React.Component {
         validated={validated}
         noValidate
       >
+        <Form.Group controlId='firstName'>
+          <Form.Label>First Name</Form.Label>
+          <Form.Control autoFocus required type='text' placeholder='First' />
+          <Form.Control.Feedback type='invalid'>First name is required</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group controlId='lastName'>
+          <Form.Label>Last Name</Form.Label>
+          <Form.Control autoFocus required type='text' placeholder='Last' />
+          <Form.Control.Feedback type='invalid'>Last name is required</Form.Control.Feedback>
+        </Form.Group>
+
         <Form.Group controlId='email'>
           <Form.Label>Email address</Form.Label>
           <Form.Control autoFocus required type='email' placeholder='Email Address' />

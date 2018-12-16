@@ -11,7 +11,9 @@
     "ah-sequelize-plugin": "^1.1.0",
     "bcrypt": "^3.0.2",
     "ioredis": "^4.3.0",
+    "libphonenumber-js": "^1.6.9",
     "sequelize": "^4.41.2",
+    "validator": "^10.9.0",
     "winston": "^3.1.0",
     "ws": "^6.1.2"
   },
@@ -41,6 +43,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testPathIgnorePatterns": [ "<rootDir>/__tests__/specHelper" ]
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/specHelper"
+    ]
   }
 }
