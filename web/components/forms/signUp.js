@@ -1,14 +1,19 @@
 import React from 'react'
 import { Form, Button } from 'react-bootstrap'
+import Client from './../../client/client'
 
 class SignUpForm extends React.Component {
   constructor () {
     super()
-    this.state = { validated: false }
+    this.state = {
+      client: new Client(),
+      validated: false
+    }
   }
 
   validate (event) {
     const form = event.currentTarget
+    console.log(form)
     const valid = form.checkValidity()
     event.preventDefault()
     event.stopPropagation()
@@ -17,6 +22,7 @@ class SignUpForm extends React.Component {
   }
 
   async submit (form) {
+    console.log(form)
     console.log('submitting...')
   }
 

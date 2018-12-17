@@ -7,7 +7,7 @@ const phoneNumberDefaultCountry = 'US'
 exports.userCreate = class userCreate extends Action {
   constructor () {
     super()
-    this.name = 'userCreate'
+    this.name = 'user:create'
     this.description = 'to create a user'
     this.outputExample = {}
   }
@@ -49,7 +49,7 @@ exports.userCreate = class userCreate extends Action {
 exports.userView = class userView extends Action {
   constructor () {
     super()
-    this.name = 'userView'
+    this.name = 'user:view'
     this.description = 'to view a user'
     this.outputExample = {}
     this.middleware = ['logged-in-session']

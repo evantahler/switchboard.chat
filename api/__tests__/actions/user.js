@@ -13,9 +13,9 @@ describe('user', () => {
 
   afterAll(async () => { await actionhero.stop() })
 
-  describe('userCreate', () => {
+  describe('user:create', () => {
     test('can create a user', async () => {
-      let { user, error } = await api.specHelper.runAction('userCreate', {
+      let { user, error } = await api.specHelper.runAction('user:create', {
         firstName: 'Peach',
         lastName: 'Toadstool',
         email: 'peach@example.com',
@@ -33,7 +33,7 @@ describe('user', () => {
     })
 
     test('can create a user with an optional phone Number', async () => {
-      let { user, error } = await api.specHelper.runAction('userCreate', {
+      let { user, error } = await api.specHelper.runAction('user:create', {
         firstName: 'Mario',
         lastName: 'Mario',
         email: 'mario@example.com',
@@ -53,7 +53,7 @@ describe('user', () => {
     })
 
     test('email addresses must be valid', async () => {
-      let { error } = await api.specHelper.runAction('userCreate', {
+      let { error } = await api.specHelper.runAction('user:create', {
         firstName: 'Bowser',
         lastName: 'Koopa',
         email: 'bowser.example.com',
@@ -64,7 +64,7 @@ describe('user', () => {
     })
 
     test('passwords must be at least 6 chars long', async () => {
-      let { error } = await api.specHelper.runAction('userCreate', {
+      let { error } = await api.specHelper.runAction('user:create', {
         firstName: 'Bowser',
         lastName: 'Koopa',
         email: 'bowser@example.com',
@@ -75,20 +75,20 @@ describe('user', () => {
     })
   })
 
-  describe('userView', () => {
+  describe('user:view', () => {
     test('user can view themselves', async () => {
       const connection = new api.specHelper.Connection()
       connection.params = {
         email: 'peach@example.com',
         password: 'passw0rd'
       }
-      let { csrfToken } = await api.specHelper.runAction('sessionCreate', connection)
+      let { csrfToken } = await api.specHelper.runAction('session:create', connection)
 
       connection.params = {
         csrfToken,
         userId: peach.id
       }
-      let { error, user } = await api.specHelper.runAction('userView', connection)
+      let { error, user } = await api.specHelper.runAction('user:view', connection)
 
       expect(error).toBeUndefined()
       expect(user.id).toBeTruthy()
@@ -104,13 +104,13 @@ describe('user', () => {
         email: 'peach@example.com',
         password: 'passw0rd'
       }
-      let { csrfToken } = await api.specHelper.runAction('sessionCreate', connection)
+      let { csrfToken } = await api.specHelper.runAction('session:create', connection)
 
       connection.params = {
         csrfToken,
         userId: mario.id
       }
-      let { error, user } = await api.specHelper.runAction('userView', connection)
+      let { error, user } = await api.specHelper.runAction('user:view', connection)
 
       expect(error).toMatch(/you cannot view this user/)
       expect(user).toBeUndefined()

@@ -3,7 +3,7 @@ const { Action, api } = require('actionhero')
 exports.sessionCreate = class sessionCreate extends Action {
   constructor () {
     super()
-    this.name = 'sessionCreate'
+    this.name = 'session:create'
     this.description = 'to create a session'
     this.outputExample = {}
   }
@@ -32,7 +32,7 @@ exports.sessionCreate = class sessionCreate extends Action {
 exports.sessionDestroy = class sessionDestroy extends Action {
   constructor () {
     super()
-    this.name = 'sessionDestroy'
+    this.name = 'session:destroy'
     this.description = 'to destroy a session'
     this.outputExample = {}
   }

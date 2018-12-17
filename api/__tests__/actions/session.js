@@ -12,7 +12,7 @@ describe('serssion', () => {
   afterAll(async () => { await actionhero.stop() })
 
   beforeAll(async () => {
-    await api.specHelper.runAction('userCreate', {
+    await api.specHelper.runAction('user:create', {
       firstName: 'Peach',
       lastName: 'Toadstool',
       email: 'peach@example.com',
@@ -20,9 +20,9 @@ describe('serssion', () => {
     })
   })
 
-  describe('sessionCreate', () => {
+  describe('session:create', () => {
     test('can log in', async () => {
-      let { success, user, error } = await api.specHelper.runAction('sessionCreate', {
+      let { success, user, error } = await api.specHelper.runAction('session:create', {
         email: 'peach@example.com',
         password: 'passw0rd'
       })
@@ -39,7 +39,7 @@ describe('serssion', () => {
     })
 
     test('cannot log in with bad password', async () => {
-      let { success, user, error } = await api.specHelper.runAction('sessionCreate', {
+      let { success, user, error } = await api.specHelper.runAction('session:create', {
         email: 'peach@example.com',
         password: 'x'
       })
@@ -50,9 +50,9 @@ describe('serssion', () => {
     })
   })
 
-  describe('sessionDestroy', () => {
+  describe('session:destroy', () => {
     test('can log out', async () => {
-      let { success, error, csrfToken } = await api.specHelper.runAction('sessionCreate', {
+      let { success, error, csrfToken } = await api.specHelper.runAction('session:create', {
         email: 'peach@example.com',
         password: 'passw0rd'
       })
@@ -60,7 +60,7 @@ describe('serssion', () => {
       expect(error).toBeUndefined()
       expect(success).toEqual(true)
 
-      let { successAgain = success, errorAgain = error } = await api.specHelper.runAction('sessionDestroy', {
+      let { successAgain = success, errorAgain = error } = await api.specHelper.runAction('session:destroy', {
         csrfToken
       })
 

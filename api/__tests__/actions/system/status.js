@@ -13,7 +13,7 @@ describe('status', () => {
   })
 
   test('can retrieve server uptime via the status action', async () => {
-    let { uptime } = await api.specHelper.runAction('status')
+    let { uptime } = await api.specHelper.runAction('system:status')
     expect(uptime).toBeGreaterThan(0)
   })
 })

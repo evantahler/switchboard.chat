@@ -1,10 +1,19 @@
 import React from 'react'
-// import { Container, Row, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
+import VersionRepository from '../../repositories/version'
 
-class PageLoggedOut extends React.Component {
+class Footer extends React.Component {
   constructor () {
     super()
-    this.state = { date: new Date() }
+    this.state = {
+      date: new Date(),
+      version: {}
+    }
+  }
+
+  async componentDidMount () {
+    const version = await VersionRepository.get()
+    if (version) { this.setState({ version }) }
   }
 
   copyright () {
@@ -14,10 +23,19 @@ class PageLoggedOut extends React.Component {
   render () {
     return (
       <footer>
-        <p>{ this.copyright() } <a target='_blank' href='https://www.delicioushat.com'>Delicious Hat</a></p>
+        <Row>
+          <Col>
+            <p>version {this.state.version.version}</p>
+          </Col>
+          <Col style={{
+            textAlign: 'right'
+          }}>
+            <p>{ this.copyright() } <a target='_blank' href='https://www.delicioushat.com'>Delicious Hat</a></p>
+          </Col>
+        </Row>
       </footer>
     )
   }
 }
 
-export default PageLoggedOut
+export default Footer
