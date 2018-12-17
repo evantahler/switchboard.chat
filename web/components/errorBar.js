@@ -20,14 +20,14 @@ class ErrorBar extends React.Component {
   }
 
   subscription (error) {
-    this.setState({ error })
+    this.setState({ error, show: true })
   }
 
   format (error) {
     return (error).toString()
   }
 
-  handleHide () { this.setState({ show: false }) }
+  handleHide () { this.setState({ show: false, error: null }) }
   handleShow () { this.setState({ show: true }) }
 
   render () {

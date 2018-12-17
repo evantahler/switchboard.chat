@@ -1,6 +1,6 @@
 import React from 'react'
-import Layout from './../components/layouts/loggedOut.js'
-import SignUpForm from './../components/forms/signUp'
+import Layout from './../../components/layouts/loggedOut.js'
+import SignUpForm from './../../components/forms/session/signUp'
 
 class Page extends React.Component {
   render () {

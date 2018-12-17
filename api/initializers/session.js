@@ -48,7 +48,7 @@ module.exports = class MyInitializer extends Initializer {
           sesionCreatedAt: new Date().getTime()
         }
 
-        await user.updateAttributes({ lastLoginAt: new Date() })
+        await user.update({ lastLoginAt: new Date() })
         await redis.set(key, JSON.stringify(sessionData))
         await redis.expire(key, api.session.ttl)
         return sessionData

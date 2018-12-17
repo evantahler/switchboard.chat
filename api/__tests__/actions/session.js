@@ -38,13 +38,24 @@ describe('serssion', () => {
       expect(user.password).toBeUndefined()
     })
 
+    test('cannot log in with unknown user', async () => {
+      let { success, user, error } = await api.specHelper.runAction('session:create', {
+        email: 'fff@example.com',
+        password: 'x'
+      })
+
+      expect(error).toMatch(/user not found/)
+      expect(success).toEqual(false)
+      expect(user).toBeUndefined()
+    })
+
     test('cannot log in with bad password', async () => {
       let { success, user, error } = await api.specHelper.runAction('session:create', {
         email: 'peach@example.com',
         password: 'x'
       })
 
-      expect(error).toBeUndefined()
+      expect(error).toMatch(/password does not match/)
       expect(success).toEqual(false)
       expect(user).toBeUndefined()
     })

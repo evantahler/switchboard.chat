@@ -18,9 +18,9 @@ exports.sessionCreate = class sessionCreate extends Action {
   async run ({ connection, response, params }) {
     response.success = false
     const user = await api.models.User.findOne({ where: { email: params.email } })
-    if (!user) { return new Error('user not found') }
+    if (!user) { throw new Error('user not found') }
     const match = await user.checkPassword(params.password)
-    if (!match) { return new Error('password does not match') }
+    if (!match) { throw new Error('password does not match') }
 
     const sessionData = await api.session.create(connection, user)
     response.user = user.apiData()

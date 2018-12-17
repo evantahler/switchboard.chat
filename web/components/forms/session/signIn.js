@@ -1,0 +1,67 @@
+import React from 'react'
+import Router from 'next/router'
+import { Form, Button } from 'react-bootstrap'
+import Client from './../../../client/client'
+import FormSerializer from './../utils/formSerializer'
+import ErrorRepository from './../../../repositories/error'
+
+const client = new Client()
+
+class SignUpForm extends React.Component {
+  constructor () {
+    super()
+    this.state = {
+      validated: false
+    }
+  }
+
+  validate (event) {
+    const form = event.currentTarget
+    const valid = form.checkValidity()
+    event.preventDefault()
+    event.stopPropagation()
+    this.setState({ validated: true })
+    if (valid) { this.submit(form) }
+  }
+
+  async submit (form) {
+    const data = FormSerializer(form)
+    try {
+      await client.action('put', '/api/session', data)
+      Router.push('/user/teams')
+    } catch (error) {
+      ErrorRepository.set(error)
+    }
+  }
+
+  render () {
+    const { validated } = this.state
+
+    return (
+      <Form
+        id='form'
+        onSubmit={event => this.validate(event)}
+        validated={validated}
+        noValidate
+      >
+        <Form.Group controlId='email'>
+          <Form.Label>Email address</Form.Label>
+          <Form.Control autoFocus required type='email' placeholder='Email Address' />
+          <Form.Control.Feedback type='invalid'>Email is required</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group controlId='password'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control required type='password' placeholder='Password' />
+          <Form.Control.Feedback type='invalid'>A password is required</Form.Control.Feedback>
+        </Form.Group>
+
+        <Button variant='primary' type='submit'>
+          Submit
+        </Button>
+      </Form>
+    )
+  }
+}
+
+export default SignUpForm

@@ -1,8 +1,17 @@
 import React from 'react'
+import Router from 'next/router'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import HighlightableNavigationLink from './highlightableNavigationLink'
 
 class NavbarLoggedOut extends React.Component {
+  async goTo (path) {
+    try {
+      await Router.push(path)
+    } catch (error) {
+      window.location.href = path
+    }
+  }
+
   render () {
     return (
       <Navbar bg='dark' variant='dark' expand='lg'>
@@ -10,12 +19,12 @@ class NavbarLoggedOut extends React.Component {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mr-auto'>
-            <HighlightableNavigationLink href='/'>Home</HighlightableNavigationLink>
-            <HighlightableNavigationLink href='/about'>About</HighlightableNavigationLink>
-            <NavDropdown title='Industries' id='nav-dropdown'>
-              <NavDropdown.Item href='/industries/education'>Education</NavDropdown.Item>
-              <NavDropdown.Item href='/industries/real-estate'>Real Estate</NavDropdown.Item>
-              <NavDropdown.Item href='/industries/logistics'>Logistics</NavDropdown.Item>
+            <HighlightableNavigationLink href='/'>...</HighlightableNavigationLink>
+          </Nav>
+          <Nav className='justify-content-end'>
+            <NavDropdown title='Settings' id='nav-dropdown' className='mr-right'>
+              <NavDropdown.Item onClick={() => this.goTo('/user/teams')}>Teams</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => this.goTo('/session/sign-out')}>Sign Out</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

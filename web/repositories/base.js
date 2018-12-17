@@ -60,11 +60,11 @@ class BaseRepository {
   }
 
   async hydrate () {
-    const response = await this.client.action(this.hydration.verb, this.hydration.path)
-    if (response && !response.error) {
+    try {
+      const response = await this.client.action(this.hydration.verb, this.hydration.path)
       this.set(response)
-    } else {
-      const errorMessage = response && response.error ? response.error : `cannot hydrate ${this.name}`
+    } catch (error) {
+      const errorMessage = error.message ? error.message : `cannot hydrate ${this.name}`
       throw new Error(errorMessage)
     }
   }

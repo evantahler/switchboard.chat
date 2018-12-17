@@ -1,19 +1,22 @@
 import React from 'react'
+import Router from 'next/router'
 import { Form, Button } from 'react-bootstrap'
-import Client from './../../client/client'
+import Client from './../../../client/client'
+import FormSerializer from './../utils/formSerializer'
+import ErrorRepository from './../../../repositories/error'
+
+const client = new Client()
 
 class SignUpForm extends React.Component {
   constructor () {
     super()
     this.state = {
-      client: new Client(),
       validated: false
     }
   }
 
   validate (event) {
     const form = event.currentTarget
-    console.log(form)
     const valid = form.checkValidity()
     event.preventDefault()
     event.stopPropagation()
@@ -22,8 +25,14 @@ class SignUpForm extends React.Component {
   }
 
   async submit (form) {
-    console.log(form)
-    console.log('submitting...')
+    const data = FormSerializer(form)
+    if (data.password !== data.passwordConfirm) { return alert('passwords do not match') } //eslint-disable-line
+    try {
+      await client.action('put', '/api/user', data)
+      Router.push('/user/teams')
+    } catch (error) {
+      ErrorRepository.set(error)
+    }
   }
 
   render () {
@@ -31,6 +40,7 @@ class SignUpForm extends React.Component {
 
     return (
       <Form
+        id='form'
         onSubmit={event => this.validate(event)}
         validated={validated}
         noValidate
@@ -43,13 +53,13 @@ class SignUpForm extends React.Component {
 
         <Form.Group controlId='lastName'>
           <Form.Label>Last Name</Form.Label>
-          <Form.Control autoFocus required type='text' placeholder='Last' />
+          <Form.Control required type='text' placeholder='Last' />
           <Form.Control.Feedback type='invalid'>Last name is required</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId='email'>
           <Form.Label>Email address</Form.Label>
-          <Form.Control autoFocus required type='email' placeholder='Email Address' />
+          <Form.Control required type='email' placeholder='Email Address' />
           <Form.Text className='text-muted'>We'll never share your email with anyone else.</Form.Text>
           <Form.Control.Feedback type='invalid'>Email is required</Form.Control.Feedback>
         </Form.Group>

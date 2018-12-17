@@ -51,8 +51,11 @@ class Client {
       if (response.data && response.data.error) { throw response.data.error }
       return response.data
     } catch (error) {
-      // we want null objects returned to the caller
-      // alert(error)
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw error
+      }
     }
   }
 }
