@@ -1,9 +1,8 @@
 import React from 'react'
 import Router from 'next/router'
-import Client from './../../../client/client'
+import SessionRepository from './../../../repositories/session'
+import UserRepository from './../../../repositories/user'
 import ErrorRepository from './../../../repositories/error'
-
-const client = new Client()
 
 class SignOutForm extends React.Component {
   componentDidMount () {
@@ -11,12 +10,10 @@ class SignOutForm extends React.Component {
   }
 
   async submit (form) {
-    try {
-      await client.action('delete', '/api/session')
-      Router.push('/')
-    } catch (error) {
-      ErrorRepository.set(error)
-    }
+    await SessionRepository.destroy()
+    await UserRepository.remove()
+    await ErrorRepository.remove()
+    Router.push('/')
   }
 
   render () {

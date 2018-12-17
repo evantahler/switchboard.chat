@@ -5,10 +5,7 @@ class ErrorRepository extends BaseRepository {
     super()
     this.name = 'error'
     this.key = 'repository:error'
-
-    // this repository doesn't go online
-    delete this.hydration.method
-    delete this.hydration.path
+    this.responseKeys = ['error']
   }
 }
 

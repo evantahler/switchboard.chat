@@ -23,6 +23,7 @@ class NavbarLoggedOut extends React.Component {
           </Nav>
           <Nav className='justify-content-end'>
             <NavDropdown title='Settings' id='nav-dropdown' className='mr-right'>
+              <NavDropdown.Item onClick={() => this.goTo('/user/profile')}>Profile</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/user/teams')}>Teams</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/session/sign-out')}>Sign Out</NavDropdown.Item>
             </NavDropdown>

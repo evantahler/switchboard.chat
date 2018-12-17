@@ -19,7 +19,7 @@ class ErrorBar extends React.Component {
     ErrorRepository.unsubscribe('error-bar')
   }
 
-  subscription (error) {
+  subscription ({ error }) {
     this.setState({ error, show: true })
   }
 

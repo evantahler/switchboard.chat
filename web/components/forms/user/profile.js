@@ -1,16 +1,20 @@
 import React from 'react'
-import Router from 'next/router'
 import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import UserRepository from './../../../repositories/user'
-import SessionRepository from './../../../repositories/session'
 
 class SignUpForm extends React.Component {
   constructor () {
     super()
     this.state = {
-      validated: false
+      validated: false,
+      user: {}
     }
+  }
+
+  async componentDidMount () {
+    const user = await UserRepository.get()
+    if (user) { this.setState({ user }) }
   }
 
   validate (event) {
@@ -22,21 +26,19 @@ class SignUpForm extends React.Component {
     if (valid) { this.submit(form) }
   }
 
-  async submit (form) {
-    const data = FormSerializer(form)
-    if (data.password !== data.passwordConfirm) { return alert('passwords do not match') } //eslint-disable-line
-
-    const userSuccess = await UserRepository.create(data)
-    if (userSuccess) {
-      const sessionSuccess = await SessionRepository.create(data)
-      if (sessionSuccess) {
-        Router.push('/user/teams')
-      }
-    }
-  }
+  // async submit (form) {
+  //   const data = FormSerializer(form)
+  //   if (data.password !== data.passwordConfirm) { return alert('passwords do not match') } //eslint-disable-line
+  //   try {
+  //     await client.action('put', '/api/user', data)
+  //     Router.push('/user/teams')
+  //   } catch (error) {
+  //     ErrorRepository.set(error)
+  //   }
+  // }
 
   render () {
-    const { validated } = this.state
+    const { validated, user } = this.state
 
     return (
       <Form
@@ -47,7 +49,7 @@ class SignUpForm extends React.Component {
       >
         <Form.Group controlId='firstName'>
           <Form.Label>First Name</Form.Label>
-          <Form.Control autoFocus required type='text' placeholder='First' />
+          <Form.Control autoFocus required type='text' placeholder='First' value={user.firstName} />
           <Form.Control.Feedback type='invalid'>First name is required</Form.Control.Feedback>
         </Form.Group>
 
@@ -76,12 +78,8 @@ class SignUpForm extends React.Component {
           <Form.Control.Feedback type='invalid'>You need to confirm your password</Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group controlId='terms'>
-          <Form.Check required label='I Agree to the terms' feedback='You must agree to the terms' />
-        </Form.Group>
-
         <Button variant='primary' type='submit'>
-          Submit
+          Update
         </Button>
       </Form>
     )

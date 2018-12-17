@@ -6,7 +6,8 @@ class VersionRepository extends BaseRepository {
     super()
     this.name = 'version'
     this.key = 'repository:version'
-    this.hydration.path = '/api/system/version'
+    this.responseKeys = ['sha', 'version', 'name', 'id', 'desciption']
+    this.routes.get.path = '/api/system/version'
   }
 }
 

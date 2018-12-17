@@ -1,11 +1,9 @@
 import React from 'react'
 import Router from 'next/router'
 import { Form, Button } from 'react-bootstrap'
-import Client from './../../../client/client'
 import FormSerializer from './../utils/formSerializer'
-import ErrorRepository from './../../../repositories/error'
-
-const client = new Client()
+import SessionRepository from './../../../repositories/session'
+import UserRepository from './../../../repositories/user'
 
 class SignUpForm extends React.Component {
   constructor () {
@@ -26,11 +24,10 @@ class SignUpForm extends React.Component {
 
   async submit (form) {
     const data = FormSerializer(form)
-    try {
-      await client.action('put', '/api/session', data)
-      Router.push('/user/teams')
-    } catch (error) {
-      ErrorRepository.set(error)
+    const session = await SessionRepository.create(data)
+    if (session) {
+      const user = await UserRepository.get(session)
+      if (user) { Router.push('/user/teams') }
     }
   }
 

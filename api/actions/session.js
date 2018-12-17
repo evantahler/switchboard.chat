@@ -23,7 +23,7 @@ exports.sessionCreate = class sessionCreate extends Action {
     if (!match) { throw new Error('password does not match') }
 
     const sessionData = await api.session.create(connection, user)
-    response.user = user.apiData()
+    response.userId = user.id
     response.success = true
     response.csrfToken = sessionData.csrfToken
   }
