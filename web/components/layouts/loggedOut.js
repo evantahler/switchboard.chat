@@ -5,15 +5,13 @@ import Footer from './../footer/footer'
 
 class PageLoggedOut extends React.Component {
   render () {
-    const errorHandler = this.props.errorHandler
-
     return (
       <PageBase>
         <NavbarLoggedOut />
         <br />
         { this.props.children }
         <hr />
-        <Footer/>
+        <Footer />
       </PageBase>
     )
   }
