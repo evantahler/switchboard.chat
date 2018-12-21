@@ -42,6 +42,7 @@ exports.userCreate = class userCreate extends Action {
     const user = new api.models.User(params)
     await user.save()
     await user.updatePassword(params.password)
+    await api.session.create(connection, user)
     response.user = user.apiData()
   }
 }
@@ -67,6 +68,54 @@ exports.userView = class userView extends Action {
   async run ({ connection, response, params, session }) {
     if (params.userId !== session.userId) { throw new Error('you cannot view this user') }
     const user = await api.models.User.findOne({ where: { id: params.userId } })
+    response.user = user.apiData()
+  }
+}
+
+exports.userEdit = class userEdit extends Action {
+  constructor () {
+    super()
+    this.name = 'user:edit'
+    this.description = 'to edit a user'
+    this.outputExample = {}
+    this.middleware = ['logged-in-session']
+  }
+
+  inputs () {
+    return {
+      userId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      firstName: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      lastName: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      email: {
+        required: false,
+        validator: s => { return validator.isEmail(s) }
+      },
+      password: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: minPasswordLength }) }
+      },
+      phoneNumber: {
+        required: false,
+        formatter: s => { return parsePhoneNumber(s, phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, phoneNumberDefaultCountry).isValid() }
+      }
+    }
+  }
+
+  async run ({ connection, response, params, session }) {
+    if (params.userId !== session.userId) { throw new Error('you cannot edit this user') }
+    let user = await api.models.User.findOne({ where: { id: params.userId } })
+    user = Object.assign(user, params)
+    await user.save()
     response.user = user.apiData()
   }
 }

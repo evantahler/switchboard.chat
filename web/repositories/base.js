@@ -18,6 +18,7 @@ class BaseRepository {
     this.errorHandler = undefined
     this.ttl = 1000 * 60 * 5 // 5 minutes
     this.subscriptions = {}
+    this.includeParamsInRequests = undefined
 
     this.routes = {
       get: {
@@ -87,7 +88,9 @@ class BaseRepository {
     }
   }
 
-  async hydrate (params) {
+  async hydrate (params = {}) {
+    params = await this.mergeAdditionalParams(params)
+
     try {
       const response = await this.client.action(this.routes.get.verb, this.routes.get.path, params)
       this.set(response)
@@ -97,7 +100,9 @@ class BaseRepository {
     }
   }
 
-  async create (params) {
+  async create (params = {}) {
+    params = await this.mergeAdditionalParams(params)
+
     try {
       const response = await this.client.action(this.routes.create.verb, this.routes.create.path, params)
       await this.set(response)
@@ -113,7 +118,9 @@ class BaseRepository {
     }
   }
 
-  async update (params) {
+  async update (params = {}) {
+    params = await this.mergeAdditionalParams(params)
+
     try {
       const response = await this.client.action(this.routes.update.verb, this.routes.update.path, params)
       this.set(response)
@@ -129,7 +136,9 @@ class BaseRepository {
     }
   }
 
-  async destroy (params) {
+  async destroy (params = {}) {
+    params = await this.mergeAdditionalParams(params)
+
     try {
       const response = await this.client.action(this.routes.destroy.verb, this.routes.destroy.path, params)
       this.remove(response)
@@ -151,6 +160,14 @@ class BaseRepository {
 
   unsubscribe (name) {
     delete this.subscriptions[name]
+  }
+
+  async mergeAdditionalParams (params) {
+    if (typeof this.includeParamsInRequests === 'function') {
+      let additionalParams = await this.includeParamsInRequests()
+      for (let i in additionalParams) { params[i] = additionalParams[i] }
+    }
+    return params
   }
 }
 

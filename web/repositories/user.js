@@ -1,5 +1,6 @@
 import BaseRepository from './base'
 import ErrorRepository from './error'
+import SessionRepository from './session'
 
 class UserRepository extends BaseRepository {
   constructor () {
@@ -15,4 +16,8 @@ class UserRepository extends BaseRepository {
 
 const repository = new UserRepository()
 repository.errorHandler = ErrorRepository
+repository.includeParamsInRequests = async () => {
+  const { csrfToken } = await SessionRepository.get()
+  return { csrfToken }
+}
 export default repository

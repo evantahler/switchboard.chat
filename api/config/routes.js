@@ -12,6 +12,10 @@ exports['default'] = {
         { path: '/session', action: 'session:create' }
       ],
 
+      post: [
+        { path: '/user', action: 'user:edit' }
+      ],
+
       delete: [
         { path: '/session', action: 'session:destroy' }
       ]

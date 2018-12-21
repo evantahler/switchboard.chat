@@ -18,7 +18,7 @@ class Client {
   async action (verb = 'get', path, data) {
     let options = {
       url: this.apiEndpoint + path,
-      credentials: 'include',
+      withCredentials: true,
       agent: `switchboard-web-${PackgeJSON.version}`,
       method: verb.toLowerCase(),
       headers: {

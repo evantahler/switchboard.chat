@@ -6,6 +6,7 @@ class SessionRepository extends BaseRepository {
     super()
     this.name = 'session'
     this.key = 'repository:session'
+    this.ttl = 1000 * 60 * 60 * 24 * 30 // 1 month
     this.responseKeys = ['csrfToken', 'userId']
     this.routes.create.path = '/api/session'
     this.routes.destroy.path = '/api/session'

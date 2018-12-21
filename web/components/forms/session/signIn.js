@@ -24,11 +24,9 @@ class SignUpForm extends React.Component {
 
   async submit (form) {
     const data = FormSerializer(form)
-    const session = await SessionRepository.create(data)
-    if (session) {
-      const user = await UserRepository.get(session)
-      if (user) { Router.push('/user/teams') }
-    }
+    const sessionData = await SessionRepository.create(data)
+    const user = await UserRepository.get(sessionData)
+    if (user) { Router.push('/user/teams') }
   }
 
   render () {

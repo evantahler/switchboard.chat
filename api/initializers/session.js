@@ -43,7 +43,6 @@ module.exports = class MyInitializer extends Initializer {
 
         const sessionData = {
           userId: user.id,
-          teamId: user.teamId,
           csrfToken: csrfToken,
           sesionCreatedAt: new Date().getTime()
         }

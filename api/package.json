@@ -7,7 +7,7 @@
     "node": "10.x.x"
   },
   "dependencies": {
-    "actionhero": "19.0.4",
+    "actionhero": "19.1.0",
     "ah-sequelize-plugin": "^1.1.0",
     "bcrypt": "^3.0.2",
     "ioredis": "^4.3.0",
