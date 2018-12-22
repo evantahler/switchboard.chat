@@ -1,6 +1,6 @@
 module.exports = {
   up: async function (migration, DataTypes) {
-    await migration.createTable('userTeams', {
+    await migration.createTable('teamMembers', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -19,12 +19,12 @@ module.exports = {
       }
     })
 
-    await migration.addIndex('userTeams', ['userId', 'teamId'], {
+    await migration.addIndex('teamMembers', ['userId', 'teamId'], {
       indicesType: 'UNIQUE'
     })
   },
 
   down: async function (migration, DataTypes) {
-    await migration.dropTable('userTeams')
+    await migration.dropTable('teamMembers')
   }
 }

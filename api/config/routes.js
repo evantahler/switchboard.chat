@@ -4,16 +4,20 @@ exports['default'] = {
       get: [
         { path: '/system/status', action: 'system:status' },
         { path: '/system/version', action: 'system:version' },
-        { path: '/user', action: 'user:view' }
+        { path: '/user', action: 'user:view' },
+        { path: '/team', action: 'team:view' },
+        { path: '/teams', action: 'teams:list' }
       ],
 
       put: [
         { path: '/user', action: 'user:create' },
+        { path: '/team', action: 'team:create' },
         { path: '/session', action: 'session:create' }
       ],
 
       post: [
-        { path: '/user', action: 'user:edit' }
+        { path: '/user', action: 'user:edit' },
+        { path: '/team', action: 'team:edit' }
       ],
 
       delete: [

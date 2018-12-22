@@ -28,7 +28,7 @@ class SignUpForm extends React.Component {
     delete data.passwordConfirm
 
     const userSuccess = await UserRepository.create(data)
-    if (userSuccess) {
+    if (userSuccess && !userSuccess.error) {
       const sessionSuccess = await SessionRepository.create(data)
       if (sessionSuccess) {
         Router.push('/user/teams')

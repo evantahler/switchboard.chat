@@ -5,6 +5,7 @@ const helper = new SpecHelper()
 const actionhero = new ActionHero.Process()
 let api
 let team
+let user
 
 describe('actionhero Tests', () => {
   beforeAll(async () => { api = await actionhero.start() })
@@ -38,21 +39,64 @@ describe('actionhero Tests', () => {
     expect(folders.map((f) => f.name)).toEqual(['folder 2'])
   })
 
-  test('a team can list all users', async () => {
-    const user = new api.models.User()
+  test('a team can list all members', async () => {
+    user = new api.models.User()
     user.firstName = 'Peach'
     user.lastName = 'Toadstool'
     user.email = 'peach@example.com'
     await user.save()
 
-    const userTeam = new api.models.UserTeam()
-    userTeam.teamId = team.id
-    userTeam.userId = user.id
-    await userTeam.save()
+    const teamMember = new api.models.TeamMember()
+    teamMember.teamId = team.id
+    teamMember.userId = user.id
+    await teamMember.save()
 
-    const users = await team.users()
+    const users = await team.teamMembers()
     expect(users.length).toEqual(1)
     expect(users.map((u) => u.name())).toEqual(['Peach Toadstool'])
+  })
+
+  test('a team can add a member by email (new)', async () => {
+    await team.addTeamMember({ email: 'mario@example.com', firstName: 'Mario', lastName: 'Mario' })
+    const teamMembers = await team.teamMembers()
+    expect(teamMembers.length).toEqual(2)
+    expect(teamMembers[1].email).toEqual('mario@example.com')
+
+    const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
+    expect(mario.id).toBeTruthy()
+  })
+
+  test('a team can add a member by email (existing)', async () => {
+    const luigi = new api.models.User()
+    luigi.firstName = 'Luigi'
+    luigi.lastName = 'Mario'
+    luigi.email = 'luigi@example.com'
+    await luigi.save()
+
+    await team.addTeamMember({ email: 'luigi@example.com' })
+    const teamMembers = await team.teamMembers()
+    expect(teamMembers.length).toEqual(3)
+    expect(teamMembers[2].email).toEqual('luigi@example.com')
+  })
+
+  test('a team can add a member by userID', async () => {
+    const toad = new api.models.User()
+    toad.firstName = 'Toad'
+    toad.lastName = 'Toadstool'
+    toad.email = 'toad@example.com'
+    await toad.save()
+
+    await team.addTeamMember({ userId: toad.id })
+    const teamMembers = await team.teamMembers()
+    expect(teamMembers.length).toEqual(4)
+    expect(teamMembers[3].email).toEqual('toad@example.com')
+  })
+
+  test('a team can remove a member', async () => {
+    const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
+    await team.removeTeamMember(mario.id)
+    const teamMembers = await team.teamMembers()
+    expect(teamMembers.length).toEqual(3)
   })
 
   test('a team can list all contacts', async () => {

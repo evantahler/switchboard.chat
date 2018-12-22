@@ -58,25 +58,25 @@ const User = function (sequelize, DataTypes) {
   }
 
   Model.prototype.joinTeam = async function (team) {
-    const userTeam = new api.models.UserTeam({ userId: this.id, teamId: team.id })
-    return userTeam.save()
+    const teamMembership = new api.models.TeamMember({ userId: this.id, teamId: team.id })
+    return teamMembership.save()
   }
 
   Model.prototype.leaveTeam = async function (team) {
-    const userTeam = await api.models.UserTeam.findOne({
+    const teamMembership = await api.models.TeamMember.findOne({
       where: { userId: this.id, teamId: team.id }
     })
-    return userTeam.destroy()
+    return teamMembership.destroy()
   }
 
   Model.prototype.teams = async function () {
-    const userTeams = await api.models.UserTeam.findAll({
+    const teamMemberships = await api.models.TeamMember.findAll({
       where: { userId: this.id }
     })
 
     return api.models.Team.findAll({ where: {
       id: {
-        [Op.in]: userTeams.map(t => { return t.teamId })
+        [Op.in]: teamMemberships.map(t => { return t.teamId })
       }
     } })
   }

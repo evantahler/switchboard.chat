@@ -1,5 +1,5 @@
 const Contact = function (sequelize, DataTypes) {
-  const Model = sequelize.define('UserTeam', {
+  const Model = sequelize.define('TeamMember', {
     'userId': {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -9,7 +9,7 @@ const Contact = function (sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'userTeams'
+    tableName: 'teamMembers'
   })
 
   Model.prototype.apiData = function () {

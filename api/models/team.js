@@ -9,7 +9,7 @@ const Team = function (sequelize, DataTypes) {
     },
     areaCode: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     phoneNumber: {
       type: DataTypes.STRING(191),
@@ -19,30 +19,29 @@ const Team = function (sequelize, DataTypes) {
       type: DataTypes.STRING(191),
       allowNull: true
     },
-    promoCode: {
-      type: DataTypes.STRING(191),
-      allowNull: true
-    },
     stripeToken: {
       type: DataTypes.STRING(191),
       allowNull: true
     },
     pricePerMonth: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 3000
     },
     pricePerMessage: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 1
     },
     includedMessagesPerMonth: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 0
     },
     enabled: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: true
+      defaultValue: true
     }
   }, {
     tableName: 'teams'
@@ -71,11 +70,37 @@ const Team = function (sequelize, DataTypes) {
     return api.models.Folder.findAll({ where: { teamId: this.id } })
   }
 
-  Model.prototype.users = async function () {
-    const UserTeams = await api.models.UserTeam.findAll({ where: { teamId: this.id } })
+  Model.prototype.addTeamMember = async function ({ email, userId, firstName, lastName }) {
+    let user
+    if (userId) {
+      user = await api.models.User.findOne({ where: { id: userId } })
+    } else if (email) {
+      user = await api.models.User.findOne({ where: { email } })
+      if (!user) {
+        user = new api.models.User({ email, firstName, lastName })
+        await user.save()
+      }
+    } else {
+      throw new Error('no way to find user')
+    }
+
+    if (!user) { throw new Error('user not found') }
+
+    const teamMember = new api.models.TeamMember({ teamId: this.id, userId: user.id })
+    return teamMember.save()
+  }
+
+  Model.prototype.removeTeamMember = async function (userId) {
+    const teamMember = await api.models.TeamMember.findOne({ where: { teamId: this.id, userId } })
+    if (!teamMember) { throw new Error('team member not found') }
+    return teamMember.destroy()
+  }
+
+  Model.prototype.teamMembers = async function () {
+    const teamMembers = await api.models.TeamMember.findAll({ where: { teamId: this.id } })
     return api.models.User.findAll({ where: {
       id: {
-        [Op.in]: UserTeams.map(t => { return t.userId })
+        [Op.in]: teamMembers.map(t => { return t.userId })
       }
     } })
   }
@@ -97,7 +122,10 @@ const Team = function (sequelize, DataTypes) {
       name: this.name,
       phoneNumber: this.phoneNumber,
       areaCode: this.areaCode,
-      sid: this.sid,
+      pricePerMonth: this.pricePerMonth,
+      pricePerMessage: this.pricePerMessage,
+      includedMessagesPerMonth: this.includedMessagesPerMonth,
+      // sid: this.sid,
       enabled: this.enabled
     }
   }

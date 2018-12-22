@@ -19,7 +19,7 @@ const repository = new UserRepository()
 repository.successHandler = SuccessRepository
 repository.errorHandler = ErrorRepository
 repository.includeParamsInRequests = async () => {
-  const { csrfToken } = await SessionRepository.get()
-  return { csrfToken }
+  const session = await SessionRepository.get()
+  return { csrfToken: session ? session.csrfToken : '' }
 }
 export default repository

@@ -4,8 +4,6 @@ const SpecHelper = require('./../specHelper')
 const helper = new SpecHelper()
 const actionhero = new ActionHero.Process()
 let api
-let peach
-let mario
 
 describe('user', () => {
   beforeAll(async () => { api = await actionhero.start() })
@@ -28,8 +26,6 @@ describe('user', () => {
       expect(user.lastName).toEqual('Toadstool')
       expect(user.email).toEqual('peach@example.com')
       expect(user.password).toBeUndefined()
-
-      peach = user
     })
 
     test('can create a user with an optional phone Number', async () => {
@@ -48,8 +44,6 @@ describe('user', () => {
       expect(user.email).toEqual('mario@example.com')
       expect(user.phoneNumber).toEqual('+1 415 413 8268')
       expect(user.password).toBeUndefined()
-
-      mario = user
     })
 
     test('email addresses must be valid', async () => {
@@ -84,10 +78,7 @@ describe('user', () => {
       }
       let { csrfToken } = await api.specHelper.runAction('session:create', connection)
 
-      connection.params = {
-        csrfToken,
-        userId: peach.id
-      }
+      connection.params = { csrfToken }
       let { error, user } = await api.specHelper.runAction('user:view', connection)
 
       expect(error).toBeUndefined()
@@ -96,24 +87,6 @@ describe('user', () => {
       expect(user.lastName).toEqual('Toadstool')
       expect(user.email).toEqual('peach@example.com')
       expect(user.password).toBeUndefined()
-    })
-
-    test('user cannot view someone else', async () => {
-      const connection = new api.specHelper.Connection()
-      connection.params = {
-        email: 'peach@example.com',
-        password: 'passw0rd'
-      }
-      let { csrfToken } = await api.specHelper.runAction('session:create', connection)
-
-      connection.params = {
-        csrfToken,
-        userId: mario.id
-      }
-      let { error, user } = await api.specHelper.runAction('user:view', connection)
-
-      expect(error).toMatch(/you cannot view this user/)
-      expect(user).toBeUndefined()
     })
   })
 
@@ -126,11 +99,7 @@ describe('user', () => {
       }
       let { csrfToken } = await api.specHelper.runAction('session:create', connection)
 
-      connection.params = {
-        csrfToken,
-        userId: peach.id,
-        firstName: 'SuperPeach'
-      }
+      connection.params = { csrfToken, firstName: 'SuperPeach' }
       let { error, user } = await api.specHelper.runAction('user:edit', connection)
 
       expect(error).toBeUndefined()
@@ -139,25 +108,6 @@ describe('user', () => {
       expect(user.lastName).toEqual('Toadstool')
       expect(user.email).toEqual('peach@example.com')
       expect(user.password).toBeUndefined()
-    })
-
-    test('user cannot edit someone else', async () => {
-      const connection = new api.specHelper.Connection()
-      connection.params = {
-        email: 'peach@example.com',
-        password: 'passw0rd'
-      }
-      let { csrfToken } = await api.specHelper.runAction('session:create', connection)
-
-      connection.params = {
-        csrfToken,
-        userId: mario.id,
-        firstName: 'SuperPeach'
-      }
-      let { error, user } = await api.specHelper.runAction('user:edit', connection)
-
-      expect(error).toMatch(/you cannot edit this user/)
-      expect(user).toBeUndefined()
     })
   })
 })

@@ -15,7 +15,7 @@ module.exports = {
       },
       areaCode: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       phoneNumber: {
         type: DataTypes.STRING(191),
@@ -25,30 +25,29 @@ module.exports = {
         type: DataTypes.STRING(191),
         allowNull: true
       },
-      promoCode: {
-        type: DataTypes.STRING(191),
-        allowNull: true
-      },
       stripeToken: {
         type: DataTypes.STRING(191),
         allowNull: true
       },
       pricePerMonth: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 3000
       },
       pricePerMessage: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 1
       },
       includedMessagesPerMonth: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
       enabled: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: true
+        defaultValue: true
       }
     })
 

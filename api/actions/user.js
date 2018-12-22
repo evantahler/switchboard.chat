@@ -1,6 +1,7 @@
 const { Action, api } = require('actionhero')
 const validator = require('validator')
 const { parsePhoneNumber } = require('libphonenumber-js')
+
 const minPasswordLength = 6
 const phoneNumberDefaultCountry = 'US'
 
@@ -57,17 +58,11 @@ exports.userView = class userView extends Action {
   }
 
   inputs () {
-    return {
-      userId: {
-        required: true,
-        formatter: s => { return parseInt(s) }
-      }
-    }
+    return {}
   }
 
-  async run ({ connection, response, params, session }) {
-    if (params.userId !== session.userId) { throw new Error('you cannot view this user') }
-    const user = await api.models.User.findOne({ where: { id: params.userId } })
+  async run ({ response, session }) {
+    const user = await api.models.User.findOne({ where: { id: session.userId } })
     response.user = user.apiData()
   }
 }
@@ -83,10 +78,6 @@ exports.userEdit = class userEdit extends Action {
 
   inputs () {
     return {
-      userId: {
-        required: true,
-        formatter: s => { return parseInt(s) }
-      },
       firstName: {
         required: false,
         validator: s => { return validator.isLength(s, { min: 1 }) }
@@ -111,9 +102,8 @@ exports.userEdit = class userEdit extends Action {
     }
   }
 
-  async run ({ connection, response, params, session }) {
-    if (params.userId !== session.userId) { throw new Error('you cannot edit this user') }
-    let user = await api.models.User.findOne({ where: { id: params.userId } })
+  async run ({ response, params, session }) {
+    let user = await api.models.User.findOne({ where: { id: session.userId } })
     user = Object.assign(user, params)
     await user.save()
     response.user = user.apiData()

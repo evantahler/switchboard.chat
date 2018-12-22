@@ -10,7 +10,7 @@ const randomBytesAsync = function (bytes = 64) {
   })
 }
 
-module.exports = class MyInitializer extends Initializer {
+module.exports = class SessionInitializer extends Initializer {
   constructor () {
     super()
     this.name = 'session'
