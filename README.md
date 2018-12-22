@@ -10,4 +10,4 @@
 
 ## To Test:
 `./api/bin/create-test-databases`
-`npm test`
+`yarn test`

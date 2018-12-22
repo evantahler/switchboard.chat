@@ -2,8 +2,8 @@
   "private": true,
   "workspaces": ["api", "web", "mobile"],
   "scripts" : {
-    "test": "npm run test-api && npm run test-web",
-    "test-api": "cd api && npm test",
-    "test-web": "cd web && npm test"
+    "test": "yarn run test-api && yarn run test-web",
+    "test-api": "cd api && yarn test",
+    "test-web": "cd web && yarn test"
   }
 }

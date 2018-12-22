@@ -22,20 +22,14 @@ describe('serssion', () => {
 
   describe('session:create', () => {
     test('can log in', async () => {
-      let { success, user, error } = await api.specHelper.runAction('session:create', {
+      let { success, userId, error } = await api.specHelper.runAction('session:create', {
         email: 'peach@example.com',
         password: 'passw0rd'
       })
 
       expect(error).toBeUndefined()
-
       expect(success).toEqual(true)
-
-      expect(user.id).toBeTruthy()
-      expect(user.firstName).toEqual('Peach')
-      expect(user.lastName).toEqual('Toadstool')
-      expect(user.email).toEqual('peach@example.com')
-      expect(user.password).toBeUndefined()
+      expect(userId).toBeTruthy()
     })
 
     test('cannot log in with unknown user', async () => {
