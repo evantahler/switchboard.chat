@@ -2,7 +2,8 @@ import React from 'react'
 import Head from 'next/head'
 import { Container, Row, Col } from 'react-bootstrap'
 import renderEmojiAsFavicon from './../../scripts/renderEmojiAsFavicon'
-import ErrorBar from './../errorBar'
+import SuccessAlert from './../alerts/success'
+import ErrorAlert from './../alerts/error'
 
 const baseTitle = 'Switchboard.Chat'
 
@@ -10,10 +11,7 @@ class PageBase extends React.Component {
   constructor (props) {
     super(props)
     const pageTitle = props.pageTitle ? `${baseTitle} - ${props.pageTitle}` : baseTitle
-    this.state = {
-      pageTitle,
-      error: null
-    }
+    this.state = { pageTitle }
   }
 
   handleError (error) {
@@ -39,7 +37,8 @@ class PageBase extends React.Component {
     return (
       <div>
         { this.header() }
-        <ErrorBar error={this.state.error} />
+        <SuccessAlert />
+        <ErrorAlert />
         <br />
         <Container>
           <Row>

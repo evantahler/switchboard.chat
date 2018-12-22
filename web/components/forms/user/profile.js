@@ -26,7 +26,13 @@ class SignUpForm extends React.Component {
   async load () {
     const sessionData = await SessionRepository.get()
     const response = await UserRepository.get(sessionData)
-    if (response) { this.setState({ user: response.user }) }
+    if (response) {
+      // we need to not null-out the password so the form element stays controlled
+      let user = response.user
+      user.password = ''
+      user.passwordConfirm = ''
+      this.setState({ user: response.user })
+    }
   }
 
   validate (event) {

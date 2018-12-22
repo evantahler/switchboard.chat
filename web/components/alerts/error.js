@@ -1,8 +1,8 @@
 import React from 'react'
 import { Row, Col, Alert } from 'react-bootstrap'
-import ErrorRepository from './../repositories/error'
+import ErrorRepository from './../../repositories/error'
 
-class ErrorBar extends React.Component {
+class ErrorAlert extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -12,11 +12,11 @@ class ErrorBar extends React.Component {
   }
 
   componentDidMount () {
-    ErrorRepository.subscribe('error-bar', this.subscription.bind(this))
+    ErrorRepository.subscribe('error-alert', this.subscription.bind(this))
   }
 
   componentWillUnmount () {
-    ErrorRepository.unsubscribe('error-bar')
+    ErrorRepository.unsubscribe('error-alert')
   }
 
   subscription ({ error }) {
@@ -53,4 +53,4 @@ class ErrorBar extends React.Component {
   }
 }
 
-export default ErrorBar
+export default ErrorAlert
