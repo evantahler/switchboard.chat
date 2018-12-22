@@ -60,7 +60,7 @@ describe('user', () => {
   describe('team:members:list', () => {
     test('can list team members', async () => {
       connection.params = { csrfToken, teamId: team.id }
-      let { error, teamMembers } = await api.specHelper.runAction('teamMember:list', connection)
+      let { error, teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
 
       expect(error).toBeUndefined()
       expect(teamMembers.length).toEqual(2)
@@ -73,12 +73,12 @@ describe('user', () => {
     test('can remove a team teamMembers', async () => {
       const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
       connection.params = { csrfToken, teamId: team.id, userId: mario.id }
-      let { error, success } = await api.specHelper.runAction('teamMember:remove', connection)
+      let { error, success } = await api.specHelper.runAction('teamMember:destroy', connection)
       expect(error).toBeUndefined()
       expect(success).toEqual(true)
 
       connection.params = { csrfToken, teamId: team.id }
-      let { teamMembers } = await api.specHelper.runAction('teamMember:list', connection)
+      let { teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
 
       expect(teamMembers.length).toEqual(1)
       expect(teamMembers[0].firstName).toEqual('Peach')

@@ -46,7 +46,7 @@ exports.teamMemberCreate = class teamMemberCreate extends Action {
 exports.teamMemberList = class teamMemberList extends Action {
   constructor () {
     super()
-    this.name = 'teamMember:list'
+    this.name = 'teamMembers:list'
     this.description = 'to list the members of a team'
     this.outputExample = {}
     this.middleware = ['logged-in-session', 'team-membership']
@@ -67,10 +67,10 @@ exports.teamMemberList = class teamMemberList extends Action {
   }
 }
 
-exports.teamMemberRemove = class teamMemberRemove extends Action {
+exports.teamMemberDestroy = class teamMemberDestroy extends Action {
   constructor () {
     super()
-    this.name = 'teamMember:remove'
+    this.name = 'teamMember:destroy'
     this.description = 'to remove a team member'
     this.outputExample = {}
     this.middleware = ['logged-in-session', 'team-membership']
