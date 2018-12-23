@@ -24,7 +24,7 @@ module.exports = class SessionInitializer extends Initializer {
 
     api.session = {
       prefix: 'session',
-      ttl: 1000 * 60 * 60 * 24 * 30, // 1 month
+      ttl: 60 * 60 * 24 * 30, // 1 month; in seconds
 
       key: (connection) => {
         return `${api.session.prefix}:${connection.fingerprint}`
@@ -34,6 +34,7 @@ module.exports = class SessionInitializer extends Initializer {
         const key = api.session.key(connection)
         const data = await redis.get(key)
         if (!data) { return false }
+        await redis.expire(key, api.session.ttl)
         return JSON.parse(data)
       },
 
@@ -61,8 +62,6 @@ module.exports = class SessionInitializer extends Initializer {
   }
 
   async start () {
-    const redis = api.redis.clients.client
-
     const sessionMiddleware = {
       name: 'logged-in-session',
       global: false,
@@ -77,8 +76,6 @@ module.exports = class SessionInitializer extends Initializer {
           throw new Error('CSRF error')
         } else {
           data.session = sessionData
-          const key = api.session.key(data.connection)
-          await redis.expire(key, api.session.ttl)
         }
       }
     }

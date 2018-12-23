@@ -59,7 +59,7 @@ exports['default'] = {
           onlyStaticElements: false,
           settings: {
             path: '/',
-            expires: 3600000
+            expires: 1000 * 60 * 60 * 24 * 30 // 1 month
           }
         },
         // Options to be applied to incoming file uploads.
