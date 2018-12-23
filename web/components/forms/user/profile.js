@@ -46,14 +46,15 @@ class SignUpForm extends React.Component {
 
   async submit (form) {
     const data = FormSerializer(form)
-    delete data.passwordConfirm
     const sessionData = await SessionRepository.get()
     data.userId = sessionData.userId
 
     if (data.password && data.password !== data.passwordConfirm) {
       return alert('passwords do not match') //eslint-disable-line
     }
+
     if (data.password.length === 0) { delete data.password }
+    delete data.passwordConfirm
 
     await UserRepository.update(data)
     return this.load()
