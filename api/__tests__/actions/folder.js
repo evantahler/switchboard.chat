@@ -5,6 +5,7 @@ const helper = new SpecHelper()
 const actionhero = new ActionHero.Process()
 let api
 let team
+let folder
 let connection
 let csrfToken
 
@@ -32,49 +33,43 @@ describe('user', () => {
 
   afterAll(async () => { await actionhero.stop() })
 
-  describe('teamMember:create', () => {
-    test('can create a team member (new user from email)', async () => {
+  describe('folder:create', () => {
+    test('can create a folder', async () => {
       connection.params = {
         csrfToken,
         teamId: team.id,
-        email: 'mario@example.com',
-        firstName: 'Mario',
-        lastName: 'Mario'
+        name: 'Royal Family'
       }
-      let { error, teamMember } = await api.specHelper.runAction('teamMember:create', connection)
+      let { error, folder: responseFolder } = await api.specHelper.runAction('folder:create', connection)
 
       expect(error).toBeUndefined()
-      expect(teamMember.id).toBeTruthy()
-      expect(teamMember.userId).toBeTruthy()
-      expect(teamMember.teamId).toBeTruthy()
+      expect(responseFolder.name).toEqual('Royal Family')
+      folder = responseFolder
     })
   })
 
-  describe('team:members:list', () => {
-    test('can list team members', async () => {
+  describe('folders:list', () => {
+    test('can list folders', async () => {
       connection.params = { csrfToken, teamId: team.id }
-      let { error, teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
+      let { error, folders } = await api.specHelper.runAction('folders:list', connection)
 
       expect(error).toBeUndefined()
-      expect(teamMembers.length).toEqual(2)
-      expect(teamMembers[0].firstName).toEqual('Peach')
-      expect(teamMembers[1].firstName).toEqual('Mario')
+      expect(folders.length).toEqual(1)
+      expect(folders[0].name).toEqual('Royal Family')
     })
   })
 
-  describe('team:members:remove', () => {
-    test('can remove a team teamMembers', async () => {
-      const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
-      connection.params = { csrfToken, teamId: team.id, userId: mario.id }
-      let { error, success } = await api.specHelper.runAction('teamMember:destroy', connection)
+  describe('folder:remove', () => {
+    test('can remove a folder', async () => {
+      connection.params = { csrfToken, teamId: team.id, folderId: folder.id }
+      let { error, success } = await api.specHelper.runAction('folder:destroy', connection)
       expect(error).toBeUndefined()
       expect(success).toEqual(true)
 
       connection.params = { csrfToken, teamId: team.id }
-      let { teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
+      let { folders } = await api.specHelper.runAction('folders:list', connection)
 
-      expect(teamMembers.length).toEqual(1)
-      expect(teamMembers[0].firstName).toEqual('Peach')
+      expect(folders.length).toEqual(0)
     })
   })
 })

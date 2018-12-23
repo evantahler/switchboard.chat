@@ -7,14 +7,18 @@ exports['default'] = {
         { path: '/user', action: 'user:view' },
         { path: '/team', action: 'team:view' },
         { path: '/teams', action: 'teams:list' },
-        { path: '/teamMembers', action: 'teamMembers:list' }
+        { path: '/teamMembers', action: 'teamMembers:list' },
+        { path: '/folders', action: 'folders:list' },
+        { path: '/contacts', action: 'contacts:list' }
       ],
 
       put: [
         { path: '/user', action: 'user:create' },
         { path: '/team', action: 'team:create' },
         { path: '/session', action: 'session:create' },
-        { path: '/teamMember', action: 'teamMember:create' }
+        { path: '/teamMember', action: 'teamMember:create' },
+        { path: '/folder', action: 'folder:create' },
+        { path: '/contact', action: 'contact:create' }
       ],
 
       post: [
@@ -24,7 +28,9 @@ exports['default'] = {
 
       delete: [
         { path: '/session', action: 'session:destroy' },
-        { path: '/teamMember', action: 'teamMember:destroy' }
+        { path: '/teamMember', action: 'teamMember:destroy' },
+        { path: '/folder', action: 'folder:destroy' },
+        { path: '/contact', action: 'contact:destroy' }
       ]
     }
   }

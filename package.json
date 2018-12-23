@@ -2,6 +2,7 @@
   "private": true,
   "workspaces": ["api", "web", "mobile"],
   "scripts" : {
+    "start": "heroku local",
     "test": "yarn run test-api && yarn run test-web",
     "test-api": "cd api && yarn test",
     "test-web": "cd web && yarn test"

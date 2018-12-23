@@ -26,15 +26,17 @@ describe('actionhero Tests', () => {
   afterAll(async () => { await actionhero.stop() })
 
   test('a team can create, destroy, and list folders', async () => {
-    await team.addFolder('folder 1')
+    const folder1 = await team.addFolder('folder 1')
     let folders = await team.folders()
     expect(folders.map((f) => f.name)).toEqual(['folder 1'])
+    expect(folders.map((f) => f.id)).toEqual([folder1.id])
 
-    await team.addFolder('folder 2')
+    const folder2 = await team.addFolder('folder 2')
     folders = await team.folders()
     expect(folders.map((f) => f.name)).toEqual(['folder 1', 'folder 2'])
+    expect(folders.map((f) => f.id)).toEqual([folder1.id, folder2.id])
 
-    await team.removeFolder('folder 1')
+    await team.removeFolder(folder1.id)
     folders = await team.folders()
     expect(folders.map((f) => f.name)).toEqual(['folder 2'])
   })
@@ -112,7 +114,7 @@ describe('actionhero Tests', () => {
 
     await contact.save()
 
-    const contacts = await team.contacts(folder.name)
+    const contacts = await team.contacts(folder.id)
     expect(contacts.length).toEqual(1)
     expect(contacts.map((u) => u.name())).toEqual(['Bowser Koopa'])
   })
