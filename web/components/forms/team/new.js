@@ -5,17 +5,9 @@ import Loader from './../../loader'
 import FormSerializer from './../utils/formSerializer'
 import TeamRepository from './../../../repositories/team'
 import SessionRepository from './../../../repositories/session'
-import * as AreaCodes from 'areacodes'
+import AreaCodes from './../../../utils/areacodes'
 
-const getAreaCodes = () => {
-  return new Promise((resolve, reject) => {
-    const areaCodesBuilder = new AreaCodes()
-    areaCodesBuilder.getAll((error, data) => {
-      if (error) { return reject(error) }
-      return resolve(Object.keys(data))
-    })
-  })
-}
+const areaCodeUtil = new AreaCodes()
 
 class NewTeamForm extends React.Component {
   constructor () {
@@ -33,7 +25,7 @@ class NewTeamForm extends React.Component {
   }
 
   async componentDidMount () {
-    const areaCodes = await getAreaCodes()
+    const areaCodes = await areaCodeUtil.get()
     this.setState({ areaCodes })
   }
 
