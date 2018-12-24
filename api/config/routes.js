@@ -9,7 +9,8 @@ exports['default'] = {
         { path: '/teams', action: 'teams:list' },
         { path: '/teamMembers', action: 'teamMembers:list' },
         { path: '/folders', action: 'folders:list' },
-        { path: '/contacts', action: 'contacts:list' }
+        { path: '/contacts', action: 'contacts:list' },
+        { path: '/twilio/listNumbers', action: 'twilio:listNumbers' }
       ],
 
       put: [

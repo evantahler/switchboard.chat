@@ -1,8 +1,6 @@
-const { Action } = require('actionhero')
+const { Action, api } = require('actionhero')
 const validator = require('validator')
 const { parsePhoneNumber } = require('libphonenumber-js')
-
-const phoneNumberDefaultCountry = 'US'
 
 exports.contactCreate = class contactCreate extends Action {
   constructor () {
@@ -33,8 +31,8 @@ exports.contactCreate = class contactCreate extends Action {
       },
       phoneNumber: {
         required: true,
-        formatter: s => { return parsePhoneNumber(s, phoneNumberDefaultCountry).formatInternational() },
-        validator: s => { return parsePhoneNumber(s, phoneNumberDefaultCountry).isValid() }
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
       }
     }
   }

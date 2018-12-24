@@ -51,7 +51,7 @@ describe('user', () => {
       expect(team.enabled).toEqual(true)
       expect(team.pricePerMonth).toEqual(3000)
       expect(team.pricePerMessage).toEqual(1)
-      expect(team.includedMessagesPerMonth).toEqual(0)
+      expect(team.includedMessagesPerMonth).toEqual(1000)
     })
 
     test('can cannot create a team with no name', async () => {
@@ -80,7 +80,7 @@ describe('user', () => {
       expect(responseTeam.enabled).toEqual(true)
       expect(responseTeam.pricePerMonth).toEqual(3000)
       expect(responseTeam.pricePerMessage).toEqual(1)
-      expect(responseTeam.includedMessagesPerMonth).toEqual(0)
+      expect(responseTeam.includedMessagesPerMonth).toEqual(1000)
     })
 
     test('cannot view a team I am not a membr of', async () => {
@@ -126,7 +126,7 @@ describe('user', () => {
       expect(responseTeam.enabled).toEqual(true)
       expect(responseTeam.pricePerMonth).toEqual(3000)
       expect(responseTeam.pricePerMessage).toEqual(1)
-      expect(responseTeam.includedMessagesPerMonth).toEqual(0)
+      expect(responseTeam.includedMessagesPerMonth).toEqual(1000)
     })
   })
 })

@@ -36,7 +36,7 @@ const Team = function (sequelize, DataTypes) {
     includedMessagesPerMonth: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 1000
     },
     enabled: {
       type: DataTypes.BOOLEAN,
