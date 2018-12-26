@@ -3,12 +3,7 @@ import * as PackgeJSON from './../package.json'
 
 class Client {
   constructor () {
-    this.apiEndpoint =
-      typeof window !== 'undefined'
-        ? window.location.href.match(/localhost/)
-          ? `http://localhost:8080`
-          : `https://api.switchboard.chat`
-        : null
+    this.apiEndpoint = process.env.API_URL
   }
 
   async test () {

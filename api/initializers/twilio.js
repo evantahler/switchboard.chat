@@ -26,18 +26,21 @@ module.exports = class TwilioInitializer extends Initializer {
         return client.availablePhoneNumbers(countryCode).local.list({ areaCode, smsEnabled: true })
       },
 
-      registerTeamPhoneNumber: async (team, phoneNumber) => {
+      registerTeamPhoneNumber: async (team) => {
         const client = api.twilio.client
-        team.phoneNumber = api.twilio.sanitize(phoneNumber)
-        const purchasedNumber = await client.incomingPhoneNumbers.create({ phoneNumber })
+        const purchasedNumber = await client.incomingPhoneNumbers.create({ phoneNumber: team.phoneNumber })
         team.sid = purchasedNumber.sid
-        await team.save()
-        await api.twilio.updateIncommingUrl(team)
+        try {
+          await api.twilio.updateIncommingUrl(team)
+        } catch (error) {
+          await api.twilio.realeaseTeamPhoneNumber(team)
+          throw error
+        }
       },
 
       realeaseTeamPhoneNumber: async (team) => {
         const client = api.twilio.client
-        return client.incomingPhoneNumbers(team.sid).release()
+        return client.incomingPhoneNumbers(team.phoneNumber).release()
       },
 
       updateIncommingUrl: async (team) => {
@@ -47,8 +50,8 @@ module.exports = class TwilioInitializer extends Initializer {
       },
 
       sendMessage: async (team, person, body) => {
-        const from = api.twilio.sanitize(team.phoneNumber)
-        const to = api.twilio.sanitize(person.phoneNumber)
+        const from = team.phoneNumber
+        const to = person.phoneNumber
         const message = api.models.message.build({
           from: from,
           to: to,

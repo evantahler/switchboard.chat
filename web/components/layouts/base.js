@@ -24,6 +24,7 @@ class PageBase extends React.Component {
         <meta name='viewport' content='width=device-width' />
         <link rel='icon' data-emoji='☎️' type='image/png' />
         <link rel='stylesheet' type='text/css' href='/static/css/bootstrap.min.css' />
+        <script src='https://js.stripe.com/v3/' />
         <title>{this.state.pageTitle}</title>
       </Head>
     )

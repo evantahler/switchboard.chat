@@ -1,5 +1,6 @@
 const { Action, api } = require('actionhero')
 const { Op } = require('sequelize')
+const { parsePhoneNumber } = require('libphonenumber-js')
 const validator = require('validator')
 
 exports.teamCreate = class teamCreate extends Action {
@@ -16,6 +17,19 @@ exports.teamCreate = class teamCreate extends Action {
       name: {
         required: true,
         validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      stripeToken: {
+        required: true,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      phoneNumber: {
+        required: true,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
+      },
+      billingEmail: {
+        required: false,
+        validator: s => { return validator.isEmail(s) }
       }
     }
   }
@@ -25,7 +39,21 @@ exports.teamCreate = class teamCreate extends Action {
     await team.save()
     const teamMember = new api.models.TeamMember({ userId: session.userId, teamId: team.id })
     await teamMember.save()
-    response.team = team.apiData()
+
+    let stripeCustomer
+    try {
+      stripeCustomer = await api.stripe.createCustomer(team, params.stripeToken)
+      team.stripeCustomerId = stripeCustomer.id
+      await team.save()
+      await api.twilio.registerTeamPhoneNumber(team)
+      response.team = team.apiData()
+      response.teamMember = teamMember.apiData()
+    } catch (error) {
+      await team.destroy()
+      await teamMember.destroy()
+      if (stripeCustomer) { await api.stripe.destroyCustomer(stripeCustomer.id) }
+      throw error
+    }
   }
 }
 
@@ -49,6 +77,7 @@ exports.teamView = class teamView extends Action {
 
   async run ({ response, team }) {
     response.team = team.apiData()
+    response.stats = await team.stats()
   }
 }
 
@@ -73,7 +102,14 @@ exports.teamsList = class teamsList extends Action {
       },
       enabled: true
     } })
-    response.teams = teams.map(t => { return t.apiData() })
+
+    response.teams = []
+    for (let i in teams) {
+      let team = teams[i]
+      let apiData = team.apiData()
+      apiData.stats = await team.stats()
+      response.teams.push(apiData)
+    }
   }
 }
 

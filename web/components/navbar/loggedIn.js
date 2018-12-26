@@ -48,13 +48,13 @@ class NavbarLoggedOut extends React.Component {
 
     return (
       <Navbar bg='dark' variant='dark' expand='lg'>
-        <Navbar.Brand href='/'>Switchboard ☎️</Navbar.Brand>
+        <Navbar.Brand href='/team'>Switchboard ☎️</Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mr-auto'>
             {
               team.id
-                ? <HighlightableNavigationLink onClick={() => this.goTo('/team')}>{team.name} Dashboard</HighlightableNavigationLink>
+                ? <HighlightableNavigationLink href='/team'>{team.name} Dashboard</HighlightableNavigationLink>
                 : null
             }
           </Nav>

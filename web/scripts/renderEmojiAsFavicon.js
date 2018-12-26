@@ -7,6 +7,7 @@ async function renderEmojiAsFavicon () {
 
   const canvasSize = 64
   const favicon = document.querySelector('link[rel=icon]')
+  if (!favicon) { return }
   const emoji = favicon.getAttribute('data-emoji')
   const canvas = document.createElement('canvas')
   canvas.height = canvasSize

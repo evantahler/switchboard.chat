@@ -31,7 +31,8 @@ exports['default'] = {
       // params you would like hidden from any logs
       filteredParams: [
         'password',
-        'csrfToken'
+        'csrfToken',
+        'stripeToken'
       ],
       // values that signify missing params
       missingParamChecks: [null, '', undefined],

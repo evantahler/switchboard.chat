@@ -25,7 +25,7 @@ module.exports = {
         type: DataTypes.STRING(191),
         allowNull: true
       },
-      stripeToken: {
+      stripeCustomerId: {
         type: DataTypes.STRING(191),
         allowNull: true
       },

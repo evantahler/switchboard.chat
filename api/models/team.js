@@ -7,21 +7,18 @@ const Team = function (sequelize, DataTypes) {
       type: DataTypes.STRING(191),
       allowNull: false
     },
-    areaCode: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     phoneNumber: {
       type: DataTypes.STRING(191),
       allowNull: true
     },
-    sid: {
+    stripeCustomerId: {
       type: DataTypes.STRING(191),
       allowNull: true
     },
-    stripeToken: {
+    billingEmail: {
       type: DataTypes.STRING(191),
-      allowNull: true
+      allowNull: false,
+      validate: { isEmail: true }
     },
     pricePerMonth: {
       type: DataTypes.INTEGER,
@@ -121,6 +118,13 @@ const Team = function (sequelize, DataTypes) {
     if (!folder) { throw new Error('folder not found') }
 
     return api.models.Contact.findAll({ where: { folderId: folder.id } })
+  }
+
+  Model.prototype.stats = async function () {
+    const messagesIn = await api.models.Message.count({ where: { teamId: this.id, direction: 'in' } })
+    const messagesOut = await api.models.Message.count({ where: { teamId: this.id, direction: 'out' } })
+
+    return { messagesIn, messagesOut }
   }
 
   Model.prototype.apiData = function () {
