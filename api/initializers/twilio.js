@@ -12,13 +12,9 @@ module.exports = class TwilioInitializer extends Initializer {
   }
 
   async initialize () {
-    if (!api.config.twilio.ssid || !api.config.twilio.ssid) {
+    if (!api.config.twilio.ssid || !api.config.twilio.ssid || api.env === 'test') {
+      // instanstiating the Twilio client requires a valid API key...
       api.log('Mocking Twilio...', 'warning')
-
-      api.twilio = {
-        registerTeamPhoneNumber (team) { return true }
-      }
-
       return
     }
 

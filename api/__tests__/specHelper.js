@@ -1,5 +1,8 @@
 const { api } = require('actionhero')
 
+// mock all vendor connection vendorOperations
+jest.mock('./../vendorOperations/teamRegister.js') //eslint-disable-line
+
 class SpecHelper {
   async truncate () {
     const tables = await api.sequelize.sequelize.query('show tables', {

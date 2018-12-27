@@ -9,7 +9,7 @@ let team
 let connection
 let csrfToken
 
-describe('user', () => {
+describe('team', () => {
   beforeAll(async () => { api = await actionhero.start() })
   beforeAll(async () => { await helper.truncate() })
   beforeAll(async () => {

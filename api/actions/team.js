@@ -1,6 +1,7 @@
 const { Action, api } = require('actionhero')
 const { Op } = require('sequelize')
 const { parsePhoneNumber } = require('libphonenumber-js')
+const TeamRegisterOp = require('./../vendorOperations/teamRegister')
 const validator = require('validator')
 
 exports.teamCreate = class teamCreate extends Action {
@@ -40,20 +41,25 @@ exports.teamCreate = class teamCreate extends Action {
     const teamMember = new api.models.TeamMember({ userId: session.userId, teamId: team.id })
     await teamMember.save()
 
-    let stripeCustomer
-    try {
-      stripeCustomer = await api.stripe.createCustomer(team, params.stripeToken)
-      team.stripeCustomerId = stripeCustomer.id
-      await team.save()
-      await api.twilio.registerTeamPhoneNumber(team)
-      response.team = team.apiData()
-      response.teamMember = teamMember.apiData()
-    } catch (error) {
-      await team.destroy()
-      await teamMember.destroy()
-      if (stripeCustomer) { await api.stripe.destroyCustomer(stripeCustomer.id) }
-      throw error
-    }
+    await new TeamRegisterOp(team, teamMember, params.stripeToken).run()
+
+    response.team = team.apiData()
+    response.teamMember = teamMember.apiData()
+
+    // let stripeCustomer
+    // try {
+    //   stripeCustomer = await api.stripe.createCustomer(team, params.stripeToken)
+    //   team.stripeCustomerId = stripeCustomer.id
+    //   await team.save()
+    //   await api.twilio.registerTeamPhoneNumber(team)
+    //   response.team = team.apiData()
+    //   response.teamMember = teamMember.apiData()
+    // } catch (error) {
+    //   await team.destroy()
+    //   await teamMember.destroy()
+    //   if (stripeCustomer) { await api.stripe.destroyCustomer(stripeCustomer.id) }
+    //   throw error
+    // }
   }
 }
 
