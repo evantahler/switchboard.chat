@@ -11,6 +11,17 @@ module.exports = class TwilioInitializer extends Initializer {
   }
 
   async initialize () {
+    if (!api.config.stripe.SecretKey) {
+      api.log('Mocking Stripe...', 'warning')
+
+      api.stripe = {
+        createCustomer (team) { return true },
+        destroyCustomer (team) { return true }
+      }
+
+      return
+    }
+
     api.stripe = {
       client: Stripe(api.config.stripe.SecretKey),
 

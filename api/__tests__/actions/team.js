@@ -38,7 +38,10 @@ describe('user', () => {
       connection.params = {
         csrfToken,
         userId: user.id,
-        name: 'Mushroom Kingdom'
+        name: 'Mushroom Kingdom',
+        phoneNumber: '+1 412 867 5309',
+        billingEmail: user.email,
+        stripeToken: 'xxx'
       }
       let createResponse = await api.specHelper.runAction('team:create', connection)
 
@@ -62,10 +65,30 @@ describe('user', () => {
     })
 
     test('can cannot create a team with a duplicate name', async () => {
-      connection.params = { csrfToken, name: 'Mushroom Kingdom' }
+      connection.params = {
+        csrfToken,
+        userId: user.id,
+        name: 'Mushroom Kingdom',
+        phoneNumber: '+1 412 867 5309',
+        billingEmail: user.email,
+        stripeToken: 'xxx'
+      }
       let { error } = await api.specHelper.runAction('team:create', connection)
 
       expect(error).toMatch(/Validation error/)
+    })
+
+    test('can cannot create a team without a stripe token', async () => {
+      connection.params = {
+        csrfToken,
+        userId: user.id,
+        name: 'Mushroom Kingdom',
+        phoneNumber: '+1 412 867 5309',
+        billingEmail: user.email
+      }
+      let { error } = await api.specHelper.runAction('team:create', connection)
+
+      expect(error).toMatch(/stripeToken is a required parameter for this action/)
     })
   })
 
@@ -84,7 +107,10 @@ describe('user', () => {
     })
 
     test('cannot view a team I am not a membr of', async () => {
-      const otherTeam = new api.models.Team({ name: 'Team Koopa' })
+      const otherTeam = new api.models.Team({
+        name: 'Team Koopa',
+        billingEmail: 'bowser@example.com'
+      })
       await otherTeam.save()
 
       connection.params = { csrfToken, teamId: otherTeam.id }

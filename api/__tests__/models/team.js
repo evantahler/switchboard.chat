@@ -14,6 +14,7 @@ describe('actionhero Tests', () => {
     team = new api.models.Team({
       areaCode: 412,
       name: 'test team',
+      billingEmail: 'example@example.com',
       pricePerMonth: 100,
       pricePerMessage: 1,
       includedMessagesPerMonth: 0,

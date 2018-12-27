@@ -12,6 +12,16 @@ module.exports = class TwilioInitializer extends Initializer {
   }
 
   async initialize () {
+    if (!api.config.twilio.ssid || !api.config.twilio.ssid) {
+      api.log('Mocking Twilio...', 'warning')
+
+      api.twilio = {
+        registerTeamPhoneNumber (team) { return true }
+      }
+
+      return
+    }
+
     api.twilio = {
       client: Twilio(api.config.twilio.ssid, api.config.twilio.token),
 
@@ -28,7 +38,10 @@ module.exports = class TwilioInitializer extends Initializer {
 
       registerTeamPhoneNumber: async (team) => {
         const client = api.twilio.client
-        const purchasedNumber = await client.incomingPhoneNumbers.create({ phoneNumber: team.phoneNumber })
+        const purchasedNumber = await client.incomingPhoneNumbers.create({
+          phoneNumber: team.phoneNumber,
+          friendlyName: `${api.env} - Team #${team.id}`
+        })
         team.sid = purchasedNumber.sid
         try {
           await api.twilio.updateIncommingUrl(team)

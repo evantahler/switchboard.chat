@@ -56,6 +56,7 @@ describe('actionhero Tests', () => {
       team1 = new api.models.Team({
         areaCode: 412,
         name: 'test team',
+        billingEmail: 'example@example.com',
         pricePerMonth: 100,
         pricePerMessage: 1,
         includedMessagesPerMonth: 0,
@@ -65,6 +66,7 @@ describe('actionhero Tests', () => {
       team2 = new api.models.Team({
         areaCode: 412,
         name: 'other team',
+        billingEmail: 'example@example.com',
         pricePerMonth: 100,
         pricePerMessage: 1,
         includedMessagesPerMonth: 0,

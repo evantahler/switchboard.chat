@@ -4,21 +4,23 @@ const SpecHelper = require('./../specHelper')
 const helper = new SpecHelper()
 const actionhero = new ActionHero.Process()
 let api
+let user
 let team
 let folder
 let connection
 let csrfToken
 
-describe('user', () => {
+describe('folder', () => {
   beforeAll(async () => { api = await actionhero.start() })
   beforeAll(async () => { await helper.truncate() })
   beforeAll(async () => {
-    await api.specHelper.runAction('user:create', {
+    const userResponse = await api.specHelper.runAction('user:create', {
       firstName: 'Peach',
       lastName: 'Toadstool',
       email: 'peach@example.com',
       password: 'passw0rd'
     })
+    user = userResponse.user
 
     connection = new api.specHelper.Connection()
     connection.params = { email: 'peach@example.com', password: 'passw0rd' }
@@ -26,7 +28,14 @@ describe('user', () => {
     let sessionResponse = await api.specHelper.runAction('session:create', connection)
     csrfToken = sessionResponse.csrfToken
 
-    connection.params = { csrfToken, name: 'Mushroom Kingdom' }
+    connection.params = {
+      csrfToken,
+      userId: user.id,
+      name: 'Mushroom Kingdom',
+      phoneNumber: '+1 412 867 5309',
+      billingEmail: user.email,
+      stripeToken: 'xxx'
+    }
     let createResponse = await api.specHelper.runAction('team:create', connection)
     team = createResponse.team
   })
