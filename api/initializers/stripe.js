@@ -23,6 +23,11 @@ module.exports = class TwilioInitializer extends Initializer {
         })
       },
 
+      updateDefaultPaymentMethod: async (team, stripeToken) => {
+        const client = api.stripe.client
+        return client.customers.update(team.stripeCustomerId, { source: stripeToken })
+      },
+
       destroyCustomer: async (stripeCustomerId) => {
         const client = api.stripe.client
         return client.customers.del(stripeCustomerId)

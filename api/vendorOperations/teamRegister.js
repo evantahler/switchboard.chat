@@ -9,9 +9,13 @@ class TeamRegisterOp {
   }
 
   async registierWithStripe () {
-    this.stripeCustomer = await api.stripe.createCustomer(this.team, this.stripeToken)
-    this.team.stripeCustomerId = this.stripeCustomer.id
-    return this.team.save()
+    if (!this.team.stripeCustomerId) {
+      this.stripeCustomer = await api.stripe.createCustomer(this.team, this.stripeToken)
+      this.team.stripeCustomerId = this.stripeCustomer.id
+      return this.team.save()
+    } else {
+      return api.stripe.updateDefaultPaymentMethod(this.team, this.stripeToken)
+    }
   }
 
   async registerWithTwilio () {
