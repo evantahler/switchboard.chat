@@ -6,6 +6,7 @@ exports['default'] = {
         { path: '/system/version', action: 'system:version' },
         { path: '/user', action: 'user:view' },
         { path: '/team', action: 'team:view' },
+        { path: '/team/billing', action: 'team:view:billing' },
         { path: '/teams', action: 'teams:list' },
         { path: '/teamMembers', action: 'teamMembers:list' },
         { path: '/folders', action: 'folders:list' },

@@ -45,21 +45,6 @@ exports.teamCreate = class teamCreate extends Action {
 
     response.team = team.apiData()
     response.teamMember = teamMember.apiData()
-
-    // let stripeCustomer
-    // try {
-    //   stripeCustomer = await api.stripe.createCustomer(team, params.stripeToken)
-    //   team.stripeCustomerId = stripeCustomer.id
-    //   await team.save()
-    //   await api.twilio.registerTeamPhoneNumber(team)
-    //   response.team = team.apiData()
-    //   response.teamMember = teamMember.apiData()
-    // } catch (error) {
-    //   await team.destroy()
-    //   await teamMember.destroy()
-    //   if (stripeCustomer) { await api.stripe.destroyCustomer(stripeCustomer.id) }
-    //   throw error
-    // }
   }
 }
 
@@ -84,6 +69,29 @@ exports.teamView = class teamView extends Action {
   async run ({ response, team }) {
     response.team = team.apiData()
     response.stats = await team.stats()
+  }
+}
+
+exports.teamViewBilling = class teamView extends Action {
+  constructor () {
+    super()
+    this.name = 'team:view:billing'
+    this.description = 'to view the saved card for a team '
+    this.outputExample = {}
+    this.middleware = ['logged-in-session', 'team-membership']
+  }
+
+  inputs () {
+    return {
+      teamId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      }
+    }
+  }
+
+  async run ({ response, team }) {
+    response.card = await api.stripe.cardDetails(team)
   }
 }
 
@@ -137,6 +145,14 @@ exports.teamEdit = class teamEdit extends Action {
       name: {
         required: false,
         validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      billingEmail: {
+        required: false,
+        validator: s => { return validator.isEmail(s) }
+      },
+      stripeToken: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
       }
     }
   }
@@ -144,6 +160,11 @@ exports.teamEdit = class teamEdit extends Action {
   async run ({ response, params, team }) {
     team = Object.assign(team, params)
     await team.save()
+
+    if (params.stripeToken) {
+      await new TeamRegisterOp(team, null, params.stripeToken).registierWithStripe()
+    }
+
     response.team = team.apiData()
   }
 }

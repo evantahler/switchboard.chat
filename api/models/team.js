@@ -132,7 +132,7 @@ const Team = function (sequelize, DataTypes) {
       id: this.id,
       name: this.name,
       phoneNumber: this.phoneNumber,
-      areaCode: this.areaCode,
+      billingEmail: this.billingEmail,
       pricePerMonth: this.pricePerMonth,
       pricePerMessage: this.pricePerMessage,
       includedMessagesPerMonth: this.includedMessagesPerMonth,

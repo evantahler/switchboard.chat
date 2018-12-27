@@ -3,7 +3,7 @@ import SuccessRepository from './success'
 import ErrorRepository from './error'
 import SessionRepository from './session'
 
-class UserRepository extends BaseRepository {
+class TeamsRepository extends BaseRepository {
   constructor () {
     super()
     this.name = 'teams'
@@ -13,7 +13,7 @@ class UserRepository extends BaseRepository {
   }
 }
 
-const repository = new UserRepository()
+const repository = new TeamsRepository()
 repository.successHandler = SuccessRepository
 repository.errorHandler = ErrorRepository
 repository.includeParamsInRequests = async () => {

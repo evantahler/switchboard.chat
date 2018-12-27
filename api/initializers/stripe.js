@@ -26,6 +26,21 @@ module.exports = class TwilioInitializer extends Initializer {
       destroyCustomer: async (stripeCustomerId) => {
         const client = api.stripe.client
         return client.customers.del(stripeCustomerId)
+      },
+
+      cardDetails: async (team) => {
+        const client = api.stripe.client
+        const response = await client.customers.update(team.stripeCustomerId, {})
+        const defaultSourceId = response.default_source
+
+        if (!response.sources && !response.sources.data) { return null }
+
+        let match
+        response.sources.data.map((source) => {
+          if (source.id === defaultSourceId) { match = source }
+        })
+
+        return match
       }
     }
   }
