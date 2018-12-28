@@ -57,6 +57,12 @@ describe('team', () => {
       expect(team.includedMessagesPerMonth).toEqual(1000)
     })
 
+    test('creating a team also created a default folder', async () => {
+      const teamModel = await api.models.Team.findOne({ where: { id: team.id } })
+      let folders = await teamModel.folders()
+      expect(folders.map(f => f.name)).toEqual(['default folder'])
+    })
+
     test('can cannot create a team with no name', async () => {
       connection.params = { csrfToken }
       let { error } = await api.specHelper.runAction('team:create', connection)
