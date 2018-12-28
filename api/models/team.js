@@ -54,6 +54,13 @@ const Team = function (sequelize, DataTypes) {
     return folder.save()
   }
 
+  Model.prototype.updateFolder = async function ({ folderId, name }) {
+    const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
+    if (!folder) { throw new Error('folder not found') }
+    if (name) { folder.name = name }
+    return folder.save()
+  }
+
   Model.prototype.removeFolder = async function (folderId) {
     const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
     if (!folder) { throw new Error('folder not found') }
@@ -61,7 +68,10 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.folders = async function () {
-    return api.models.Folder.findAll({ where: { teamId: this.id } })
+    return api.models.Folder.findAll({
+      where: { teamId: this.id },
+      order: [['name', 'asc']]
+    })
   }
 
   Model.prototype.addTeamMember = async function ({ email, userId, firstName, lastName }) {
@@ -106,6 +116,22 @@ const Team = function (sequelize, DataTypes) {
     return contact.save()
   }
 
+  Model.prototype.updateContact = async function ({ contactId, firstName, lastName, phoneNumber, folderId }) {
+    const contact = await api.models.Contact.findOne({ where: { id: contactId } })
+
+    if (firstName) { contact.firstName = firstName }
+    if (lastName) { contact.lastName = lastName }
+    if (phoneNumber) { contact.phoneNumber = phoneNumber }
+
+    if (folderId) {
+      const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
+      if (!folder) { throw new Error('folder not found') }
+      contact.folderId = folderId
+    }
+
+    return contact.save()
+  }
+
   Model.prototype.removeContact = async function ({ contactId, folderId }) {
     const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
     if (!folder) { throw new Error('folder not found') }
@@ -115,14 +141,19 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.contacts = async function (folderId) {
-    const folder = await api.models.Folder.findOne({ where: {
-      teamId: this.id,
-      id: folderId
-    } })
+    let folderWhere = { teamId: this.id }
+    if (folderId) { folderWhere.id = folderId }
+    const folders = await api.models.Folder.findAll({ where: folderWhere })
+    let contacts = api.models.Contact.findAll({
+      where: {
+        folderId: {
+          [Op.in]: folders.map(f => f.id)
+        }
+      },
+      order: [['lastName', 'asc'], ['firstName', 'asc']]
+    })
 
-    if (!folder) { throw new Error('folder not found') }
-
-    return api.models.Contact.findAll({ where: { folderId: folder.id } })
+    return contacts
   }
 
   Model.prototype.stats = async function () {

@@ -39,7 +39,7 @@ exports.contactCreate = class contactCreate extends Action {
 
   async run ({ response, params, team }) {
     const contact = await team.addContact(params)
-    response.contact = contact.apiData()
+    response.contact = await contact.apiData()
   }
 }
 
@@ -59,7 +59,7 @@ exports.contactsList = class contactsList extends Action {
         formatter: s => { return parseInt(s) }
       },
       folderId: {
-        required: true,
+        required: false,
         formatter: s => { return parseInt(s) }
       }
     }
@@ -67,7 +67,55 @@ exports.contactsList = class contactsList extends Action {
 
   async run ({ response, params, team }) {
     const contacts = await team.contacts(params.folderId)
-    response.contacts = contacts.map(c => { return c.apiData() })
+    response.contacts = []
+    for (let i in contacts) {
+      response.contacts.push(await contacts[i].apiData())
+    }
+  }
+}
+
+exports.contactEdit = class contactEdit extends Action {
+  constructor () {
+    super()
+    this.name = 'contact:edit'
+    this.description = 'to edit for a team'
+    this.outputExample = {}
+    this.middleware = ['logged-in-session', 'team-membership']
+  }
+
+  inputs () {
+    return {
+      teamId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      contactId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      folderId: {
+        required: false,
+        formatter: s => { return parseInt(s) }
+      },
+      firstName: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      lastName: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      phoneNumber: {
+        required: false,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
+      }
+    }
+  }
+
+  async run ({ response, params, team }) {
+    const contact = await team.updateContact(params)
+    response.contact = await contact.apiData()
   }
 }
 

@@ -20,6 +20,10 @@ const Message = function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
+    contactId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     teamId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -36,6 +40,7 @@ const Message = function (sequelize, DataTypes) {
       message: this.message,
       direction: this.direction,
       read: this.read,
+      contactId: this.contactId,
       teamId: this.teamId,
       createdAt: this.createdAt
     }

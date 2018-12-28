@@ -29,6 +29,38 @@ exports.folderCreate = class folderCreate extends Action {
   }
 }
 
+exports.folderEdit = class folderEdit extends Action {
+  constructor () {
+    super()
+    this.name = 'folder:edit'
+    this.description = 'to edit a folder for a team'
+    this.outputExample = {}
+    this.middleware = ['logged-in-session', 'team-membership']
+  }
+
+  inputs () {
+    return {
+      teamId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      folderId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      name: {
+        required: true,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      }
+    }
+  }
+
+  async run ({ response, params, team }) {
+    const folder = await team.updateFolder(params.name)
+    response.folder = folder.apiData()
+  }
+}
+
 exports.foldersList = class foldersList extends Action {
   constructor () {
     super()

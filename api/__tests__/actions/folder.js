@@ -63,8 +63,9 @@ describe('folder', () => {
       let { error, folders } = await api.specHelper.runAction('folders:list', connection)
 
       expect(error).toBeUndefined()
-      expect(folders.length).toEqual(1)
-      expect(folders[0].name).toEqual('Royal Family')
+      expect(folders.length).toEqual(2)
+      expect(folders[0].name).toEqual('default folder')
+      expect(folders[1].name).toEqual('Royal Family')
     })
   })
 
@@ -78,7 +79,8 @@ describe('folder', () => {
       connection.params = { csrfToken, teamId: team.id }
       let { folders } = await api.specHelper.runAction('folders:list', connection)
 
-      expect(folders.length).toEqual(0)
+      expect(folders.length).toEqual(1)
+      expect(folders[0].name).toEqual('default folder')
     })
   })
 })

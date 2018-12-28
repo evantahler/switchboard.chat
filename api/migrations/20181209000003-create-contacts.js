@@ -24,11 +24,6 @@ module.exports = {
       phoneNumber: {
         type: DataTypes.STRING(191),
         allowNull: false
-      },
-      canUseCommands: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
       }
     })
 

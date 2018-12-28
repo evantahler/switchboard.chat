@@ -5,7 +5,7 @@ import HighlightableNavigationLink from './highlightableNavigationLink'
 import SessionRepository from './../../repositories/session'
 import TeamsRepository from './../../repositories/teams'
 
-class NavbarLoggedOut extends React.Component {
+class NavbarLoggedIn extends React.Component {
   constructor () {
     super()
     this.state = { teams: [], team: {} }
@@ -22,8 +22,8 @@ class NavbarLoggedOut extends React.Component {
   }
 
   async loadSessionTeam () {
-    const { team } = await SessionRepository.get()
-    if (team) { this.setState({ team }) }
+    const sessionResponse = await SessionRepository.get()
+    if (sessionResponse && sessionResponse.team) { this.setState({ team: sessionResponse.team }) }
   }
 
   async setTeam (team) {
@@ -78,4 +78,4 @@ class NavbarLoggedOut extends React.Component {
   }
 }
 
-export default NavbarLoggedOut
+export default NavbarLoggedIn

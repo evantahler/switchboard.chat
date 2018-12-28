@@ -1,3 +1,5 @@
+const { api } = require('actionhero')
+
 const Contact = function (sequelize, DataTypes) {
   const Model = sequelize.define('Contact', {
     'folderId': {
@@ -15,11 +17,6 @@ const Contact = function (sequelize, DataTypes) {
     'phoneNumber': {
       type: DataTypes.STRING(191),
       allowNull: false
-    },
-    'canUseCommands': {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: 0
     }
   }, {
     tableName: 'contacts'
@@ -29,14 +26,24 @@ const Contact = function (sequelize, DataTypes) {
     return [this.firstName, this.lastName].join(' ')
   }
 
-  Model.prototype.apiData = function () {
+  Model.prototype.mostRecentMessage = async function () {
+    const mostRecentMessage = await api.models.Message.findOne({
+      where: { contactId: this.id },
+      order: [[ 'createdAt', 'desc' ]]
+    })
+
+    if (mostRecentMessage) { return mostRecentMessage.createdAt }
+    return null
+  }
+
+  Model.prototype.apiData = async function () {
     return {
       id: this.id,
       folderId: this.folderId,
       firstName: this.firstName,
       lastName: this.lastName,
       phoneNumber: this.phoneNumber,
-      canUseCommands: this.canUseCommands
+      mostRecentMessage: await this.mostRecentMessage()
     }
   }
 
