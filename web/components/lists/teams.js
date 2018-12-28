@@ -1,16 +1,15 @@
 import React from 'react'
 import Router from 'next/router'
-import { Card, Button, Alert } from 'react-bootstrap'
+import { Card, ButtonToolbar, Button, Alert } from 'react-bootstrap'
 import TeamsRepository from './../../repositories/teams'
 import SessionRepository from './../../repositories/session'
 
 class TeamCard extends React.Component {
-  async setTeam (team) {
+  async goToTeam (team, subpath = '') {
     let session = await SessionRepository.get()
     session.team = team
-    console.log('set', session)
     await SessionRepository.set(session)
-    Router.push('/team')
+    Router.push(`/team${subpath}`)
   }
 
   render () {
@@ -28,7 +27,11 @@ class TeamCard extends React.Component {
             Price per Message: {team.pricePerMessage}<br />
             Included Messages per Month: {team.includedMessagesPerMonth}<br />
           </Card.Text>
-          <Button variant='primary' onClick={this.setTeam.bind(this, team)}>Go to to {team.name}</Button>
+          <ButtonToolbar>
+            <Button variant='primary' onClick={this.goToTeam.bind(this, team, '')}>Go to to {team.name}</Button>
+            &nbsp;
+            <Button variant='info' onClick={this.goToTeam.bind(this, team, '/edit')}>Edit Team</Button>
+          </ButtonToolbar>
         </Card.Body>
       </Card>
     )

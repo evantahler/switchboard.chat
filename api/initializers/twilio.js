@@ -55,7 +55,8 @@ module.exports = class TwilioInitializer extends Initializer {
       updateIncommingUrl: async (team) => {
         const client = api.twilio.client
         const smsUrl = api.config.twilio.messageUrl
-        return client.incomingPhoneNumbers(team.sid).update({ smsUrl })
+        const voiceUrl = api.config.twilio.voiceUrl
+        return client.incomingPhoneNumbers(team.sid).update({ smsUrl, voiceUrl })
       },
 
       sendMessage: async (team, person, body) => {
@@ -80,6 +81,14 @@ module.exports = class TwilioInitializer extends Initializer {
         }
 
         return api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData())
+      },
+
+      renderVoiceResponse: (message) => {
+        const VoiceResponse = Twilio.twiml.VoiceResponse
+        const response = new VoiceResponse()
+        response.say(message)
+        const xml = response.toString()
+        return xml
       }
     }
   }

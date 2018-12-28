@@ -14,16 +14,18 @@ class NewTeamForm extends React.Component {
         name: '',
         areaCode: '',
         phoneNumber: '',
-        billingEmail: ''
+        billingEmail: '',
+        voiceResponse: ''
       },
       billingInformation: {}
     }
   }
 
   async componentDidMount () {
-    const { team } = await TeamRepository.get()
+    const teamResponse = await TeamRepository.get()
+    if (teamResponse) { this.setState({ team: teamResponse.team }) }
     const billingInformation = await TeamRepository.loadBillingInformation()
-    this.setState({ team, billingInformation })
+    if (billingInformation) { this.setState({ billingInformation }) }
   }
 
   setStripeToken (stripeResponse) {
@@ -98,6 +100,13 @@ class NewTeamForm extends React.Component {
             <Form.Label>Team Phone Number</Form.Label>
             <Form.Text className='text-muted'>If you want to change your team's phone number, please contact support.</Form.Text>
             <Form.Control disabled value={team.phoneNumber} required type='text' />
+          </Form.Group>
+
+          <Form.Group controlId='voiceResponse'>
+            <Form.Label>Voice Response</Form.Label>
+            <Form.Control autoFocus value={team.voiceResponse} required type='text' placeholder='Send a text...' onChange={e => update(e)} />
+            <Form.Text className='text-muted'>This message will be read to someone who calls your team phone number.</Form.Text>
+            <Form.Control.Feedback type='invalid'>A Voice Response s is required</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId='billingEmail'>

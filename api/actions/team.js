@@ -31,6 +31,9 @@ exports.teamCreate = class teamCreate extends Action {
       billingEmail: {
         required: false,
         validator: s => { return validator.isEmail(s) }
+      },
+      voiceResponse: {
+        required: false
       }
     }
   }
@@ -149,6 +152,9 @@ exports.teamEdit = class teamEdit extends Action {
       billingEmail: {
         required: false,
         validator: s => { return validator.isEmail(s) }
+      },
+      voiceResponse: {
+        required: false
       },
       stripeToken: {
         required: false,

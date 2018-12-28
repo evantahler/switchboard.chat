@@ -37,6 +37,8 @@ exports['default'] = {
         // When visiting the root URL, should visitors see 'api' or 'file'?
         //  Visitors can always visit /api and /public as normal
         rootEndpointType: 'file',
+        // match response file formats
+        matchExtensionMime: true,
         // simple routing also adds an 'all' route which matches /api/:action for all actions
         simpleRouting: true,
         // queryRouting allows an action to be defined via a URL param, ie: /api?action=:action
@@ -112,7 +114,6 @@ exports.test = {
       return {
         secure: false,
         port: 18080 + parseInt(process.env.JEST_WORKER_ID || 0),
-        matchExtensionMime: true,
         metadataOptions: {
           serverInformation: true,
           requesterInformation: true

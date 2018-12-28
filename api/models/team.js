@@ -20,6 +20,11 @@ const Team = function (sequelize, DataTypes) {
       allowNull: false,
       validate: { isEmail: true }
     },
+    voiceResponse: {
+      type: DataTypes.TEXT('medium'),
+      allowNull: false,
+      defaultValue: 'We are sorry, but this number only accepts text messages.  Goodbye.'
+    },
     pricePerMonth: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -133,6 +138,7 @@ const Team = function (sequelize, DataTypes) {
       name: this.name,
       phoneNumber: this.phoneNumber,
       billingEmail: this.billingEmail,
+      voiceResponse: this.voiceResponse,
       pricePerMonth: this.pricePerMonth,
       pricePerMessage: this.pricePerMessage,
       includedMessagesPerMonth: this.includedMessagesPerMonth,

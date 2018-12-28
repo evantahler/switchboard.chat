@@ -25,7 +25,9 @@ exports['default'] = {
 
       post: [
         { path: '/user', action: 'user:edit' },
-        { path: '/team', action: 'team:edit' }
+        { path: '/team', action: 'team:edit' },
+        { path: '/twilio/in', action: 'twilio:in' },
+        { path: '/twilio/voice', action: 'twilio:voice' }
       ],
 
       delete: [
