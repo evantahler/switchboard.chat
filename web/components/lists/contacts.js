@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, Alert } from 'react-bootstrap'
 import ContactsRepository from './../../repositories/contacts'
+import FoldersRepository from './../../repositories/folders'
 
 class ContactCard extends React.Component {
   render () {
@@ -31,8 +32,10 @@ class ContactsList extends React.Component {
   }
 
   async load () {
-    const response = await ContactsRepository.get()
-    if (response) { this.setState({ contacts: response.contacts }) }
+    const contactResponse = await ContactsRepository.get()
+    if (contactResponse) { this.setState({ contacts: contactResponse.contacts }) }
+    const foldersResponse = await FoldersRepository.get()
+    if (foldersResponse) { this.setState({ folders: foldersResponse.folders }) }
   }
 
   render () {
