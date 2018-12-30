@@ -25,7 +25,7 @@ class AddContactModal extends React.Component {
 
   render () {
     return (
-      <>
+      <div>
         <Button variant='outline-info' size='sm' onClick={this.handleShow}>+</Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -42,7 +42,7 @@ class AddContactModal extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-      </>
+      </div>
     )
   }
 }

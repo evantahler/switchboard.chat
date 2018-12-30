@@ -24,11 +24,23 @@ class ContactCard extends React.Component {
 class ContactsList extends React.Component {
   constructor () {
     super()
-    this.state = { contacts: [] }
+    this.state = {
+      contacts: [],
+      hydrating: false
+    }
   }
 
   async componentDidMount () {
+    ContactsRepository.subscribe('team-contacts-list', this.subscription.bind(this))
     return this.load()
+  }
+
+  componentWillUnmount () {
+    ContactsRepository.unsubscribe('team-contacts-list')
+  }
+
+  async subscription () {
+    await this.load()
   }
 
   async load () {

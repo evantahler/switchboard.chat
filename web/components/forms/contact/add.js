@@ -5,7 +5,7 @@ import ContactRepository from './../../../repositories/contact'
 import ContactsRepository from './../../../repositories/contacts'
 import FoldersRepository from './../../../repositories/folders'
 
-class SignUpForm extends React.Component {
+class AddContactForm extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -105,4 +105,4 @@ class SignUpForm extends React.Component {
   }
 }
 
-export default SignUpForm
+export default AddContactForm
