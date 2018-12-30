@@ -50,6 +50,11 @@ const Team = function (sequelize, DataTypes) {
     paranoid: true
   })
 
+  Model.afterDestroy(async (instance) => {
+    instance.name = `${instance.name}-destroyed-${instance.id}`
+    return instance.save()
+  })
+
   Model.prototype.addFolder = async function (folderName) {
     const folder = new api.models.Folder({ teamId: this.id, name: folderName })
     return folder.save()

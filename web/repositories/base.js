@@ -108,6 +108,7 @@ class BaseRepository {
       const response = await this.client.action(this.routes.create.verb, this.routes.create.path, params)
       await this.set(response)
       if (this.successHandler) { this.successHandler.set({ message: `Created ${this.name}` }) }
+      await this.publish(response)
       return this.get()
     } catch (error) {
       const errorMessage = error.message ? error.message : `cannot create ${this.name}`
@@ -127,6 +128,7 @@ class BaseRepository {
       const response = await this.client.action(this.routes.update.verb, this.routes.update.path, params)
       this.set(response)
       if (this.successHandler) { this.successHandler.set({ message: `Updated ${this.name}` }) }
+      await this.publish(response)
       return response
     } catch (error) {
       const errorMessage = error.message ? error.message : `cannot update ${this.name}`
@@ -146,6 +148,7 @@ class BaseRepository {
       const response = await this.client.action(this.routes.destroy.verb, this.routes.destroy.path, params)
       this.remove(response)
       if (this.successHandler) { this.successHandler.set({ message: `Destroyed ${this.name}` }) }
+      await this.publish(response)
       return true
     } catch (error) {
       const errorMessage = error.message ? error.message : `cannot remove ${this.name}`

@@ -27,6 +27,11 @@ const Contact = function (sequelize, DataTypes) {
     paranoid: true
   })
 
+  Model.afterDestroy(async (instance) => {
+    instance.phoneNumber = `${instance.phoneNumber}-destroyed-${instance.id}`
+    return instance.save()
+  })
+
   Model.prototype.name = function () {
     return [this.firstName, this.lastName].join(' ')
   }

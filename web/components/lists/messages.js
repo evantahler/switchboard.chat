@@ -3,6 +3,7 @@ import { Card, Alert } from 'react-bootstrap'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import EditContactModal from './../modals/contacts/edit.js'
+import DestroyContactModal from './../modals/contacts/destroy.js'
 
 class MessageCard extends React.Component {
   render () {
@@ -61,7 +62,7 @@ class ContactsList extends React.Component {
 
     return (
       <div>
-        <h2>Messages with {contact.firstName} {contact.lastName} <EditContactModal /></h2>
+        <h2>Messages with {contact.firstName} {contact.lastName} <EditContactModal /> <DestroyContactModal /></h2>
         { messages.length > 0
           ? messages.map((message) => { return <MessageCard key={`message-${message.id}`} message={message} /> })
           : <Alert variant='info'>No messages yet</Alert>

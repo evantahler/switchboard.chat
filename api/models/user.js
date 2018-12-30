@@ -44,6 +44,12 @@ const User = function (sequelize, DataTypes) {
     paranoid: true
   })
 
+  Model.afterDestroy(async (instance) => {
+    instance.email = `${instance.email}-destroyed-${instance.id}`
+    instance.phoneNumber = `${instance.phoneNumber}-destroyed-${instance.id}`
+    return instance.save()
+  })
+
   Model.prototype.name = function () {
     return [this.firstName, this.lastName].join(' ')
   }
