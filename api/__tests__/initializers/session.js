@@ -16,7 +16,7 @@ const sleep = (time = 1000) => {
   })
 }
 
-describe('status', () => {
+describe('session', () => {
   beforeAll(async () => { api = await actionhero.start() })
   beforeAll(async () => { await helper.truncate() })
   beforeAll(async () => {
