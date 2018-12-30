@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Modal } from 'react-bootstrap'
-import AddContactForm from '../forms/contact/add.js'
-import ErrorAlert from './../alerts/error'
+import { Modal, Button } from 'react-bootstrap'
+import AddContactForm from '../../forms/contact/add.js'
+import ErrorAlert from './../../alerts/error'
 
 class AddContactModal extends React.Component {
   constructor () {
@@ -25,7 +25,7 @@ class AddContactModal extends React.Component {
 
   render () {
     return (
-      <div>
+      <>
         <Button variant='outline-info' size='sm' onClick={this.handleShow}>+</Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -42,7 +42,7 @@ class AddContactModal extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-      </div>
+      </>
     )
   }
 }

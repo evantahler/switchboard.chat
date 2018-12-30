@@ -62,8 +62,7 @@ class NewTeamForm extends React.Component {
       session.team = team
       await SessionRepository.set(session)
       await TeamsRepository.hydrate()
-      // await Router.push('/team')
-      window.location.pathname = '/team'
+      await Router.push('/team')
     } else {
       this.setState({ submitting: false })
     }

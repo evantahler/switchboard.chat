@@ -4,6 +4,10 @@ import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import HighlightableNavigationLink from './highlightableNavigationLink'
 import SessionRepository from './../../repositories/session'
 import TeamsRepository from './../../repositories/teams'
+import ContactsRepository from './../../repositories/contacts'
+import ContactRepository from './../../repositories/contact'
+import MessagesRepository from './../../repositories/messages'
+import FoldersRepository from './../../repositories/folders'
 
 class NavbarLoggedIn extends React.Component {
   constructor () {
@@ -27,9 +31,13 @@ class NavbarLoggedIn extends React.Component {
   }
 
   async setTeam (team) {
+    await ContactsRepository.remove()
+    await ContactRepository.remove()
+    await MessagesRepository.remove()
+    await FoldersRepository.remove()
+
     let session = await SessionRepository.get()
     session.team = team
-    console.log('setting', session)
     await SessionRepository.set(session)
     await this.loadSessionTeam()
     Router.push('/team')

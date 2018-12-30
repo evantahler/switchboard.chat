@@ -46,7 +46,8 @@ const Team = function (sequelize, DataTypes) {
       defaultValue: true
     }
   }, {
-    tableName: 'teams'
+    tableName: 'teams',
+    paranoid: true
   })
 
   Model.prototype.addFolder = async function (folderName) {
@@ -112,12 +113,12 @@ const Team = function (sequelize, DataTypes) {
   Model.prototype.addContact = async function ({ firstName, lastName, phoneNumber, folderId }) {
     const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
     if (!folder) { throw new Error('folder not found') }
-    const contact = new api.models.Contact({ firstName, lastName, phoneNumber, folderId: folder.id })
+    const contact = new api.models.Contact({ firstName, lastName, phoneNumber, folderId: folder.id, teamId: this.id })
     return contact.save()
   }
 
   Model.prototype.updateContact = async function ({ contactId, firstName, lastName, phoneNumber, folderId }) {
-    const contact = await api.models.Contact.findOne({ where: { id: contactId } })
+    const contact = await api.models.Contact.findOne({ where: { id: contactId, teamId: this.id } })
 
     if (firstName) { contact.firstName = firstName }
     if (lastName) { contact.lastName = lastName }
@@ -135,7 +136,7 @@ const Team = function (sequelize, DataTypes) {
   Model.prototype.removeContact = async function ({ contactId, folderId }) {
     const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
     if (!folder) { throw new Error('folder not found') }
-    const contact = await api.models.Contact.findOne({ where: { folderId: folder.id, id: contactId } })
+    const contact = await api.models.Contact.findOne({ where: { folderId: folder.id, id: contactId, teamId: this.id } })
     if (!contact) { throw new Error('contact not found') }
     return contact.destroy()
   }
@@ -146,6 +147,7 @@ const Team = function (sequelize, DataTypes) {
     const folders = await api.models.Folder.findAll({ where: folderWhere })
     let contacts = api.models.Contact.findAll({
       where: {
+        teamId: this.id,
         folderId: {
           [Op.in]: folders.map(f => f.id)
         }

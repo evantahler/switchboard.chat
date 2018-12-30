@@ -1,14 +1,21 @@
 import React from 'react'
 import { Card, Alert } from 'react-bootstrap'
+import ContactRepository from './../../repositories/contact'
 import ContactsRepository from './../../repositories/contacts'
 import FoldersRepository from './../../repositories/folders'
 
 class ContactCard extends React.Component {
+  async showMessages () {
+    const contact = this.props.contact
+    await ContactRepository.hydrate(contact)
+  }
+
   render () {
     const contact = this.props.contact
+    const bg = this.props.active ? 'primary' : 'light'
 
     return (
-      <Card>
+      <Card bg={bg} onClick={this.showMessages.bind(this)}>
         <Card.Body>
           <Card.Title>{contact.firstName} {contact.lastName}</Card.Title>
           <Card.Text>
@@ -24,19 +31,18 @@ class ContactCard extends React.Component {
 class ContactsList extends React.Component {
   constructor () {
     super()
-    this.state = {
-      contacts: [],
-      hydrating: false
-    }
+    this.state = { contacts: [], contact: {} }
   }
 
   async componentDidMount () {
     ContactsRepository.subscribe('team-contacts-list', this.subscription.bind(this))
+    ContactRepository.subscribe('team-contact-list', this.subscription.bind(this))
     return this.load()
   }
 
   componentWillUnmount () {
     ContactsRepository.unsubscribe('team-contacts-list')
+    ContactRepository.unsubscribe('team-contacts-list')
   }
 
   async subscription () {
@@ -44,19 +50,25 @@ class ContactsList extends React.Component {
   }
 
   async load () {
-    const contactResponse = await ContactsRepository.get()
-    if (contactResponse) { this.setState({ contacts: contactResponse.contacts }) }
+    const contactsResponse = await ContactsRepository.get()
+    if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
+    const contactResponse = await ContactRepository.get()
+    if (contactResponse) { this.setState({ contact: contactResponse.contact }) }
     const foldersResponse = await FoldersRepository.get()
     if (foldersResponse) { this.setState({ folders: foldersResponse.folders }) }
   }
 
   render () {
     const contacts = this.state.contacts
+    const contact = this.state.contact
 
     return (
       <div>
         { contacts.length > 0
-          ? contacts.map((contact) => { return <ContactCard key={`contact-${contact.id}`} contact={contact} /> })
+          ? contacts.map((c) => {
+            const active = contact ? (c.id === contact.id) : false
+            return <ContactCard key={`contact-${c.id}`} active={active} contact={c} />
+          })
           : <Alert variant='warning'>You have no contacts.  Why not create one?.</Alert>
         }
       </div>

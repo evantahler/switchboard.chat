@@ -3,24 +3,18 @@ import SuccessRepository from './success'
 import ErrorRepository from './error'
 import SessionRepository from './session'
 
-class UserRepository extends BaseRepository {
+class MessagesRepository extends BaseRepository {
   constructor () {
     super()
-    this.name = 'contact'
-    this.key = 'repository:contact'
-    this.responseKeys = ['contact']
-    this.routes.create.path = '/api/contact'
-    this.routes.update.path = '/api/contact'
-    this.routes.destroy.path = '/api/contact'
-  }
-
-  // concact information will come in full from the contact list
-  async hydrate (contact) {
-    await this.set({ contact })
+    this.name = 'messages'
+    this.key = 'repository:messages'
+    this.responseKeys = ['messages']
+    this.routes.get.path = '/api/messages'
+    this.routes.create.path = '/api/message'
   }
 }
 
-const repository = new UserRepository()
+const repository = new MessagesRepository()
 repository.successHandler = SuccessRepository
 repository.errorHandler = ErrorRepository
 repository.includeParamsInRequests = async () => {

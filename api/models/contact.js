@@ -2,6 +2,10 @@ const { api } = require('actionhero')
 
 const Contact = function (sequelize, DataTypes) {
   const Model = sequelize.define('Contact', {
+    'teamId': {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     'folderId': {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -19,7 +23,8 @@ const Contact = function (sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'contacts'
+    tableName: 'contacts',
+    paranoid: true
   })
 
   Model.prototype.name = function () {
@@ -39,6 +44,7 @@ const Contact = function (sequelize, DataTypes) {
   Model.prototype.apiData = async function () {
     return {
       id: this.id,
+      teamId: this.teamId,
       folderId: this.folderId,
       firstName: this.firstName,
       lastName: this.lastName,

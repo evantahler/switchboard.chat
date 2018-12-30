@@ -3,7 +3,8 @@ import { Row, Col } from 'react-bootstrap'
 import Layout from './../../components/layouts/loggedIn.js'
 import TeamRepository from './../../repositories/team.js'
 import ContactsList from './../../components/lists/contacts.js'
-import AddContactModal from './../../components/modals/addContact.js'
+import MessagesList from './../../components/lists/messages.js'
+import AddContactModal from './../../components/modals/contacts/add.js'
 
 class Page extends React.Component {
   constructor () {
@@ -24,6 +25,7 @@ class Page extends React.Component {
     return (
       <Layout>
         <h1>{team.name}</h1>
+        <br />
         <Row>
           <Col md={4}>
             <h2>Contacts <AddContactModal /></h2>
@@ -31,7 +33,7 @@ class Page extends React.Component {
           </Col>
 
           <Col md={8}>
-            <h2>Messages</h2>
+            <MessagesList />
           </Col>
         </Row>
       </Layout>

@@ -3,9 +3,18 @@ import Router from 'next/router'
 import { Card, ButtonToolbar, Button, Alert } from 'react-bootstrap'
 import TeamsRepository from './../../repositories/teams'
 import SessionRepository from './../../repositories/session'
+import ContactsRepository from './../../repositories/contacts'
+import ContactRepository from './../../repositories/contact'
+import MessagesRepository from './../../repositories/messages'
+import FoldersRepository from './../../repositories/folders'
 
 class TeamCard extends React.Component {
   async goToTeam (team, subpath = '') {
+    await ContactsRepository.remove()
+    await ContactRepository.remove()
+    await MessagesRepository.remove()
+    await FoldersRepository.remove()
+
     let session = await SessionRepository.get()
     session.team = team
     await SessionRepository.set(session)

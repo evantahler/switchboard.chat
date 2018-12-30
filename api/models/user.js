@@ -40,7 +40,8 @@ const User = function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'users'
+    tableName: 'users',
+    paranoid: true
   })
 
   Model.prototype.name = function () {
