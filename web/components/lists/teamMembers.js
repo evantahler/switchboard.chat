@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Alert } from 'react-bootstrap'
+import { Card, Alert, ButtonToolbar } from 'react-bootstrap'
 import SessionRepository from './../../repositories/session'
 import TeamMembersRepository from './../../repositories/teamMembers'
 import EditTeamMemberModal from './../modals/teamMember/edit.js'
@@ -22,23 +22,18 @@ class TeamMemberCard extends React.Component {
 
     return (
       <Card>
-        <Card.Header>
+        <Card.Header>{teamMember.firstName} {teamMember.lastName}</Card.Header>
+        <Card.Body>
+          <Card.Text> {teamMember.email} </Card.Text>
           {
             userId !== teamMember.id
-              ? <div>
-                {teamMember.firstName} {teamMember.lastName}
-                &nbsp;
+              ? <ButtonToolbar>
                 <EditTeamMemberModal teamMember={teamMember} />
                 &nbsp;
                 <DestroyTeamMemberModal teamMember={teamMember} />
-              </div>
-              : <div>
-                {teamMember.firstName} {teamMember.lastName}
-              </div>
+              </ButtonToolbar>
+              : null
           }
-        </Card.Header>
-        <Card.Body>
-          <Card.Text> {teamMember.email} </Card.Text>
         </Card.Body>
       </Card>
     )

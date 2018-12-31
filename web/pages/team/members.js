@@ -30,6 +30,8 @@ class Page extends React.Component {
             <TeamMembersList />
           </Col>
           <Col>
+            <h2>Add new Team Member</h2>
+            <p>Switchboard users can be members of many teams.  If the Team Member you are is inviting already has an account, they will recieve an invitation.  Otherwise, they will recieve an invitation to join both Switchboard and your team.</p>
             <AddTeamMemberForm />
           </Col>
         </Row>
