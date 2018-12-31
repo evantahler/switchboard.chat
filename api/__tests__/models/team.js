@@ -63,7 +63,7 @@ describe('actionhero Tests', () => {
     await team.addTeamMember({ email: 'mario@example.com', firstName: 'Mario', lastName: 'Mario' })
     const teamMembers = await team.teamMembers()
     expect(teamMembers.length).toEqual(2)
-    expect(teamMembers[1].email).toEqual('mario@example.com')
+    expect(teamMembers[0].email).toEqual('mario@example.com')
 
     const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
     expect(mario.id).toBeTruthy()
@@ -79,7 +79,7 @@ describe('actionhero Tests', () => {
     await team.addTeamMember({ email: 'luigi@example.com' })
     const teamMembers = await team.teamMembers()
     expect(teamMembers.length).toEqual(3)
-    expect(teamMembers[2].email).toEqual('luigi@example.com')
+    expect(teamMembers[0].email).toEqual('luigi@example.com')
   })
 
   test('a team can add a member by userID', async () => {

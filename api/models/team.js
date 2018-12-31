@@ -100,6 +100,19 @@ const Team = function (sequelize, DataTypes) {
     return teamMember.save()
   }
 
+  Model.prototype.editTeamMember = async function ({ userId, email, firstName, lastName, phoneNumber }) {
+    const teamMember = await api.models.TeamMember.findOne({ where: { teamId: this.id, userId } })
+    if (!teamMember) { throw new Error('team member not found') }
+    const user = await api.models.User.findOne({ where: { id: teamMember.userId } })
+
+    if (email) { user.email = email }
+    if (firstName) { user.firstName = firstName }
+    if (lastName) { user.lastName = lastName }
+    if (phoneNumber) { user.phoneNumber = phoneNumber }
+
+    return user.save()
+  }
+
   Model.prototype.removeTeamMember = async function (userId) {
     const teamMember = await api.models.TeamMember.findOne({ where: { teamId: this.id, userId } })
     if (!teamMember) { throw new Error('team member not found') }
@@ -108,11 +121,14 @@ const Team = function (sequelize, DataTypes) {
 
   Model.prototype.teamMembers = async function () {
     const teamMembers = await api.models.TeamMember.findAll({ where: { teamId: this.id } })
-    return api.models.User.findAll({ where: {
+    return api.models.User.findAll({ where:
+    {
       id: {
         [Op.in]: teamMembers.map(t => { return t.userId })
       }
-    } })
+    },
+    order: [['lastName', 'asc'], ['firstName', 'asc']]
+    })
   }
 
   Model.prototype.addContact = async function ({ firstName, lastName, phoneNumber, folderId }) {

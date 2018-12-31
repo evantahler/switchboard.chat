@@ -1,15 +1,15 @@
 import React from 'react'
 import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
-import ContactRepository from './../../../repositories/contact'
-import ContactsRepository from './../../../repositories/contacts'
+import TeamMemberRepository from './../../../repositories/teamMember'
+import TeamMembersRepository from './../../../repositories/teamMembers'
 
-class DestroyContactForm extends React.Component {
+class DestroyTeamMemberForm extends React.Component {
   constructor () {
     super()
     this.state = {
       validated: false,
-      contact: {}
+      teamMember: {}
     }
   }
 
@@ -18,8 +18,9 @@ class DestroyContactForm extends React.Component {
   }
 
   async load () {
-    const { contact } = await ContactRepository.get()
-    this.setState({ contact })
+    const { teamMember } = await TeamMemberRepository.get()
+    if (!teamMember) { return }
+    this.setState({ teamMember })
   }
 
   validate (event) {
@@ -33,17 +34,16 @@ class DestroyContactForm extends React.Component {
 
   async submit (form) {
     const data = FormSerializer(form)
-    data.contactId = this.state.contact.id
-    data.folderId = this.state.contact.folderId
-    const deleteReponse = await ContactRepository.destroy(data)
+    data.userId = this.state.teamMember.id
+    const deleteReponse = await TeamMemberRepository.destroy(data)
     if (deleteReponse) {
-      await ContactsRepository.hydrate()
+      await TeamMembersRepository.hydrate()
       return this.props.handleClose()
     }
   }
 
   render () {
-    const { validated, contact } = this.state
+    const { validated, teamMember } = this.state
 
     return (
       <Form
@@ -52,16 +52,16 @@ class DestroyContactForm extends React.Component {
         validated={validated}
         noValidate
       >
-        <Form.Group controlId='contact'>
-          Are you sure you want to delete {contact.firstName} {contact.lastName}?
+        <Form.Group controlId='teamMember'>
+          Are you sure you want to remove {teamMember.firstName} {teamMember.lastName} from this team?
         </Form.Group>
 
         <Button variant='danger' type='submit'>
-          Delete Contact
+          Delete Team Member
         </Button>
       </Form>
     )
   }
 }
 
-export default DestroyContactForm
+export default DestroyTeamMemberForm

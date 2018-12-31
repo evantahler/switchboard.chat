@@ -1,5 +1,6 @@
-const { Action } = require('actionhero')
+const { Action, api } = require('actionhero')
 const validator = require('validator')
+const { parsePhoneNumber } = require('libphonenumber-js')
 
 exports.teamMemberCreate = class teamMemberCreate extends Action {
   constructor () {
@@ -31,6 +32,11 @@ exports.teamMemberCreate = class teamMemberCreate extends Action {
       lastName: {
         required: false,
         validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      phoneNumber: {
+        required: false,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
       }
     }
   }
@@ -67,6 +73,52 @@ exports.teamMemberList = class teamMemberList extends Action {
   }
 }
 
+exports.teamMemberEdit = class teamMemberEdit extends Action {
+  constructor () {
+    super()
+    this.name = 'teamMember:edit'
+    this.description = 'to edit a team member'
+    this.outputExample = {}
+    this.middleware = ['logged-in-session', 'team-membership']
+  }
+
+  inputs () {
+    return {
+      teamId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      userId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      email: {
+        required: false,
+        validator: s => { return validator.isEmail(s) }
+      },
+      firstName: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      lastName: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      phoneNumber: {
+        required: false,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
+      }
+    }
+  }
+
+  async run ({ response, params, team, session }) {
+    if (session.userId === params.userId) { throw new Error('you cannot edit yourself via this method') }
+    const teamMember = await team.editTeamMember(params)
+    response.teamMember = await teamMember.apiData()
+  }
+}
+
 exports.teamMemberDestroy = class teamMemberDestroy extends Action {
   constructor () {
     super()
@@ -89,7 +141,8 @@ exports.teamMemberDestroy = class teamMemberDestroy extends Action {
     }
   }
 
-  async run ({ response, params, team }) {
+  async run ({ response, params, team, session }) {
+    if (session.userId === params.userId) { throw new Error('you cannot remove yourself from a team') }
     await team.removeTeamMember(params.userId)
     response.success = true
   }

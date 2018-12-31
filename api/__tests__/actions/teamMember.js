@@ -59,19 +59,51 @@ describe('user', () => {
     })
   })
 
+  describe('team:members:edit', () => {
+    afterAll(async () => {
+      const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
+      mario.firstName = 'Mario'
+      await mario.save()
+    })
+
+    test('can edit team members', async () => {
+      const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
+      connection.params = { csrfToken, teamId: team.id, userId: mario.id, firstName: 'Mario!!!' }
+      let { error, teamMember } = await api.specHelper.runAction('teamMember:edit', connection)
+
+      expect(error).toBeUndefined()
+      expect(teamMember.firstName).toEqual('Mario!!!')
+      expect(teamMember.lastName).toEqual('Mario')
+      expect(teamMember.email).toEqual('mario@example.com')
+    })
+
+    test('cannot edit myself', async () => {
+      connection.params = { csrfToken, teamId: team.id, userId: user.id, firstName: 'NewName' }
+      let { error } = await api.specHelper.runAction('teamMember:edit', connection)
+
+      expect(error).toEqual('Error: you cannot edit yourself via this method')
+    })
+  })
+
   describe('team:members:list', () => {
-    test('can list team members', async () => {
+    test('can list team members sorted by name', async () => {
       connection.params = { csrfToken, teamId: team.id }
       let { error, teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
 
       expect(error).toBeUndefined()
       expect(teamMembers.length).toEqual(2)
-      expect(teamMembers[0].firstName).toEqual('Peach')
-      expect(teamMembers[1].firstName).toEqual('Mario')
+      expect(teamMembers[1].firstName).toEqual('Peach')
+      expect(teamMembers[0].firstName).toEqual('Mario')
     })
   })
 
   describe('team:members:remove', () => {
+    test('cannot remove yourself from the team', async () => {
+      connection.params = { csrfToken, teamId: team.id, userId: user.id }
+      let { error } = await api.specHelper.runAction('teamMember:destroy', connection)
+      expect(error).toEqual('Error: you cannot remove yourself from a team')
+    })
+
     test('can remove a team teamMembers', async () => {
       const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
       connection.params = { csrfToken, teamId: team.id, userId: mario.id }

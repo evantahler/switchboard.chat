@@ -1,9 +1,10 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
-import DestroyContactForm from '../../forms/contact/destroy.js'
+import DestroyTeamMemberForm from '../../forms/teamMember/destroy.js'
+import TeamMemberRepository from './../../../repositories/teamMember'
 import ErrorAlert from './../../alerts/error'
 
-class DestroyContactModal extends React.Component {
+class DestroyTeamMemberModal extends React.Component {
   constructor () {
     super()
 
@@ -15,12 +16,18 @@ class DestroyContactModal extends React.Component {
     }
   }
 
-  handleClose () {
-    this.setState({ show: false })
+  async setTeamMember () {
+    const teamMember = this.props.teamMember
+    await TeamMemberRepository.set({ teamMember })
   }
 
-  handleShow () {
+  async handleShow () {
+    await this.setTeamMember`()`
     this.setState({ show: true })
+  }
+
+  handleClose () {
+    this.setState({ show: false })
   }
 
   render () {
@@ -30,11 +37,11 @@ class DestroyContactModal extends React.Component {
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Destroy Contact</Modal.Title>
+            <Modal.Title>Destroy Team Member</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <ErrorAlert />
-            <DestroyContactForm handleClose={this.handleClose} />
+            <DestroyTeamMemberForm handleClose={this.handleClose} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant='secondary' onClick={this.handleClose}>
@@ -47,4 +54,4 @@ class DestroyContactModal extends React.Component {
   }
 }
 
-export default DestroyContactModal
+export default DestroyTeamMemberModal

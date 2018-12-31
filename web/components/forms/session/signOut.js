@@ -10,6 +10,8 @@ import FoldersRepository from './../../../repositories/folders'
 import MessagesRepository from './../../../repositories/messages'
 import TeamRepository from './../../../repositories/team'
 import TeamsRepository from './../../../repositories/teams'
+import TeamMemberRepository from './../../../repositories/teamMember'
+import TeamMembersRepository from './../../../repositories/teamMembers'
 
 class SignOutForm extends React.Component {
   componentDidMount () {
@@ -27,6 +29,8 @@ class SignOutForm extends React.Component {
     await FoldersRepository.remove()
     await TeamRepository.remove()
     await TeamsRepository.remove()
+    await TeamMemberRepository.remove()
+    await TeamMembersRepository.remove()
     Router.push('/')
   }
 

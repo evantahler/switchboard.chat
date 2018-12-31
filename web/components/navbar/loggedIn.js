@@ -8,6 +8,8 @@ import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import FoldersRepository from './../../repositories/folders'
+import TeamMemberRepository from './../../repositories/teamMember'
+import TeamMembersRepository from './../../repositories/teamMembers'
 
 class NavbarLoggedIn extends React.Component {
   constructor () {
@@ -35,6 +37,8 @@ class NavbarLoggedIn extends React.Component {
     await ContactRepository.remove()
     await MessagesRepository.remove()
     await FoldersRepository.remove()
+    await TeamMemberRepository.remove()
+    await TeamMembersRepository.remove()
 
     let session = await SessionRepository.get()
     session.team = team
@@ -63,6 +67,11 @@ class NavbarLoggedIn extends React.Component {
             {
               team.id
                 ? <HighlightableNavigationLink href='/team'>{team.name} Dashboard</HighlightableNavigationLink>
+                : null
+            }
+            {
+              team.id
+                ? <HighlightableNavigationLink href='/team/members'>Team Members</HighlightableNavigationLink>
                 : null
             }
           </Nav>

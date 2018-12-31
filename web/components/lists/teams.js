@@ -7,6 +7,8 @@ import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import FoldersRepository from './../../repositories/folders'
+import TeamMemberRepository from './../../repositories/teamMember'
+import TeamMembersRepository from './../../repositories/teamMembers'
 
 class TeamCard extends React.Component {
   async goToTeam (team, subpath = '') {
@@ -14,6 +16,8 @@ class TeamCard extends React.Component {
     await ContactRepository.remove()
     await MessagesRepository.remove()
     await FoldersRepository.remove()
+    await TeamMemberRepository.remove()
+    await TeamMembersRepository.remove()
 
     let session = await SessionRepository.get()
     session.team = team
@@ -39,7 +43,9 @@ class TeamCard extends React.Component {
           <ButtonToolbar>
             <Button variant='primary' onClick={this.goToTeam.bind(this, team, '')}>Go to to {team.name}</Button>
             &nbsp;
-            <Button variant='info' onClick={this.goToTeam.bind(this, team, '/edit')}>Edit Team</Button>
+            <Button variant='outline-warning' onClick={this.goToTeam.bind(this, team, '/members')}>Team Members</Button>
+            &nbsp;
+            <Button variant='outline-info' onClick={this.goToTeam.bind(this, team, '/edit')}>Edit Team</Button>
           </ButtonToolbar>
         </Card.Body>
       </Card>
