@@ -23,15 +23,25 @@ exports.messageSend = class messageSend extends Action {
       message: {
         required: true,
         validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      type: {
+        required: true,
+        default: 'message'
       }
     }
   }
 
-  async run ({ response, params, team }) {
+  async run ({ response, params, user, team }) {
     const contact = await api.models.Contact.findOne({ where: { id: params.contactId, teamId: team.id } })
     if (!contact) { throw new Error('contact not a member of this team') }
-    const message = await team.addMessage(contact, params.message)
-    response.message = message.apiData()
+
+    if (this.props.type === 'message') {
+      const message = await team.addMessage(contact, params.message)
+      response.message = message.apiData()
+    } else {
+      const note = await team.addNote(contact, user, params.message)
+      response.note = note.apiData()
+    }
   }
 }
 

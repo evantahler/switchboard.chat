@@ -31,7 +31,8 @@ exports['default'] = {
         { path: '/twilio/in', action: 'twilio:in' },
         { path: '/twilio/voice', action: 'twilio:voice' },
         { path: '/folder', action: 'folder:edit' },
-        { path: '/contact', action: 'contact:edit' }
+        { path: '/contact', action: 'contact:edit' },
+        { path: '/message', action: 'message:send' }
       ],
 
       delete: [

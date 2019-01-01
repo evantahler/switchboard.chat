@@ -4,6 +4,7 @@ import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import EditContactModal from './../modals/contacts/edit.js'
 import DestroyContactModal from './../modals/contacts/destroy.js'
+import MessageAddForm from './../forms/message/add.js'
 
 class MessageCard extends React.Component {
   render () {
@@ -64,6 +65,8 @@ class MessagesList extends React.Component {
     return (
       <div>
         <h2>📞 with {contact.firstName} {contact.lastName} <EditContactModal /> <DestroyContactModal /></h2>
+        <MessageAddForm />
+        <br />
         { messages.length > 0
           ? messages.map((message) => { return <MessageCard key={`message-${message.id}`} message={message} /> })
           : <Alert variant='info'>No messages yet</Alert>
