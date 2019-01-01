@@ -43,6 +43,8 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: true
       }
+    }, {
+      charset: 'utf8mb4'
     })
 
     await migration.addIndex('users', ['email'], {

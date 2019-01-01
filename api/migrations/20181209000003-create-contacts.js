@@ -25,6 +25,8 @@ module.exports = {
         type: DataTypes.STRING(191),
         allowNull: false
       }
+    }, {
+      charset: 'utf8mb4'
     })
 
     await migration.addIndex('contacts', ['phoneNumber', 'folderId'], {

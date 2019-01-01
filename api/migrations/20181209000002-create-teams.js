@@ -49,6 +49,8 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       }
+    }, {
+      charset: 'utf8mb4'
     })
 
     await migration.addIndex('teams', ['name'], {

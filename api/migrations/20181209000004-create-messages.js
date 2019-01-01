@@ -33,6 +33,8 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false
       }
+    }, {
+      charset: 'utf8mb4'
     })
   },
 

@@ -104,14 +104,14 @@ class NewTeamForm extends React.Component {
 
           <Form.Group controlId='voiceResponse'>
             <Form.Label>Voice Response</Form.Label>
-            <Form.Control autoFocus value={team.voiceResponse} required type='text' placeholder='Send a text...' onChange={e => update(e)} />
+            <Form.Control value={team.voiceResponse} required type='text' placeholder='Send a text...' onChange={e => update(e)} />
             <Form.Text className='text-muted'>This message will be read to someone who calls your team phone number.</Form.Text>
             <Form.Control.Feedback type='invalid'>A Voice Response s is required</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId='billingEmail'>
             <Form.Label>Billing Email Adress</Form.Label>
-            <Form.Control autoFocus value={team.billingEmail} required type='email' placeholder='you@example.com' onChange={e => update(e)} />
+            <Form.Control value={team.billingEmail} required type='email' placeholder='you@example.com' onChange={e => update(e)} />
             <Form.Control.Feedback type='invalid'>A billing Email Adress is required</Form.Control.Feedback>
           </Form.Group>
 

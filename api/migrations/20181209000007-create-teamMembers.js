@@ -17,6 +17,8 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false
       }
+    }, {
+      charset: 'utf8mb4'
     })
 
     await migration.addIndex('teamMembers', ['userId', 'teamId'], {

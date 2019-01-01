@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Alert } from 'react-bootstrap'
+import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import ContactsRepository from './../../repositories/contacts'
 import FoldersRepository from './../../repositories/folders'
@@ -19,8 +20,13 @@ class ContactCard extends React.Component {
         <Card.Body>
           <Card.Title>{contact.firstName} {contact.lastName}</Card.Title>
           <Card.Text>
-            {contact.phoneNumber} <br />
-            Most Recent Message @ {contact.mostRecentMessage || 'never'}
+            <span>{contact.phoneNumber}</span>
+            <br />
+            {
+              contact.mostRecentMessage
+                ? <span className='text-muted'>Last Message <Moment fromNow ago>{contact.mostRecentMessage}</Moment> ago</span>
+                : <span className='text-muted'>No message</span>
+            }
           </Card.Text>
         </Card.Body>
       </Card>

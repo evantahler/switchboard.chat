@@ -82,5 +82,14 @@ describe('folder', () => {
       expect(folders.length).toEqual(1)
       expect(folders[0].name).toEqual('default folder')
     })
+
+    test('cannot delete the default folder', async () => {
+      connection.params = { csrfToken, teamId: team.id }
+      let { folders } = await api.specHelper.runAction('folders:list', connection)
+
+      connection.params = { csrfToken, teamId: team.id, folderId: folders[0].id }
+      let { error } = await api.specHelper.runAction('folder:destroy', connection)
+      expect(error).toEqual('Error: this folder cannot be deleted')
+    })
   })
 })

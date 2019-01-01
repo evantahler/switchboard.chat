@@ -25,6 +25,8 @@ module.exports = {
         type: DataTypes.TEXT,
         allowNull: false
       }
+    }, {
+      charset: 'utf8mb4'
     })
   },
 

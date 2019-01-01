@@ -195,7 +195,9 @@ const Team = function (sequelize, DataTypes) {
       userId: user.id
     })
 
-    return note.save()
+    await note.save()
+    await api.chatRoom.broadcast({}, 'team:' + this.id, await note.apiData())
+    return note
   }
 
   Model.prototype.addMessage = async function (contact, body) {
@@ -212,13 +214,13 @@ const Team = function (sequelize, DataTypes) {
     await message.save()
 
     try {
-      await api.twilio.client.sendMessage({ to: message.to, from: message.from, body })
+      await api.twilio.client.messages.create({ to: message.to, from: message.from, body })
     } catch (error) {
       await message.destroy()
       throw error
     }
 
-    await api.chatRoom.broadcast({}, 'team:' + this.id, message.apiData())
+    await api.chatRoom.broadcast({}, 'team:' + this.id, await message.apiData())
     return message
   }
 

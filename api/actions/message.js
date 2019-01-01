@@ -31,16 +31,20 @@ exports.messageSend = class messageSend extends Action {
     }
   }
 
-  async run ({ response, params, user, team }) {
+  async run ({ response, params, team, session }) {
     const contact = await api.models.Contact.findOne({ where: { id: params.contactId, teamId: team.id } })
     if (!contact) { throw new Error('contact not a member of this team') }
+    const user = await api.models.User.findOne({ where: { id: session.userId } })
+    if (!user) { throw new Error('user not found') }
 
-    if (this.props.type === 'message') {
+    if (params.type === 'message') {
       const message = await team.addMessage(contact, params.message)
       response.message = message.apiData()
-    } else {
+    } else if (params.type === 'note') {
       const note = await team.addNote(contact, user, params.message)
       response.note = note.apiData()
+    } else {
+      throw new Error(`message type ${params.type} not known`)
     }
   }
 }

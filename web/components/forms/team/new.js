@@ -81,8 +81,8 @@ class NewTeamForm extends React.Component {
     const { validated, team, phoneNumbers, areaCodes, stripeToken, submitting } = this.state
 
     const update = async (event) => {
-      team[event.target.id] = event.target.value
       const previousAreaCode = team.areaCode
+      team[event.target.id] = event.target.value
       if (team.areaCode && (!team.phoneNumber || previousAreaCode !== team.areaCode)) {
         this.loadPhoneNumbers()
       }

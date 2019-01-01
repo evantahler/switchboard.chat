@@ -27,6 +27,8 @@ const Note = function (sequelize, DataTypes) {
   }
 
   Model.prototype.apiData = async function () {
+    const user = await this.user()
+
     return {
       id: this.id,
       type: 'note',
@@ -35,7 +37,7 @@ const Note = function (sequelize, DataTypes) {
       teamId: this.teamId,
       userId: this.userId,
       message: this.message,
-      user: await this.user().apiData()
+      user: user.apiData()
     }
   }
 

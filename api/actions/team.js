@@ -45,7 +45,7 @@ exports.teamCreate = class teamCreate extends Action {
     await teamMember.save()
 
     await new TeamRegisterOp(team, teamMember, params.stripeToken).run()
-    const folder = new api.models.Folder({ teamId: team.id, name: 'default folder' })
+    const folder = new api.models.Folder({ teamId: team.id, name: 'default folder', deletable: false })
     await folder.save()
 
     response.team = team.apiData()

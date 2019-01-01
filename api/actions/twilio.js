@@ -34,9 +34,57 @@ exports.twilioIn = class listNumbers extends Action {
     this.middleware = []
   }
 
-  inputs () {}
+  inputs () {
+    return {
+      To: {
+        required: true,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
+      },
+      From: {
+        required: true,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
+      },
+      Body: { required: true },
+      AccountSid: { required: true }
+    }
+  }
 
-  async run ({ response, params, session }) { }
+  async run (data) {
+    const { params, connection } = data
+    if (params.AccountSid !== api.config.twilio.ssid) { throw new Error('Twilio account SID does not match') }
+    const team = await api.models.Team.findOne({ where: { phoneNumber: params.To } })
+    if (!team) { throw new Error('team not found') }
+    let contact = await api.models.Contact.findOne({ where: { phoneNumber: params.From } })
+
+    if (!contact) {
+      const folder = await api.models.Folder.findOne({ where: { teamId: team.id, deletable: false } })
+      contact = await team.addContact({
+        firstName: 'unknown',
+        lastName: 'unknown',
+        phoneNumber: params.From,
+        folderId: folder.id
+      })
+    }
+
+    const message = new api.models.Message({
+      from: params.From,
+      to: params.To,
+      message: params.Body,
+      direction: 'in',
+      teamId: team.id,
+      read: false,
+      contactId: contact.id
+    })
+
+    await message.save()
+    await api.chatRoom.broadcast({}, 'team:' + team.id, await message.apiData())
+
+    connection.setHeader('Content-Type', 'application/xml')
+    connection.rawConnection.res.end('<Response></Response>')
+    data.toRender = false
+  }
 }
 
 exports.twilioVoice = class listNumbers extends Action {
@@ -50,7 +98,12 @@ exports.twilioVoice = class listNumbers extends Action {
 
   inputs () {
     return {
-      To: { required: true }
+      To: {
+        required: true,
+        formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
+        validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
+      },
+      AccountSid: { required: true }
     }
   }
 
@@ -58,9 +111,9 @@ exports.twilioVoice = class listNumbers extends Action {
     const { params, connection } = data
     let response = 'We are sorry, that number is not recognized.  Goodbye.'
 
-    const incommingNumber = parsePhoneNumber((params.To), api.config.twilio.phoneNumberDefaultCountry).formatInternational()
+    if (params.AccountSid !== api.config.twilio.ssid) { throw new Error('Twilio account SID does not match') }
 
-    const team = await api.models.Team.findOne({ where: { phoneNumber: incommingNumber } })
+    const team = await api.models.Team.findOne({ where: { phoneNumber: params.To } })
     if (team) { response = team.voiceResponse }
     const xml = api.twilio.renderVoiceResponse(response)
     connection.setHeader('Content-Type', 'application/xml')

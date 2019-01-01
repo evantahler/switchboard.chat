@@ -73,19 +73,22 @@ class NavbarLoggedIn extends React.Component {
             }
             {
               team.id
-                ? <HighlightableNavigationLink href='/team/members'>Team Members</HighlightableNavigationLink>
+                ? <NavDropdown title='Team Settings' id='team-dropdown'>
+                  <NavDropdown.Item onClick={() => this.goTo('/team/members')}>Members</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => this.goTo('/team/edit')}>Settings</NavDropdown.Item>
+                </NavDropdown>
                 : null
             }
           </Nav>
           <Nav className='justify-content-end'>
-            <NavDropdown title='Teams' id='nav-dropdown'>
+            <NavDropdown title='Teams' id='teams-dropdown'>
               {
                 this.state.teams.map(team => {
                   return <NavDropdown.Item key={`team-${team.id}`} onClick={() => this.setTeam(team)}>{team.name}</NavDropdown.Item>
                 })
               }
             </NavDropdown>
-            <NavDropdown title='Settings' id='nav-dropdown' className='mr-right'>
+            <NavDropdown title='Settings' id='user-dropdown' className='mr-right'>
               <NavDropdown.Item onClick={() => this.goTo('/user/profile')}>Profile</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/user/teams')}>Teams</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/session/sign-out')}>Sign Out</NavDropdown.Item>

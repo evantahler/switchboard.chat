@@ -32,7 +32,8 @@ exports['default'] = {
       filteredParams: [
         'password',
         'csrfToken',
-        'stripeToken'
+        'stripeToken',
+        'AccountSid'
       ],
       // values that signify missing params
       missingParamChecks: [null, '', undefined],

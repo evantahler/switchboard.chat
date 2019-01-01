@@ -21,7 +21,8 @@ exports['default'] = {
         { path: '/session', action: 'session:create' },
         { path: '/teamMember', action: 'teamMember:create' },
         { path: '/folder', action: 'folder:create' },
-        { path: '/contact', action: 'contact:create' }
+        { path: '/contact', action: 'contact:create' },
+        { path: '/message', action: 'message:send' }
       ],
 
       post: [
@@ -31,8 +32,7 @@ exports['default'] = {
         { path: '/twilio/in', action: 'twilio:in' },
         { path: '/twilio/voice', action: 'twilio:voice' },
         { path: '/folder', action: 'folder:edit' },
-        { path: '/contact', action: 'contact:edit' },
-        { path: '/message', action: 'message:send' }
+        { path: '/contact', action: 'contact:edit' }
       ],
 
       delete: [
