@@ -20,7 +20,7 @@ class MessageCard extends React.Component {
   }
 }
 
-class ContactsList extends React.Component {
+class MessagesList extends React.Component {
   constructor () {
     super()
     this.state = { contact: {}, messages: [] }
@@ -43,6 +43,7 @@ class ContactsList extends React.Component {
     const contactResponse = await ContactRepository.get()
     if (contactResponse && contactResponse.contact) {
       this.setState({ contact: contactResponse.contact })
+      await MessagesRepository.setKey()
       const messagesResponse = await MessagesRepository.get()
       if (messagesResponse) { this.setState({ messages: messagesResponse.messages }) }
     }
@@ -72,4 +73,4 @@ class ContactsList extends React.Component {
   }
 }
 
-export default ContactsList
+export default MessagesList

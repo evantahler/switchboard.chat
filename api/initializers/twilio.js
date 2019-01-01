@@ -59,30 +59,6 @@ module.exports = class TwilioInitializer extends Initializer {
         return client.incomingPhoneNumbers(team.sid).update({ smsUrl, voiceUrl })
       },
 
-      sendMessage: async (team, person, body) => {
-        const from = team.phoneNumber
-        const to = person.phoneNumber
-        const message = api.models.message.build({
-          from: from,
-          to: to,
-          message: body,
-          direction: 'out',
-          read: true,
-          teamId: team.id
-        })
-
-        await message.save()
-
-        try {
-          await api.twilio.client.sendMessage({ to, from, body: message.message })
-        } catch (error) {
-          await message.destroy()
-          throw error
-        }
-
-        return api.chatRoom.broadcast({}, 'team:' + team.id, message.apiData())
-      },
-
       renderVoiceResponse: (message) => {
         const VoiceResponse = Twilio.twiml.VoiceResponse
         const response = new VoiceResponse()

@@ -23,4 +23,5 @@ repository.includeParamsInRequests = async () => {
     teamId: session && session.team ? session.team.id : null
   }
 }
+
 export default repository

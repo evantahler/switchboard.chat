@@ -186,6 +186,40 @@ const Team = function (sequelize, DataTypes) {
     return { messagesIn, messagesOut }
   }
 
+  Model.prototype.addMessage = async function (contact, body) {
+    if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
+    const message = new api.models.Message({
+      from: this.phoneNumber,
+      to: contact.phoneNumber,
+      message: body,
+      direction: 'out',
+      read: false,
+      teamId: this.id,
+      contactId: contact.id
+    })
+    await message.save()
+
+    try {
+      await api.twilio.client.sendMessage({ to: message.to, from: message.from, body })
+    } catch (error) {
+      await message.destroy()
+      throw error
+    }
+
+    await api.chatRoom.broadcast({}, 'team:' + this.id, message.apiData())
+    return message
+  }
+
+  Model.prototype.messagesAndNotes = async function (contact, limit = 100, offset = 0) {
+    if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
+    const messages = await api.models.Message.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
+    const notes = await api.models.Note.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
+    let orderedResults = [].concat(messages, notes)
+    orderedResults.sort((a, b) => { return a.createdAt.getTime() > b.createdAt.getTime() })
+
+    return orderedResults
+  }
+
   Model.prototype.apiData = function () {
     return {
       id: this.id,

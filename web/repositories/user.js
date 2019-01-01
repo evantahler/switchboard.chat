@@ -22,4 +22,5 @@ repository.includeParamsInRequests = async () => {
   const session = await SessionRepository.get()
   return { csrfToken: session ? session.csrfToken : '' }
 }
+
 export default repository

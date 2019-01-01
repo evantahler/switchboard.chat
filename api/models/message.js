@@ -35,6 +35,7 @@ const Message = function (sequelize, DataTypes) {
   Model.prototype.apiData = function () {
     return {
       id: this.id,
+      type: 'message',
       from: this.from,
       to: this.to,
       message: this.message,

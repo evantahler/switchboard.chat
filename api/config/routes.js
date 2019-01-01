@@ -11,6 +11,7 @@ exports['default'] = {
         { path: '/teamMembers', action: 'teamMembers:list' },
         { path: '/folders', action: 'folders:list' },
         { path: '/contacts', action: 'contacts:list' },
+        { path: '/messages', action: 'messages:list' },
         { path: '/twilio/listNumbers', action: 'twilio:listNumbers' }
       ],
 
