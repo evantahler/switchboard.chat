@@ -63,7 +63,7 @@ class MessagesList extends React.Component {
 
     return (
       <div>
-        <h2>Messages with {contact.firstName} {contact.lastName} <EditContactModal /> <DestroyContactModal /></h2>
+        <h2>📞 with {contact.firstName} {contact.lastName} <EditContactModal /> <DestroyContactModal /></h2>
         { messages.length > 0
           ? messages.map((message) => { return <MessageCard key={`message-${message.id}`} message={message} /> })
           : <Alert variant='info'>No messages yet</Alert>
