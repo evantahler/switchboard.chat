@@ -7,6 +7,7 @@ import TeamsRepository from './../../repositories/teams'
 import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
+import MessageRepository from './../../repositories/message'
 import FoldersRepository from './../../repositories/folders'
 import TeamMemberRepository from './../../repositories/teamMember'
 import TeamMembersRepository from './../../repositories/teamMembers'
@@ -36,6 +37,7 @@ class NavbarLoggedIn extends React.Component {
     await ContactsRepository.remove()
     await ContactRepository.remove()
     await MessagesRepository.remove()
+    await MessageRepository.remove()
     await FoldersRepository.remove()
     await TeamMemberRepository.remove()
     await TeamMembersRepository.remove()

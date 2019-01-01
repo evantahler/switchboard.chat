@@ -7,6 +7,7 @@ class TeamRepository extends BaseRepository {
   constructor () {
     super()
     this.name = 'team'
+    this.ttl = 1000 * 60 * 60 * 24 // 1 day
     this.key = 'repository:team'
     this.responseKeys = ['team']
     this.routes.create.path = '/api/team'

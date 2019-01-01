@@ -2,20 +2,18 @@ import BaseRepository from './base'
 import SuccessRepository from './success'
 import ErrorRepository from './error'
 import SessionRepository from './session'
+import ContactRepository from './contact'
 
 class UserRepository extends BaseRepository {
   constructor () {
     super()
-    this.name = 'contact'
-    this.ttl = 1000 * 60 * 60 * 24 // 1 day
-    this.key = 'repository:contact'
-    this.responseKeys = ['contact']
-    this.routes.create.path = '/api/contact'
-    this.routes.update.path = '/api/contact'
-    this.routes.destroy.path = '/api/contact'
+    this.name = 'message'
+    this.key = 'repository:message'
+    this.responseKeys = ['message']
+    this.routes.create.path = '/api/message'
   }
 
-  // concact information will come in full from the contact list
+  // concact information will come in full from the form
   async hydrate (contact) {
     await this.set({ contact })
   }
@@ -26,9 +24,11 @@ repository.successHandler = SuccessRepository
 repository.errorHandler = ErrorRepository
 repository.includeParamsInRequests = async () => {
   const session = await SessionRepository.get()
+  const contactResponse = await ContactRepository.get()
   return {
     csrfToken: session ? session.csrfToken : '',
-    teamId: session && session.team ? session.team.id : null
+    teamId: session && session.team ? session.team.id : null,
+    contactId: contactResponse && contactResponse.contact ? contactResponse.contact.id : null
   }
 }
 

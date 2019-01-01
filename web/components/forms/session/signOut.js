@@ -8,6 +8,7 @@ import ContactsRepository from './../../../repositories/contacts'
 import ContactRepository from './../../../repositories/contact'
 import FoldersRepository from './../../../repositories/folders'
 import MessagesRepository from './../../../repositories/messages'
+import MessageRepository from './../../../repositories/message'
 import TeamRepository from './../../../repositories/team'
 import TeamsRepository from './../../../repositories/teams'
 import TeamMemberRepository from './../../../repositories/teamMember'
@@ -26,6 +27,7 @@ class SignOutForm extends React.Component {
     await ContactsRepository.remove()
     await ContactRepository.remove()
     await MessagesRepository.remove()
+    await MessageRepository.remove()
     await FoldersRepository.remove()
     await TeamRepository.remove()
     await TeamsRepository.remove()

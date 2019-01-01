@@ -186,6 +186,18 @@ const Team = function (sequelize, DataTypes) {
     return { messagesIn, messagesOut }
   }
 
+  Model.prototype.addNote = async function (contact, user, body) {
+    if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
+    const note = new api.models.Note({
+      message: body,
+      teamId: this.id,
+      contactId: contact.id,
+      userId: user.id
+    })
+
+    return note.save()
+  }
+
   Model.prototype.addMessage = async function (contact, body) {
     if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
     const message = new api.models.Message({
