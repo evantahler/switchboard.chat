@@ -1,7 +1,6 @@
 import React from 'react'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import MessageRepository from './../../../repositories/message'
-import MessagesRepository from './../../../repositories/messages'
 
 class MessageAddForm extends React.Component {
   constructor () {
@@ -28,7 +27,6 @@ class MessageAddForm extends React.Component {
     const saveResponse = await MessageRepository.create(data)
     if (saveResponse) {
       this.setState({ validated: false, message: '' })
-      await MessagesRepository.hydrate()
     }
   }
 

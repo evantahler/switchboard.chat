@@ -196,7 +196,10 @@ const Team = function (sequelize, DataTypes) {
     })
 
     await note.save()
-    await api.chatRoom.broadcast({}, 'team:' + this.id, await note.apiData())
+
+    const channel = `team:${this.id}`
+    try { await api.chatRoom.add(channel) } catch (error) { }
+    await api.chatRoom.broadcast({}, channel, await note.apiData())
     return note
   }
 
@@ -211,6 +214,7 @@ const Team = function (sequelize, DataTypes) {
       teamId: this.id,
       contactId: contact.id
     })
+
     await message.save()
 
     try {
@@ -220,7 +224,9 @@ const Team = function (sequelize, DataTypes) {
       throw error
     }
 
-    await api.chatRoom.broadcast({}, 'team:' + this.id, await message.apiData())
+    const channel = `team:${this.id}`
+    try { await api.chatRoom.add(channel) } catch (error) { }
+    await api.chatRoom.broadcast({}, channel, await message.apiData())
     return message
   }
 

@@ -94,8 +94,8 @@ const User = function (sequelize, DataTypes) {
       email: this.email,
       phoneNumber: this.phoneNumber,
       firstName: this.firstName,
-      lastName: this.lastName,
-      requirePasswordChange: this.requirePasswordChange
+      lastName: this.lastName
+      // requirePasswordChange: this.requirePasswordChange
     }
   }
 

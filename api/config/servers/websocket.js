@@ -8,7 +8,8 @@ exports['default'] = {
       return {
         enabled: true,
         // you can pass a FQDN (string) here or 'window.location.origin'
-        clientUrl: 'window.location.origin',
+        // clientUrl: 'window.location.origin',
+        clientUrl: process.env.API_URL,
         // Directory to render client-side JS.
         // Path should start with "/" and will be built starting from api.config..general.paths.public
         clientJsPath: 'javascript/',

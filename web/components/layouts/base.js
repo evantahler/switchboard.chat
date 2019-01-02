@@ -25,6 +25,7 @@ class PageBase extends React.Component {
         <link rel='icon' data-emoji='☎️' type='image/png' />
         <link rel='stylesheet' type='text/css' href='/static/css/bootstrap.min.css' />
         <script src='https://js.stripe.com/v3/' />
+        <script src={`${process.env.API_URL}/public/javascript/ActionheroWebsocketClient.min.js`} />
         <title>{this.state.pageTitle}</title>
       </Head>
     )

@@ -10,9 +10,6 @@ class ContactsRepository extends BaseRepository {
     this.key = 'repository:contacts'
     this.responseKeys = ['contacts']
     this.routes.get.path = '/api/contacts'
-    this.routes.create.path = '/api/contact'
-    this.routes.update.path = '/api/contact'
-    this.routes.destroy.path = '/api/contact'
   }
 }
 

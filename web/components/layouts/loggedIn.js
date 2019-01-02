@@ -1,7 +1,7 @@
 import React from 'react'
 import PageBase from './base'
 import NavbarLoggedIn from './../navbar/loggedIn'
-import Footer from './../footer/footer'
+import LoggedInFooter from './../footer/loggedIn'
 import LoggedOutCatcher from './../loggedOutCatcher'
 
 class PageLoggedOut extends React.Component {
@@ -12,7 +12,7 @@ class PageLoggedOut extends React.Component {
         <br />
         { this.props.children }
         <hr />
-        <Footer />
+        <LoggedInFooter />
         <LoggedOutCatcher />
       </PageBase>
     )
