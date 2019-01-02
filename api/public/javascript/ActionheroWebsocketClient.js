@@ -3674,7 +3674,9 @@ if (typeof Primus === 'undefined') {
 }
 
 ActionheroWebsocketClient.prototype.defaults = function () {
-  return { apiPath: '/api', cookieKey: 'sessionID', url: undefined }
+  return { apiPath: '/api',
+  cookieKey: 'sessionID',
+  url: 'https://73849491.ngrok.io' }
 }
 
 // //////////////

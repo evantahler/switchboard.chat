@@ -60,7 +60,10 @@ class TeamListener extends React.Component {
 
     client.on('connected', () => { if (this.mounted) { this.setState({ connected: true }) } })
     client.on('disconnected', () => { if (this.mounted) { this.setState({ connected: false }) } })
-    client.on('error', (error) => { ErrorRepository.set({ error: `WS Error: ${error}` }) })
+    client.on('error', (error) => {
+      console.error(error)
+      ErrorRepository.set({ error: `WS Error: ${error}` })
+    })
     client.on('say', (message) => { messageHandler(message) })
 
     this.setState({ client })

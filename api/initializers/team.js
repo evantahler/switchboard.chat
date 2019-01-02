@@ -25,6 +25,19 @@ module.exports = class TeamInitializer extends Initializer {
       }
     }
 
+    const teamChatMiddlewareAuth = {
+      name: 'team-chat-middleware-auth',
+      priority: 1000,
+      join: async (connection, room) => {
+        const teamId = parseInt(room.split(':')[1])
+        const sessionData = await api.session.load(connection)
+        if (!sessionData || !sessionData.userId) { return connection.end() }
+        const teamMember = await api.models.TeamMember.findOne({ where: { userId: sessionData.userId, teamId } })
+        if (!teamMember) { return connection.end() }
+      }
+    }
+
     api.actions.addMiddleware(ensureTeamMiddleware)
+    api.chatRoom.addMiddleware(teamChatMiddlewareAuth)
   }
 }
