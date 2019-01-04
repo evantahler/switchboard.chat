@@ -1,6 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import { Container, Row, Col } from 'react-bootstrap'
+import GoogleAnalytics from './../googleAnalytics'
 import renderEmojiAsFavicon from './../../scripts/renderEmojiAsFavicon'
 import SuccessAlert from './../alerts/success'
 import ErrorAlert from './../alerts/error'
@@ -49,6 +50,7 @@ class PageBase extends React.Component {
             </Col>
           </Row>
         </Container>
+        <GoogleAnalytics />
       </div>
     )
   }
