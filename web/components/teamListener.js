@@ -62,13 +62,15 @@ class TeamListener extends React.Component {
     client.on('disconnected', () => { if (this.mounted) { this.setState({ connected: false }) } })
     client.on('error', (error) => {
       console.error(error)
-      ErrorRepository.set({ error: `WS Error: ${error}` })
+      ErrorRepository.set({ error: `WS ${error}` })
     })
     client.on('say', (message) => { messageHandler(message) })
 
     this.setState({ client })
     await client.connect()
-    await client.roomAdd(`team:${this.state.team.id}`)
+    client.roomAdd(`team:${this.state.team.id}`, (response) => {
+      if (response.error) { ErrorRepository.set({ error: `WS ${response.error}` }) }
+    })
   }
 
   disconnect () {

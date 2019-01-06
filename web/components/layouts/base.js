@@ -2,7 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import { Container, Row, Col } from 'react-bootstrap'
 import GoogleAnalytics from './../googleAnalytics'
-import renderEmojiAsFavicon from './../../scripts/renderEmojiAsFavicon'
 import SuccessAlert from './../alerts/success'
 import ErrorAlert from './../alerts/error'
 
@@ -23,17 +22,15 @@ class PageBase extends React.Component {
     return (
       <Head>
         <meta name='viewport' content='width=device-width' />
-        <link rel='icon' data-emoji='☎️' type='image/png' />
+        <link rel='apple-touch-icon' sizes='180x180' href='/static/favicon/apple-touch-icon.png' />
+        <link rel='icon' type='image/png' sizes='32x32' href='/static/favicon/favicon-32x32.png' />
+        <link rel='icon' type='image/png' sizes='16x16' href='/static/favicon/favicon-16x16.png' />
         <link rel='stylesheet' type='text/css' href='/static/css/bootstrap.min.css' />
         <script src='https://js.stripe.com/v3/' />
         <script src={`${process.env.API_URL}/public/javascript/ActionheroWebsocketClient.min.js`} />
         <title>{this.state.pageTitle}</title>
       </Head>
     )
-  }
-
-  async componentDidMount () {
-    await renderEmojiAsFavicon()
   }
 
   render () {

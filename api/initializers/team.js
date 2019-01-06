@@ -31,9 +31,9 @@ module.exports = class TeamInitializer extends Initializer {
       join: async (connection, room) => {
         const teamId = parseInt(room.split(':')[1])
         const sessionData = await api.session.load(connection)
-        if (!sessionData || !sessionData.userId) { return connection.end() }
+        if (!sessionData || !sessionData.userId) { throw new Error('you are not logged in') }
         const teamMember = await api.models.TeamMember.findOne({ where: { userId: sessionData.userId, teamId } })
-        if (!teamMember) { return connection.end() }
+        if (!teamMember) { throw new Error('you are not a member of this team') }
       }
     }
 
