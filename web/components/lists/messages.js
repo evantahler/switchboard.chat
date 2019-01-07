@@ -3,8 +3,8 @@ import { ListGroup, Alert } from 'react-bootstrap'
 import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
-import EditContactModal from './../modals/contacts/edit.js'
-import DestroyContactModal from './../modals/contacts/destroy.js'
+import EditContactModal from './../modals/contact/edit.js'
+import DestroyContactModal from './../modals/contact/destroy.js'
 import MessageAddForm from './../forms/message/add.js'
 
 class MessageCard extends React.Component {

@@ -1,3 +1,5 @@
+const { api } = require('actionhero')
+
 const Folder = function (sequelize, DataTypes) {
   const Model = sequelize.define('Folder', {
     teamId: {
@@ -28,6 +30,8 @@ const Folder = function (sequelize, DataTypes) {
 
   Model.beforeDestroy(async (instance) => {
     if (instance.deletable === false) { throw new Error('this folder cannot be deleted') }
+    const count = await api.models.Contact.count({ where: { folderId: instance.id } })
+    if (count > 0) { throw new Error('this folder is not empty') }
   })
 
   return Model

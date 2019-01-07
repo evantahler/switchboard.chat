@@ -1,15 +1,14 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import Layout from './../../components/layouts/loggedIn.js'
 import TeamRepository from './../../repositories/team.js'
-import ContactsList from './../../components/lists/contacts.js'
-import MessagesList from './../../components/lists/messages.js'
-import AddContactModal from './../../components/modals/contact/add.js'
+import AddFoldertModal from './../../components/modals/folder/add'
+import FoldersList from './../../components/lists/folders.js'
 
 class Page extends React.Component {
   constructor () {
     super()
     this.state = {
+      contacts: [],
       team: {}
     }
   }
@@ -24,18 +23,11 @@ class Page extends React.Component {
 
     return (
       <Layout>
-        <h1>{team.name}</h1>
+        <h1>{team.name} Folders</h1>
+        <AddFoldertModal />
         <br />
-        <Row>
-          <Col md={4}>
-            <h2>Contacts <AddContactModal /></h2>
-            <ContactsList />
-          </Col>
-
-          <Col md={8}>
-            <MessagesList />
-          </Col>
-        </Row>
+        <br />
+        <FoldersList />
       </Layout>
     )
   }

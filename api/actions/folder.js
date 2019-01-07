@@ -56,7 +56,7 @@ exports.folderEdit = class folderEdit extends Action {
   }
 
   async run ({ response, params, team }) {
-    const folder = await team.updateFolder(params.name)
+    const folder = await team.updateFolder(params)
     response.folder = folder.apiData()
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Alert } from 'react-bootstrap'
+import { Card, Alert, Form } from 'react-bootstrap'
 import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import ContactsRepository from './../../repositories/contacts'
@@ -37,7 +37,12 @@ class ContactCard extends React.Component {
 class ContactsList extends React.Component {
   constructor () {
     super()
-    this.state = { contacts: [], contact: {} }
+    this.state = {
+      contacts: [],
+      folders: [],
+      contact: {},
+      folder: {}
+    }
   }
 
   async componentDidMount () {
@@ -56,7 +61,9 @@ class ContactsList extends React.Component {
   }
 
   async load () {
-    const contactsResponse = await ContactsRepository.get()
+    const folder = this.state.folder
+
+    const contactsResponse = await ContactsRepository.get({ folderId: folder.id })
     if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
     const contactResponse = await ContactRepository.get()
     if (contactResponse) { this.setState({ contact: contactResponse.contact }) }
@@ -65,11 +72,27 @@ class ContactsList extends React.Component {
   }
 
   render () {
-    const contacts = this.state.contacts
-    const contact = this.state.contact
+    const { contact, contacts, folders, folder } = this.state
+
+    const updateFolder = async (event) => {
+      if (event.target.value === '__all') { event.target.value = null }
+      folder[event.target.id] = event.target.value
+      const contactsResponse = await ContactsRepository.hydrate({ folderId: event.target.value })
+      if (contactsResponse) { this.setState({ folder, contacts: contactsResponse.contacts }) }
+    }
 
     return (
       <div>
+        <Form.Group controlId='folderId'>
+          <Form.Label>Folder</Form.Label>
+          <Form.Control value={folder.id} required as='select' onChange={e => updateFolder(e)}>
+            <option value={null}>* All Contacts *</option>
+            { folders.map(f => {
+              return <option value={f.id} key={`folder-${f.id}`}>{f.name}</option>
+            }) }
+          </Form.Control>
+        </Form.Group>
+
         { contacts.length > 0
           ? contacts.map((c) => {
             const active = contact ? (c.id === contact.id) : false

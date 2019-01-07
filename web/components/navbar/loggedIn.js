@@ -9,6 +9,7 @@ import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import MessageRepository from './../../repositories/message'
 import FoldersRepository from './../../repositories/folders'
+import FolderRepository from './../../repositories/folder'
 import TeamMemberRepository from './../../repositories/teamMember'
 import TeamMembersRepository from './../../repositories/teamMembers'
 
@@ -39,6 +40,7 @@ class NavbarLoggedIn extends React.Component {
     await MessagesRepository.remove()
     await MessageRepository.remove()
     await FoldersRepository.remove()
+    await FolderRepository.remove()
     await TeamMemberRepository.remove()
     await TeamMembersRepository.remove()
 
@@ -74,6 +76,7 @@ class NavbarLoggedIn extends React.Component {
             {
               team.id
                 ? <NavDropdown title='Team Settings' id='team-dropdown'>
+                  <NavDropdown.Item onClick={() => this.goTo('/team/folders')}>Folders</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => this.goTo('/team/members')}>Members</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => this.goTo('/team/edit')}>Settings</NavDropdown.Item>
                 </NavDropdown>
