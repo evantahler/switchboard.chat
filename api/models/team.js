@@ -55,11 +55,6 @@ const Team = function (sequelize, DataTypes) {
     return instance.save()
   })
 
-  Model.afterCreate(async (instance) => {
-    const channel = `team:${instance.id}`
-    await api.chatRoom.add(channel)
-  })
-
   Model.prototype.addFolder = async function (folderName) {
     const folder = new api.models.Folder({ teamId: this.id, name: folderName })
     return folder.save()
@@ -200,11 +195,7 @@ const Team = function (sequelize, DataTypes) {
       userId: user.id
     })
 
-    await note.save()
-
-    const channel = `team:${this.id}`
-    await api.chatRoom.broadcast({}, channel, await note.apiData())
-    return note
+    return note.save()
   }
 
   Model.prototype.addMessage = async function (contact, body, attachment) {
@@ -229,8 +220,6 @@ const Team = function (sequelize, DataTypes) {
       throw error
     }
 
-    const channel = `team:${this.id}`
-    await api.chatRoom.broadcast({}, channel, await message.apiData())
     return message
   }
 

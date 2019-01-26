@@ -1,103 +1,51 @@
 import React from 'react'
 import { Badge } from 'react-bootstrap'
-import BaseRepository from './../repositories/base'
-import ErrorRepository from './../repositories/error'
-import SessionRepository from './../repositories/session'
-import MessagesRepository from './../repositories/messages'
 import ContactsRepository from './../repositories/contacts'
-
-class MessagesRepositoryForWS extends BaseRepository {
-  constructor () {
-    super()
-    this.name = 'MessagesRepositoryForWS'
-    this.ttl = 1000 * 60 // 1 minute
-    this.key = 'repository:messages'
-    this.responseKeys = ['messages']
-  }
-
-  async appendForTeam (message) {
-    this.key = `repository:messages:${message.contactId}`
-    // const messagesResponse = await this.get()
-    const response = JSON.parse(this.storage.getItem(this.key))
-    if (response && response.data) {
-      let messages = response.data.messages || []
-      messages.push(message)
-      await this.set({ messages })
-      await MessagesRepository.publish(message)
-    } else {
-      await ContactsRepository.hydrate()
-    }
-  }
-}
+import SessionRepository from './../repositories/session'
 
 class TeamListener extends React.Component {
   constructor () {
     super()
     this.state = {
-      client: null,
-      connected: false
+      lastCheck: null,
+      sleep: 1000 * 30,
+      renderTimer: null,
+      fetchTimer: null,
+      _tick: null
     }
   }
 
-  componentDidMount () {
-    this.mounted = true
-    this.connect()
+  async componentDidMount () {
+    await this.poll()
+    const fetchTimer = setInterval(this.poll.bind(this), this.state.sleep)
+    const renderTimer = setInterval(this.tick.bind(this), 1000)
+    this.setState({ fetchTimer, renderTimer })
   }
 
   componentWillUnmount () {
-    this.mounted = false
-    this.disconnect()
+    clearInterval(this.state.renderTimer)
+    clearInterval(this.state.fetchTimer)
   }
 
-  async connect () {
-    if (!window.ActionheroWebsocketClient) { return } //eslint-disable-line
+  tick () {
+    this.setState({ _tick: new Date() })
+  }
 
+  async poll () {
     const sessionResponse = await SessionRepository.get()
     if (sessionResponse && sessionResponse.team) {
-      await this.setState({ team: sessionResponse.team })
-    } else { return }
-
-    const client = new ActionheroWebsocketClient() //eslint-disable-line
-
-    const messageHandler = this.handleMessage.bind(this)
-
-    client.on('connected', () => { if (this.mounted) { this.setState({ connected: true }) } })
-    client.on('disconnected', () => { if (this.mounted) { this.setState({ connected: false }) } })
-    client.on('error', (error) => {
-      console.error(error)
-      ErrorRepository.set({ error: `WS ${error}` })
-    })
-    client.on('say', (message) => { messageHandler(message) })
-
-    await this.setState({ client })
-
-    await this.state.client.connect()
-    this.state.client.roomAdd(`team:${this.state.team.id}`, (response) => {
-      if (response.error) { ErrorRepository.set({ error: `WS ${response.error}` }) }
-    })
-  }
-
-  disconnect () {
-    const { client } = this.state
-    if (client) {
-      client.disconnect()
+      await ContactsRepository.hydrate()
     }
-  }
-
-  async handleMessage ({ message }) {
-    console.log({ mounted: this.mounted, connected: this.state.connected })
-    if (message && (message.type === 'message' || message.type === 'note')) {
-      const repository = new MessagesRepositoryForWS()
-      await repository.appendForTeam(message)
-    }
+    this.setState({ lastCheck: new Date() })
   }
 
   render () {
-    const { connected } = this.state
-    let variant = 'danger'
-    if (connected) { variant = 'success' }
+    const { lastCheck, sleep } = this.state
+    if (!lastCheck) { return null }
 
-    return <p>ws: <Badge variant={variant}>{connected ? 'connected' : 'disconnected'}</Badge></p>
+    const now = new Date()
+    const secondsRemaining = Math.floor((sleep - (now.getTime() - lastCheck.getTime())) / 1000)
+    return <p>polling: <Badge variant='primary'>{secondsRemaining}s</Badge></p>
   }
 }
 

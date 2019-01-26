@@ -81,9 +81,7 @@ exports.twilioIn = class listNumbers extends Action {
     })
 
     await message.save()
-    const channel = `team:${team.id}`
-    await api.chatRoom.broadcast({}, channel, await message.apiData())
-
+    
     connection.setHeader('Content-Type', 'application/xml')
     connection.rawConnection.res.end('<Response></Response>')
     data.toRender = false
