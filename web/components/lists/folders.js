@@ -76,7 +76,11 @@ class HeaderCard extends React.Component {
       <br />
       <FolderEditModal folder={folder} />
       &nbsp;
-      <FolderDestroyModal folder={folder} />
+      {
+        folder.deletable
+          ? <FolderDestroyModal folder={folder} />
+          : null
+      }
     </th>
   }
 }

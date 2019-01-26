@@ -50,13 +50,16 @@ class TeamListener extends React.Component {
   }
 
   async connect () {
+    if (!window.ActionheroWebsocketClient) { return } //eslint-disable-line
+
     const sessionResponse = await SessionRepository.get()
     if (sessionResponse && sessionResponse.team) {
       await this.setState({ team: sessionResponse.team })
     } else { return }
 
-    const messageHandler = this.handleMessage.bind(this)
     const client = new ActionheroWebsocketClient() //eslint-disable-line
+
+    const messageHandler = this.handleMessage.bind(this)
 
     client.on('connected', () => { if (this.mounted) { this.setState({ connected: true }) } })
     client.on('disconnected', () => { if (this.mounted) { this.setState({ connected: false }) } })
@@ -66,19 +69,23 @@ class TeamListener extends React.Component {
     })
     client.on('say', (message) => { messageHandler(message) })
 
-    this.setState({ client })
-    await client.connect()
-    client.roomAdd(`team:${this.state.team.id}`, (response) => {
+    await this.setState({ client })
+
+    await this.state.client.connect()
+    this.state.client.roomAdd(`team:${this.state.team.id}`, (response) => {
       if (response.error) { ErrorRepository.set({ error: `WS ${response.error}` }) }
     })
   }
 
   disconnect () {
-    const { client, connected } = this.state
-    if (client && connected) { client.disconnect() }
+    const { client } = this.state
+    if (client) {
+      client.disconnect()
+    }
   }
 
   async handleMessage ({ message }) {
+    console.log({ mounted: this.mounted, connected: this.state.connected })
     if (message && (message.type === 'message' || message.type === 'note')) {
       const repository = new MessagesRepositoryForWS()
       await repository.appendForTeam(message)

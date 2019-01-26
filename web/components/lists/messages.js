@@ -13,9 +13,21 @@ class MessageCard extends React.Component {
     let variant = 'success'
     if (message.direction === 'out') { variant = 'info' }
 
+    const imageStyle = {
+      maxWidth: 400,
+      maxHeight: 400,
+      minWidth: 200,
+      minHeight: 200
+    }
+
     return (
       <ListGroup.Item variant={variant}>
         <p>{message.message}</p>
+        {
+          message.attachment
+            ? <img style={imageStyle} src={message.attachment} />
+            : null
+        }
         <p className='text-muted'><Moment fromNow ago>{message.createdAt}</Moment> ago</p>
       </ListGroup.Item>
     )

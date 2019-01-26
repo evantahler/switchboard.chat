@@ -55,6 +55,11 @@ const Team = function (sequelize, DataTypes) {
     return instance.save()
   })
 
+  Model.afterCreate(async (instance) => {
+    const channel = `team:${instance.id}`
+    await api.chatRoom.add(channel)
+  })
+
   Model.prototype.addFolder = async function (folderName) {
     const folder = new api.models.Folder({ teamId: this.id, name: folderName })
     return folder.save()
@@ -198,17 +203,17 @@ const Team = function (sequelize, DataTypes) {
     await note.save()
 
     const channel = `team:${this.id}`
-    try { await api.chatRoom.add(channel) } catch (error) { }
     await api.chatRoom.broadcast({}, channel, await note.apiData())
     return note
   }
 
-  Model.prototype.addMessage = async function (contact, body) {
+  Model.prototype.addMessage = async function (contact, body, attachment) {
     if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
     const message = new api.models.Message({
       from: this.phoneNumber,
       to: contact.phoneNumber,
       message: body,
+      attachment: attachment,
       direction: 'out',
       read: false,
       teamId: this.id,
@@ -225,7 +230,6 @@ const Team = function (sequelize, DataTypes) {
     }
 
     const channel = `team:${this.id}`
-    try { await api.chatRoom.add(channel) } catch (error) { }
     await api.chatRoom.broadcast({}, channel, await message.apiData())
     return message
   }

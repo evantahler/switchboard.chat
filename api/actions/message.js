@@ -24,6 +24,10 @@ exports.messageSend = class messageSend extends Action {
         required: true,
         validator: s => { return validator.isLength(s, { min: 1 }) }
       },
+      attachment: {
+        required: false,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
       type: {
         required: true,
         default: 'message'
@@ -38,7 +42,7 @@ exports.messageSend = class messageSend extends Action {
     if (!user) { throw new Error('user not found') }
 
     if (params.type === 'message') {
-      const message = await team.addMessage(contact, params.message)
+      const message = await team.addMessage(contact, params.message, params.attachment)
       response.message = message.apiData()
     } else if (params.type === 'note') {
       const note = await team.addNote(contact, user, params.message)

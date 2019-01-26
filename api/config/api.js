@@ -63,10 +63,7 @@ exports['default'] = {
         'locale': [path.join(__dirname, '/../locales')]
       },
       // hash containing chat rooms you wish to be created at server boot
-      startingChatRooms: {
-        // format is {roomName: {authKey, authValue}}
-        // 'secureRoom': {authorized: true},
-      }
+      startingChatRooms: {}
     }
   }
 }
@@ -77,10 +74,7 @@ exports.test = {
       id: `test-server-${process.env.JEST_WORKER_ID || 0}`,
       serverToken: `serverToken-${process.env.JEST_WORKER_ID || 0}`,
       developmentMode: true,
-      startingChatRooms: {
-        'defaultRoom': {},
-        'otherRoom': {}
-      },
+      startingChatRooms: {},
       paths: {
         'locale': [
           path.join(__dirname, '..', 'locales')

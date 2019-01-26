@@ -12,6 +12,10 @@ const Message = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    attachment: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     direction: {
       type: DataTypes.STRING(191),
       allowNull: false
@@ -39,6 +43,7 @@ const Message = function (sequelize, DataTypes) {
       from: this.from,
       to: this.to,
       message: this.message,
+      attachment: this.attachment,
       direction: this.direction,
       read: this.read,
       contactId: this.contactId,

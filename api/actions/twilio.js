@@ -46,6 +46,7 @@ exports.twilioIn = class listNumbers extends Action {
         formatter: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).formatInternational() },
         validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
       },
+      MediaUrl0: { required: false },
       Body: { required: true },
       AccountSid: { required: true }
     }
@@ -72,6 +73,7 @@ exports.twilioIn = class listNumbers extends Action {
       from: params.From,
       to: params.To,
       message: params.Body,
+      attachment: params.MediaUrl0,
       direction: 'in',
       teamId: team.id,
       read: false,
@@ -80,7 +82,6 @@ exports.twilioIn = class listNumbers extends Action {
 
     await message.save()
     const channel = `team:${team.id}`
-    try { await api.chatRoom.add(channel) } catch (error) { }
     await api.chatRoom.broadcast({}, channel, await message.apiData())
 
     connection.setHeader('Content-Type', 'application/xml')
