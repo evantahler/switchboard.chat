@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Alert, Form } from 'react-bootstrap'
+import { Card, Alert, Form, Badge } from 'react-bootstrap'
 import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import ContactsRepository from './../../repositories/contacts'
@@ -18,7 +18,9 @@ class ContactCard extends React.Component {
     return (
       <Card bg={bg} onClick={this.showMessages.bind(this)}>
         <Card.Body>
-          <Card.Title>{contact.firstName} {contact.lastName}</Card.Title>
+          <Card.Title>{
+            contact.unreadCount > 0 ? <Badge pill variant='danger'>{contact.unreadCount}</Badge> : null
+          } {contact.firstName} {contact.lastName}</Card.Title>
           <Card.Text>
             <span>{contact.phoneNumber}</span>
             <br />

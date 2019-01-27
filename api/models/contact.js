@@ -46,6 +46,15 @@ const Contact = function (sequelize, DataTypes) {
     return null
   }
 
+  Model.prototype.unreadCount = async function () {
+    return api.models.Message.count({
+      where: {
+        contactId: this.id,
+        read: false
+      }
+    })
+  }
+
   Model.prototype.apiData = async function () {
     return {
       id: this.id,
@@ -54,7 +63,8 @@ const Contact = function (sequelize, DataTypes) {
       firstName: this.firstName,
       lastName: this.lastName,
       phoneNumber: this.phoneNumber,
-      mostRecentMessage: await this.mostRecentMessage()
+      mostRecentMessage: await this.mostRecentMessage(),
+      unreadCount: await this.unreadCount()
     }
   }
 

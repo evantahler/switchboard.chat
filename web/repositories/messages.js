@@ -8,7 +8,7 @@ class MessagesRepository extends BaseRepository {
   constructor () {
     super()
     this.name = 'messages'
-    this.ttl = 1000 * 60 // 1 minute
+    this.ttl = 1000 // 1 second (so we allways check for new messages)
     this.key = 'repository:messages'
     this.responseKeys = ['messages']
     this.routes.get.path = '/api/messages'

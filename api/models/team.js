@@ -234,6 +234,14 @@ const Team = function (sequelize, DataTypes) {
     let orderedResults = [].concat(messages, notes)
     orderedResults.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime() })
 
+    for (let i in messages) {
+      let message = messages[i]
+      if (message.read !== true) {
+        message.read = true
+        message.save() // actually, don't await here
+      }
+    }
+
     return orderedResults
   }
 
