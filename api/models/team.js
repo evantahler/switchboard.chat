@@ -249,7 +249,8 @@ const Team = function (sequelize, DataTypes) {
     if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
     const contentType = mime.lookup(originalFileName)
     const uuid = uuidv4()
-    let remotePath = `team-${this.id}/contact-${this.id}/${uuid}-${originalFileName}`
+    let remotePath = `team-${this.id}/contact-${contact.id}/${uuid}-${originalFileName}`
+    console.log({ remotePath, localPath, contentType })
     return api.s3.uploadFile(remotePath, localPath, contentType)
   }
 

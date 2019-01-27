@@ -69,11 +69,18 @@ exports.twilioIn = class listNumbers extends Action {
       })
     }
 
+    let attachment
+    if (params.MediaUrl0) {
+      let { originalFileName, localFile } = await api.twilio.downloadAttachment(params.MediaUrl0)
+      attachment = await team.uploadFile(localFile, originalFileName, contact)
+      api.log(`downloaded ${params.MediaUrl0} => uploaded to ${attachment}`)
+    }
+
     const message = new api.models.Message({
       from: params.From,
       to: params.To,
       message: params.Body,
-      attachment: params.MediaUrl0,
+      attachment: attachment,
       direction: 'in',
       teamId: team.id,
       read: false,

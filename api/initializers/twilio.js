@@ -1,5 +1,10 @@
 const { api, Initializer } = require('actionhero')
 const Twilio = require('twilio')
+const Axios = require('axios')
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+const uuidv4 = require('uuid/v4')
 const { parsePhoneNumber } = require('libphonenumber-js')
 
 module.exports = class TwilioInitializer extends Initializer {
@@ -65,6 +70,27 @@ module.exports = class TwilioInitializer extends Initializer {
         response.say(message)
         const xml = response.toString()
         return xml
+      },
+
+      downloadAttachment: async (url) => {
+        const response = await Axios({
+          url,
+          method: 'GET',
+          responseType: 'stream'
+        })
+
+        const uuid = uuidv4()
+        const localFile = path.resolve(os.tmpdir(), uuid)
+        const writer = fs.createWriteStream(localFile)
+        response.data.pipe(writer)
+
+        // twilo/amazon returns the original filename as a header
+        let originalFileName = response.headers['content-disposition'].match(/filename="(.*)"/)[1]
+
+        return new Promise((resolve, reject) => {
+          writer.once('error', reject)
+          writer.once('finish', () => { return resolve({ localFile, originalFileName }) })
+        })
       }
     }
   }

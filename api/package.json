@@ -11,6 +11,7 @@
     "actionhero": "19.1.1",
     "ah-sequelize-plugin": "^1.1.0",
     "aws-sdk": "^2.395.0",
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.2",
     "ioredis": "^4.3.0",
     "libphonenumber-js": "^1.6.9",
