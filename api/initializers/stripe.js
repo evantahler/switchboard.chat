@@ -1,7 +1,7 @@
 const { api, Initializer } = require('actionhero')
 const Stripe = require('stripe')
 
-module.exports = class TwilioInitializer extends Initializer {
+module.exports = class StripeInitializer extends Initializer {
   constructor () {
     super()
     this.name = 'stripe'

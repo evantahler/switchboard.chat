@@ -1,5 +1,7 @@
 const { api } = require('actionhero')
 const { Op } = require('sequelize')
+const uuidv4 = require('uuid/v4')
+const mime = require('mime-types')
 
 const Team = function (sequelize, DataTypes) {
   const Model = sequelize.define('Team', {
@@ -214,7 +216,9 @@ const Team = function (sequelize, DataTypes) {
     await message.save()
 
     try {
-      await api.twilio.client.messages.create({ to: message.to, from: message.from, body })
+      let twilioData = { to: message.to, from: message.from, body }
+      if (attachment) { twilioData.mediaUrl = attachment }
+      await api.twilio.client.messages.create(twilioData)
     } catch (error) {
       await message.destroy()
       throw error
@@ -228,9 +232,17 @@ const Team = function (sequelize, DataTypes) {
     const messages = await api.models.Message.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
     const notes = await api.models.Note.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
     let orderedResults = [].concat(messages, notes)
-    orderedResults.sort((a, b) => { return a.createdAt.getTime() > b.createdAt.getTime() })
+    orderedResults.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime() })
 
     return orderedResults
+  }
+
+  Model.prototype.uploadFile = async function (localPath, originalFileName, contact) {
+    if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
+    const contentType = mime.lookup(originalFileName)
+    const uuid = uuidv4()
+    let remotePath = `team-${this.id}/contact-${this.id}/${uuid}-${originalFileName}`
+    return api.s3.uploadFile(remotePath, localPath, contentType)
   }
 
   Model.prototype.apiData = function () {

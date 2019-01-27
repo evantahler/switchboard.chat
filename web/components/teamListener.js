@@ -2,13 +2,15 @@ import React from 'react'
 import { Badge } from 'react-bootstrap'
 import ContactsRepository from './../repositories/contacts'
 import SessionRepository from './../repositories/session'
+import ContactRepository from './../repositories/contact'
+import MessagesRepository from './../repositories/messages'
 
 class TeamListener extends React.Component {
   constructor () {
     super()
     this.state = {
       lastCheck: null,
-      sleep: 1000 * 30,
+      sleep: 1000 * 15,
       renderTimer: null,
       fetchTimer: null,
       _tick: null
@@ -36,6 +38,12 @@ class TeamListener extends React.Component {
     if (sessionResponse && sessionResponse.team) {
       await ContactsRepository.hydrate()
     }
+
+    const contactResponse = await ContactRepository.get()
+    if (contactResponse && contactResponse.contact) {
+      await MessagesRepository.hydrate()
+    }
+
     this.setState({ lastCheck: new Date() })
   }
 

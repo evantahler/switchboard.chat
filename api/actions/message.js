@@ -24,9 +24,8 @@ exports.messageSend = class messageSend extends Action {
         required: true,
         validator: s => { return validator.isLength(s, { min: 1 }) }
       },
-      attachment: {
-        required: false,
-        validator: s => { return validator.isLength(s, { min: 1 }) }
+      file: {
+        required: false
       },
       type: {
         required: true,
@@ -41,8 +40,13 @@ exports.messageSend = class messageSend extends Action {
     const user = await api.models.User.findOne({ where: { id: session.userId } })
     if (!user) { throw new Error('user not found') }
 
+    let attachment
+    if (params.file && params.file.path) {
+      attachment = await team.uploadFile(params.file.path, params.file.name, contact)
+    }
+
     if (params.type === 'message') {
-      const message = await team.addMessage(contact, params.message, params.attachment)
+      const message = await team.addMessage(contact, params.message, attachment)
       response.message = message.apiData()
     } else if (params.type === 'note') {
       const note = await team.addNote(contact, user, params.message)

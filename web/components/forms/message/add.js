@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import MessageRepository from './../../../repositories/message'
+import MessagesRepository from './../../../repositories/messages'
 
 class MessageAddForm extends React.Component {
   constructor () {
@@ -8,7 +9,9 @@ class MessageAddForm extends React.Component {
     this.state = {
       validated: false,
       type: 'message',
-      message: ''
+      message: '',
+      file: null,
+      fileName: ''
     }
   }
 
@@ -26,16 +29,23 @@ class MessageAddForm extends React.Component {
     delete data.validated
     const saveResponse = await MessageRepository.create(data)
     if (saveResponse) {
-      this.setState({ validated: false, message: '' })
+      this.setState({ validated: false, message: '', file: null, fileName: '' })
+      await MessagesRepository.hydrate()
     }
   }
 
   render () {
-    const { validated, message, type } = this.state
+    const { validated, message, type, fileName } = this.state
 
     const updateMessage = async (event) => {
       this.state[event.target.id] = event.target.value
       this.setState(this.state)
+    }
+
+    const updateFile = async (event) => {
+      this.state.file = event.target.files[0]
+      this.state.fileName = event.target.value
+      await this.setState(this.state)
     }
 
     const updateCheck = async (event) => {
@@ -59,6 +69,10 @@ class MessageAddForm extends React.Component {
 
         <Row>
           <Col md={4}>
+            <Form.Group controlId='file'>
+              <Form.Control type='file' placeholder='Add Attachment' value={fileName} onChange={e => updateFile(e)} />
+            </Form.Group>
+
             <Button className='float-left' variant='outline-primary' size='sm' type='submit'>{`Send ${type}`}</Button>
           </Col>
           <Col md={4} />

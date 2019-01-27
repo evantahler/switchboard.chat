@@ -10,9 +10,11 @@
   "dependencies": {
     "actionhero": "19.1.1",
     "ah-sequelize-plugin": "^1.1.0",
+    "aws-sdk": "^2.395.0",
     "bcrypt": "^3.0.2",
     "ioredis": "^4.3.0",
     "libphonenumber-js": "^1.6.9",
+    "mime-types": "^2.1.21",
     "sequelize": "^4.41.2",
     "stripe": "^6.20.0",
     "twilio": "^3.26.0",
