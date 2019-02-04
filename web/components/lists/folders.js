@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Table } from 'react-bootstrap'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
 import FoldersRepository from './../../repositories/folders'
@@ -7,41 +8,35 @@ import FolderEditModal from './../modals/folder/edit'
 import FolderDestroyModal from './../modals/folder/destroy'
 
 class ContactCard extends React.Component {
-  async updateFolder (folder) {
-    const contact = this.props.contact
-    contact.folderId = folder.id
-    contact.contactId = contact.id
-    await ContactRepository.update(contact)
-    await ContactsRepository.hydrate()
-  }
-
   render () {
     const contact = this.props.contact
-    const leftFolder = this.props.leftFolder
-    const rightFolder = this.props.rightFolder
+    const index = this.props.idx
+
+    const style = {
+      maxWidth: 300,
+      margin: 2
+    }
 
     return (
-      <Card>
-        <Card.Body>
-          <Card.Text>
-            <span>
-              {
-                leftFolder
-                  ? <span onClick={this.updateFolder.bind(this, leftFolder)}>⏪</span>
-                  : null
-              }
-
-              {contact.firstName} {contact.lastName}
-
-              {
-                rightFolder
-                  ? <span onClick={this.updateFolder.bind(this, rightFolder)}>⏩</span>
-                  : null
-              }
-            </span>
-          </Card.Text>
-        </Card.Body>
-      </Card>
+      <Draggable draggableId={`contact-${contact.id}`} index={index}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <Card style={style}>
+              <Card.Body>
+                <Card.Text>
+                  <span>
+                    {contact.firstName} {contact.lastName}
+                  </span>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </div>
+        )}
+      </Draggable>
     )
   }
 }
@@ -49,21 +44,34 @@ class ContactCard extends React.Component {
 class ContactsColumn extends React.Component {
   render () {
     const contacts = this.props.contacts
-    const leftFolder = this.props.leftFolder
-    const rightFolder = this.props.rightFolder
+    const folder = this.props.folder
 
-    return <div>
-      {
-        contacts.map((contact) => {
-          return <ContactCard
-            key={`ContactCard-${contact.id}`}
-            leftFolder={leftFolder}
-            rightFolder={rightFolder}
-            contact={contact}
-          />
-        })
-      }
-    </div>
+    let idx = -1
+
+    return <Droppable droppableId={`folder-${folder.id}`}>
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          style={{
+            backgroundColor: snapshot.isDraggingOver ? 'lightGrey' : null,
+            minHeight: 300
+          }}
+          {...provided.droppableProps}
+        >
+          {
+            contacts.map((contact) => {
+              idx++
+              return <ContactCard
+                key={`ContactCard-${contact.id}`}
+                contact={contact}
+                idx={idx}
+              />
+            })
+          }
+          { provided.placeholder }
+        </div>
+      )}
+    </Droppable>
   }
 }
 
@@ -117,6 +125,30 @@ class FodlersList extends React.Component {
     if (foldersResponse) { this.setState({ folders: foldersResponse.folders }) }
   }
 
+  async onDragEnd (args) {
+    let { contacts } = this.state
+
+    if (!args.draggableId) { return }
+    if (!args.destination) { return }
+
+    const contactId = parseInt(args.draggableId.split('contact-')[1])
+    const folderId = parseInt(args.destination.droppableId.split('folder-')[1])
+    const contact = contacts.filter(c => c.id === contactId)[0]
+    contact.folderId = folderId
+    contact.contactId = contact.id
+
+    for (let i in contacts) {
+      if (contacts[i].id === contact.id) {
+        contacts[i] = contact
+        break
+      }
+    }
+    this.setState({ contacts })
+
+    await ContactRepository.update(contact)
+    await ContactsRepository.hydrate()
+  }
+
   render () {
     const folders = this.state.folders
     let contacts = {}
@@ -132,39 +164,35 @@ class FodlersList extends React.Component {
     }
 
     return (
-      <div style={{ overflow: 'auto' }}>
-        <Table size='sm' bordered>
-          <thead>
-            <tr>
-              {
-                folders.map((folder) => {
-                  return <HeaderCard key={`header-${folder.id}`} folder={folder} />
-                })
-              }
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {
-                folders.map((folder) => {
-                  let idx = folders.indexOf(folder)
-                  let leftFolder = idx > 0 ? folders[(idx - 1)] : null
-                  let rightFolder = idx < folders.length ? folders[(idx + 1)] : null
-
-                  return <td key={`contactsColumn-${folder.id}`}>
-                    <ContactsColumn
-                      folder={folder}
-                      contacts={contacts[folder.id]}
-                      leftFolder={leftFolder}
-                      rightFolder={rightFolder}
-                    />
-                  </td>
-                })
-              }
-            </tr>
-          </tbody>
-        </Table>
-      </div>
+      <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
+        <div style={{ overflow: 'auto' }}>
+          <Table size='sm' bordered>
+            <thead>
+              <tr>
+                {
+                  folders.map((folder) => {
+                    return <HeaderCard key={`header-${folder.id}`} folder={folder} />
+                  })
+                }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {
+                  folders.map((folder) => {
+                    return <td key={`contactsColumn-${folder.id}`}>
+                      <ContactsColumn
+                        folder={folder}
+                        contacts={contacts[folder.id]}
+                      />
+                    </td>
+                  })
+                }
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+      </DragDropContext>
     )
   }
 }
