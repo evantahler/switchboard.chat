@@ -246,7 +246,7 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.updateTask = async function ({ taskId, completedAt, title, description, assignedUser }) {
-    const task = await api.models.task.findOne({ where: { id: taskId, teamId: this.id } })
+    const task = await api.models.Task.findOne({ where: { id: taskId, teamId: this.id } })
 
     if (completedAt) { task.completedAt = completedAt }
     if (title) { task.title = title }

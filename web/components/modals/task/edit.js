@@ -34,7 +34,7 @@ class EditTaskModal extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <ErrorAlert />
-            <EditTaskForm handleClose={this.handleClose} />
+            <EditTaskForm task={this.props.task} handleClose={this.handleClose} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant='secondary' onClick={this.handleClose}>

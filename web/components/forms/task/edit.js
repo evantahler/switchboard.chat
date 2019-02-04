@@ -12,13 +12,11 @@ class EditTaskForm extends React.Component {
       validated: false,
       teamMembers: [],
       task: {
-        id: -1,
-        contactId: '',
-        assignedUserId: '',
         title: '',
         description: '',
-        completedAt: ''
-      }
+        assignedUserId: ''
+      },
+      checked: false
     }
   }
 
@@ -27,9 +25,10 @@ class EditTaskForm extends React.Component {
   }
 
   async load () {
-    const { task } = await TaskRepository.get()
+    let task = this.props.task
+    await TaskRepository.hydrate(this.props.task)
     const { teamMembers } = await TeamMembersRepository.get()
-    this.setState({ task, teamMembers })
+    this.setState({ teamMembers, task })
   }
 
   validate (event) {
@@ -44,6 +43,7 @@ class EditTaskForm extends React.Component {
   async submit (form) {
     const data = FormSerializer(form)
     data.taskId = this.state.task.id
+    if (this.state.checked) { data.completedAt = new Date() }
     const saveResponse = await TaskRepository.update(data)
     if (saveResponse) {
       await TasksRepository.hydrate()
@@ -52,7 +52,7 @@ class EditTaskForm extends React.Component {
   }
 
   render () {
-    const { validated, task, teamMembers } = this.state
+    const { validated, task, teamMembers, checked } = this.state
 
     const update = async (event) => {
       task[event.target.id] = event.target.value
@@ -84,12 +84,16 @@ class EditTaskForm extends React.Component {
 
         <Form.Group controlId='description'>
           <Form.Label>Description</Form.Label>
-          <Form.Control required type='textfield' placeholder='...' value={task.description} onChange={e => update(e)} />
+          <Form.Control required as='textarea' rows='3' placeholder='...' value={task.description} onChange={e => update(e)} />
           <Form.Control.Feedback type='invalid'>Description is required</Form.Control.Feedback>
         </Form.Group>
 
+        <Form.Group controlId='complete'>
+          <Form.Check type='checkbox' label='Complete?' checked={checked} onChange={event => this.setState({ checked: event.target.checked })} />
+        </Form.Group>
+
         <Button variant='primary' type='submit'>
-          Edit Contact
+          Edit Task
         </Button>
       </Form>
     )

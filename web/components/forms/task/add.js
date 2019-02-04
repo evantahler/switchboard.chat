@@ -89,7 +89,7 @@ class AddTaskForm extends React.Component {
 
         <Form.Group controlId='description'>
           <Form.Label>Description</Form.Label>
-          <Form.Control required type='textfield' placeholder='...' value={task.description} onChange={e => update(e)} />
+          <Form.Control required as='textarea' rows='3' placeholder='...' value={task.description} onChange={e => update(e)} />
           <Form.Control.Feedback type='invalid'>Description is required</Form.Control.Feedback>
         </Form.Group>
 

@@ -13,9 +13,10 @@ class TaskCard extends React.Component {
 
     return (
       <ListGroup.Item>
-        <p><span className='text-warning'>{task.title}</span>: {task.description}</p>
+        <p><span className='text-warning'>{task.title}</span>:</p>
+        <p dangerouslySetInnerHTML={{ __html: task.description.replace(/(?:\r\n|\r|\n)/g, '<br />') }} />
         <p className='text-muted'>{assignment} <Moment fromNow ago>{task.createdAt}</Moment> ago</p>
-        <EditTaskModal />
+        <EditTaskModal task={task} />
       </ListGroup.Item>
     )
   }
@@ -54,17 +55,12 @@ class TasksList extends React.Component {
   render () {
     const { tasks } = this.state
 
-    const containerStyle = {
-      maxHeight: 300,
-      overflow: 'auto'
-    }
-
     return (
       <div>
         <h3>Tasks</h3>
         {
           tasks.length > 0
-            ? <ListGroup style={containerStyle}>
+            ? <ListGroup>
               { tasks.map((task) => {
                 return <TaskCard key={`task-${task.id}`} task={task} />
               })

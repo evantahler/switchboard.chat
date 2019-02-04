@@ -100,7 +100,7 @@ exports.taskEdit = class taskEdit extends Action {
       if (!assignedUser) { throw new Error('assignedUser not found') }
     }
 
-    const task = await team.updateTask(Object.assign(params, { assignedUser }))
+    const task = await team.updateTask(Object.assign({ assignedUser }, params))
     response.task = await task.apiData()
   }
 }
