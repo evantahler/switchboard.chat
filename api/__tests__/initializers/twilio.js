@@ -33,8 +33,8 @@ describe('twilio', () => {
 
   afterAll(async () => { await actionhero.stop() })
 
-  test('placeholde', () => {
-    // Cannot run this test suite without using real cradentials...
+  test('placeholder', () => {
+    // Cannot run this test suite without using real credentials...
     expect(true).toEqual(true)
     expect(user).toBeTruthy()
     expect(csrfToken).toBeTruthy()
