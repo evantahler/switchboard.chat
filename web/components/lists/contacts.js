@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, Alert, Form, Badge } from 'react-bootstrap'
 import Moment from 'react-moment'
+import SessionRepository from './../../repositories/session'
 import ContactRepository from './../../repositories/contact'
 import ContactsRepository from './../../repositories/contacts'
 import FoldersRepository from './../../repositories/folders'
@@ -63,9 +64,7 @@ class ContactsList extends React.Component {
   }
 
   async load () {
-    const folder = this.state.folder
-
-    const contactsResponse = await ContactsRepository.get({ folderId: folder.id })
+    const contactsResponse = await ContactsRepository.get()
     if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
     const contactResponse = await ContactRepository.get()
     if (contactResponse) { this.setState({ contact: contactResponse.contact }) }
@@ -73,14 +72,32 @@ class ContactsList extends React.Component {
     if (foldersResponse) { this.setState({ folders: foldersResponse.folders }) }
   }
 
+  async updateSessionWithFolder (id) {
+    let session = await SessionRepository.get()
+
+    if (id === '__all') {
+      delete session.folder
+      await SessionRepository.set(session)
+      this.setState({ folder: {} })
+    } else {
+      id = parseInt(id)
+      const { folders } = this.state
+      const folder = folders.filter(f => f.id === id)[0]
+
+      session.folder = folder
+      await SessionRepository.set(session)
+      this.setState({ folder })
+    }
+  }
+
   render () {
     const { contact, contacts, folders, folder } = this.state
 
     const updateFolder = async (event) => {
-      if (event.target.value === '__all') { event.target.value = null }
       folder[event.target.id] = event.target.value
-      const contactsResponse = await ContactsRepository.hydrate({ folderId: event.target.value })
-      if (contactsResponse) { this.setState({ folder, contacts: contactsResponse.contacts }) }
+      await this.updateSessionWithFolder(event.target.value)
+      const contactsResponse = await ContactsRepository.hydrate()
+      if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
     }
 
     return (
@@ -88,7 +105,7 @@ class ContactsList extends React.Component {
         <Form.Group controlId='folderId'>
           <Form.Label>Folder</Form.Label>
           <Form.Control value={folder.id} required as='select' onChange={e => updateFolder(e)}>
-            <option value={null}>* All Contacts *</option>
+            <option value='__all'>* All Contacts *</option>
             { folders.map(f => {
               return <option value={f.id} key={`folder-${f.id}`}>{f.name}</option>
             }) }

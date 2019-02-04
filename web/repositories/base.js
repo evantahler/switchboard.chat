@@ -97,6 +97,7 @@ class BaseRepository {
       this.set(response)
     } catch (error) {
       const errorMessage = error.message ? error.message : `cannot hydrate ${this.name}`
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
   }
