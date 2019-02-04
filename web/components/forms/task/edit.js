@@ -3,6 +3,8 @@ import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import TaskRepository from './../../../repositories/task'
 import TasksRepository from './../../../repositories/tasks'
+import ContactsRepository from './../../../repositories/contacts'
+import MessagesRepository from './../../../repositories/messages'
 import TeamMembersRepository from './../../../repositories/teamMembers'
 
 class EditTaskForm extends React.Component {
@@ -47,6 +49,8 @@ class EditTaskForm extends React.Component {
     const saveResponse = await TaskRepository.update(data)
     if (saveResponse) {
       await TasksRepository.hydrate()
+      await ContactsRepository.hydrate()
+      await MessagesRepository.hydrate()
       return this.props.handleClose()
     }
   }

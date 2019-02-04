@@ -93,7 +93,7 @@ exports.taskEdit = class taskEdit extends Action {
     }
   }
 
-  async run ({ response, team, params }) {
+  async run ({ response, team, params, session }) {
     let assignedUser
     if (params.assignedUserId) {
       assignedUser = await api.models.User.findOne({ where: { id: params.assignedUserId } })
@@ -102,6 +102,15 @@ exports.taskEdit = class taskEdit extends Action {
 
     const task = await team.updateTask(Object.assign({ assignedUser }, params))
     response.task = await task.apiData()
+
+    if (params.completedAt) {
+      const user = await api.models.User.findOne({ where: { id: session.userId } })
+      if (!user) { throw new Error('user not found') }
+      const contact = await api.models.Contact.findOne({ where: { id: task.contactId, teamId: team.id } })
+      if (!contact) { throw new Error('contact not found') }
+      const note = await team.addNote(contact, user, `Completed Task: ${task.title}`)
+      response.note = note.apiData()
+    }
   }
 }
 

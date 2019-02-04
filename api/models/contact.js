@@ -1,4 +1,5 @@
 const { api } = require('actionhero')
+const { Op } = require('sequelize')
 
 const Contact = function (sequelize, DataTypes) {
   const Model = sequelize.define('Contact', {
@@ -57,7 +58,7 @@ const Contact = function (sequelize, DataTypes) {
 
   Model.prototype.tasksCount = async function () {
     return api.models.Task.count({
-      where: { contactId: this.id }
+      where: { contactId: this.id, completedAt: { [Op.eq]: null } }
     })
   }
 

@@ -69,6 +69,7 @@ const Task = function (sequelize, DataTypes) {
       description: this.description,
       user: user.apiData(),
       assignedUser: assignedUser.apiData(),
+      assignedUserId: this.assignedUserId,
       contact: contact.apiData()
     }
   }
