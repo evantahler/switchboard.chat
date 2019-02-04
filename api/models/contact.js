@@ -55,6 +55,12 @@ const Contact = function (sequelize, DataTypes) {
     })
   }
 
+  Model.prototype.tasksCount = async function () {
+    return api.models.Task.count({
+      where: { contactId: this.id }
+    })
+  }
+
   Model.prototype.apiData = async function () {
     return {
       id: this.id,
@@ -64,7 +70,8 @@ const Contact = function (sequelize, DataTypes) {
       lastName: this.lastName,
       phoneNumber: this.phoneNumber,
       mostRecentMessage: await this.mostRecentMessage(),
-      unreadCount: await this.unreadCount()
+      unreadCount: await this.unreadCount(),
+      tasksCount: await this.tasksCount()
     }
   }
 

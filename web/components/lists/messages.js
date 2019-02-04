@@ -3,8 +3,6 @@ import { ListGroup, Alert } from 'react-bootstrap'
 import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
-import EditContactModal from './../modals/contact/edit.js'
-import DestroyContactModal from './../modals/contact/destroy.js'
 import MessageAddForm from './../forms/message/add.js'
 
 class MessageCard extends React.Component {
@@ -61,7 +59,7 @@ class MessagesList extends React.Component {
   async componentDidMount () {
     ContactRepository.subscribe('message-list', this.subscription.bind(this))
     MessagesRepository.subscribe('message-list', this.subscription.bind(this))
-    this.load()
+    await this.load()
     this.scrollToBottom()
   }
 
@@ -71,7 +69,14 @@ class MessagesList extends React.Component {
   }
 
   async subscription () {
+    const { messages } = this.state
+    let oldMessageCount = messages.length
     await this.load()
+    let newMessageCount = this.state.messages.length
+
+    if (newMessageCount > oldMessageCount) {
+      this.scrollToBottom()
+    }
   }
 
   async load () {
@@ -86,11 +91,7 @@ class MessagesList extends React.Component {
 
   scrollToBottom () {
     if (!this.messagesEnd) { return }
-    this.messagesEnd.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  componentDidUpdate () {
-    this.scrollToBottom()
+    this.messagesEnd.scrollIntoView({ behavior: 'auto' })
   }
 
   render () {
@@ -112,7 +113,7 @@ class MessagesList extends React.Component {
 
     return (
       <div>
-        <h2>📞 with {contact.firstName} {contact.lastName} <EditContactModal /> <DestroyContactModal /></h2>
+        <h3>Messages</h3>
         { messages.length > 0
           ? <ListGroup style={containerStyle}>
             { messages.map((message) => {

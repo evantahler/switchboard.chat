@@ -12,6 +12,7 @@ exports['default'] = {
         { path: '/folders', action: 'folders:list' },
         { path: '/contacts', action: 'contacts:list' },
         { path: '/messages', action: 'messages:list' },
+        { path: '/tasks', action: 'tasks:list' },
         { path: '/twilio/listNumbers', action: 'twilio:listNumbers' }
       ],
 
@@ -22,7 +23,8 @@ exports['default'] = {
         { path: '/teamMember', action: 'teamMember:create' },
         { path: '/folder', action: 'folder:create' },
         { path: '/contact', action: 'contact:create' },
-        { path: '/message', action: 'message:send' }
+        { path: '/message', action: 'message:send' },
+        { path: '/task', action: 'task:create' }
       ],
 
       post: [
@@ -32,14 +34,16 @@ exports['default'] = {
         { path: '/twilio/in', action: 'twilio:in' },
         { path: '/twilio/voice', action: 'twilio:voice' },
         { path: '/folder', action: 'folder:edit' },
-        { path: '/contact', action: 'contact:edit' }
+        { path: '/contact', action: 'contact:edit' },
+        { path: '/task', action: 'task:edit' }
       ],
 
       delete: [
         { path: '/session', action: 'session:destroy' },
         { path: '/teamMember', action: 'teamMember:destroy' },
         { path: '/folder', action: 'folder:destroy' },
-        { path: '/contact', action: 'contact:destroy' }
+        { path: '/contact', action: 'contact:destroy' },
+        { path: '/task', action: 'task:destroy' }
       ]
     }
   }

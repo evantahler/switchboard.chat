@@ -4,6 +4,7 @@ import ContactsRepository from './../repositories/contacts'
 import SessionRepository from './../repositories/session'
 import ContactRepository from './../repositories/contact'
 import MessagesRepository from './../repositories/messages'
+import TasksRepository from './../repositories/tasks'
 
 class TeamListener extends React.Component {
   constructor () {
@@ -42,6 +43,7 @@ class TeamListener extends React.Component {
     const contactResponse = await ContactRepository.get()
     if (contactResponse && contactResponse.contact) {
       await MessagesRepository.hydrate()
+      await TasksRepository.hydrate()
     }
 
     this.setState({ lastCheck: new Date() })

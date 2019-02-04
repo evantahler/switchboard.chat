@@ -4,6 +4,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
 import FoldersRepository from './../../repositories/folders'
+import SessionRepository from './../../repositories/session'
 import FolderEditModal from './../modals/folder/edit'
 import FolderDestroyModal from './../modals/folder/destroy'
 
@@ -119,6 +120,12 @@ class FodlersList extends React.Component {
   }
 
   async load () {
+    const session = await SessionRepository.get()
+    if (session) {
+      delete session.folder
+      await SessionRepository.set(session)
+    }
+
     const contactsResponse = await ContactsRepository.get()
     if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
     const foldersResponse = await FoldersRepository.get()

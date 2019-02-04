@@ -227,6 +227,41 @@ const Team = function (sequelize, DataTypes) {
     return message
   }
 
+  Model.prototype.addTask = async function (contact, note, user, title, description, assignedUser) {
+    if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
+    if (note.teamId !== this.id) { throw new Error('note is not for this team') }
+
+    const task = new api.models.Task({
+      teamId: this.id,
+      noteId: note.id,
+      contactId: contact.id,
+      userId: user.id,
+      title,
+      description,
+      completedAt: null,
+      assignedUserId: (assignedUser ? assignedUser.id : null)
+    })
+
+    return task.save()
+  }
+
+  Model.prototype.updateTask = async function ({ taskId, completedAt, title, description, assignedUser }) {
+    const task = await api.models.task.findOne({ where: { id: taskId, teamId: this.id } })
+
+    if (completedAt) { task.completedAt = completedAt }
+    if (title) { task.title = title }
+    if (description) { task.description = description }
+    if (assignedUser) { task.assignedUserId = assignedUser.id }
+
+    return task.save()
+  }
+
+  Model.prototype.removeTask = async function ({ taskId }) {
+    const task = await api.models.Task.findOne({ where: { id: taskId, teamId: this.id } })
+    if (!task) { throw new Error('task not found') }
+    return task.destroy()
+  }
+
   Model.prototype.messagesAndNotes = async function (contact, limit = 100, offset = 0) {
     if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
     const messages = await api.models.Message.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })

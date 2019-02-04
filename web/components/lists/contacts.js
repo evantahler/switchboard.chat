@@ -19,9 +19,17 @@ class ContactCard extends React.Component {
     return (
       <Card bg={bg} onClick={this.showMessages.bind(this)}>
         <Card.Body>
-          <Card.Title>{
-            contact.unreadCount > 0 ? <Badge pill variant='danger'>{contact.unreadCount}</Badge> : null
-          } {contact.firstName} {contact.lastName}</Card.Title>
+          <Card.Title>
+            {contact.firstName} {contact.lastName}
+            &nbsp;
+            {
+              contact.unreadCount > 0 ? <Badge pill variant='danger'>{contact.unreadCount}</Badge> : null
+            }
+            &nbsp;
+            {
+              contact.tasksCount > 0 ? <Badge pill variant='warning'>{contact.tasksCount}</Badge> : null
+            }
+          </Card.Title>
           <Card.Text>
             <span>{contact.phoneNumber}</span>
             <br />
