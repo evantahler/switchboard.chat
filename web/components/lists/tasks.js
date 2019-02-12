@@ -53,7 +53,9 @@ class TasksList extends React.Component {
   }
 
   render () {
-    const { tasks } = this.state
+    const { tasks, contact } = this.state
+
+    if (!contact.id) { return null }
 
     return (
       <div>

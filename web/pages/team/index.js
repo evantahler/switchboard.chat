@@ -48,8 +48,8 @@ class Page extends React.Component {
 
   render () {
     const { team, contact, folders } = this.state
-    let folder = ''
-    if (contact.folderId && folders.length > 0) {
+    let folder
+    if (contact && contact.folderId && folders.length > 0) {
       folder = (folders.filter(folder => folder.id === contact.folderId))[0]
     }
 
@@ -64,13 +64,17 @@ class Page extends React.Component {
           </Col>
 
           <Col md={8}>
-            <Jumbotron>
-              <p>{folder.name}</p>
-              <h2>{contact.firstName} {contact.lastName}</h2>
-              <br />
-              <br />
-              <EditContactModal /> <DestroyContactModal /> <AddTaskModal />
-            </Jumbotron>
+            {
+              folder && contact
+                ? <Jumbotron>
+                  <p>{folder.name}</p>
+                  <h2>{contact.firstName} {contact.lastName}</h2>
+                  <br />
+                  <br />
+                  <EditContactModal /> <DestroyContactModal /> <AddTaskModal />
+                </Jumbotron>
+                : null
+            }
 
             <TasksList />
             <MessagesList />
