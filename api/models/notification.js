@@ -1,34 +1,31 @@
+const { api } = require('actionhero')
+
 const Notification = function (sequelize, DataTypes) {
   const Model = sequelize.define('Notification', {
-    'userId': {
-      type: DataTypes.STRING(191),
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    'notifyByEmail': {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      defaultValue: true
+    teamId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
-    'notifyBySMS': {
+    enabled: {
       type: DataTypes.BOOLEAN,
-      allowNull: true,
+      allowNull: false,
       defaultValue: false
     },
-    'notificationDelayMinutesSMS': {
+    medium: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'sms'
+    },
+    delayMiliseconds: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: 30
+      defaultValue: (1000 * 60 * 5)
     },
-    'notificationDelayMinutesEmail': {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      defaultValue: 60
-    },
-    'lastEmailNotificationAt': {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    'lastSMSNotificationAt': {
+    notifiedAt: {
       type: DataTypes.DATE,
       allowNull: true
     }
@@ -36,15 +33,27 @@ const Notification = function (sequelize, DataTypes) {
     tableName: 'notifications'
   })
 
-  Model.prototype.apiData = function () {
+  Model.prototype.team = async function () {
+    return api.models.Team.findOne({ where: { id: this.teamId } })
+  }
+
+  Model.prototype.apiData = async function () {
+    const team = await this.team()
+
     return {
       id: this.id,
       userId: this.userId,
-      notifyByEmail: this.notifyByEmail,
-      notifyBySMS: this.notifyBySMS,
-      notificationDelayMinutesSMS: this.notificationDelayMinutesSMS,
-      notificationDelayMinutesEmail: this.notificationDelayMinutesEmail
+      teamId: this.teamId,
+      enabled: this.enabled,
+      medium: this.medium,
+      delayMiliseconds: this.delayMiliseconds,
+      notifiedAt: this.notifiedAt,
+      team: team
     }
+  }
+
+  Model.allowedMediums = function () {
+    return ['sms']
   }
 
   return Model

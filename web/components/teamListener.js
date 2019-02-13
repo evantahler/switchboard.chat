@@ -41,7 +41,7 @@ class TeamListener extends React.Component {
     }
 
     const contactResponse = await ContactRepository.get()
-    if (contactResponse && contactResponse.contact) {
+    if (sessionResponse && sessionResponse.team && contactResponse && contactResponse.contact) {
       await MessagesRepository.hydrate()
       await TasksRepository.hydrate()
     }

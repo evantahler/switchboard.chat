@@ -93,6 +93,7 @@ class NavbarLoggedIn extends React.Component {
             </NavDropdown>
             <NavDropdown title='Settings' id='user-dropdown' className='mr-right'>
               <NavDropdown.Item onClick={() => this.goTo('/user/profile')}>Profile</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => this.goTo('/user/notifications')}>Notifications</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/user/teams')}>Teams</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/session/sign-out')}>Sign Out</NavDropdown.Item>
             </NavDropdown>

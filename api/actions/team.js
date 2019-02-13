@@ -41,8 +41,14 @@ exports.teamCreate = class teamCreate extends Action {
   async run ({ response, params, session }) {
     const team = new api.models.Team(params)
     await team.save()
-    const teamMember = new api.models.TeamMember({ userId: session.userId, teamId: team.id })
-    await teamMember.save()
+
+    const user = await api.models.User.findOne({ where: { id: session.userId } })
+    const teamMember = await team.addTeamMember({
+      email: user.email,
+      userId: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName
+    })
 
     await new TeamRegisterOp(team, teamMember, params.stripeToken).run()
     const folder = new api.models.Folder({ teamId: team.id, name: 'default folder', deletable: false })

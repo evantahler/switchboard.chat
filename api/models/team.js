@@ -99,7 +99,9 @@ const Team = function (sequelize, DataTypes) {
     if (!user) { throw new Error('user not found') }
 
     const teamMember = new api.models.TeamMember({ teamId: this.id, userId: user.id })
-    return teamMember.save()
+    await teamMember.save()
+    await api.models.Notification.findOrCreate({ where: { userId: teamMember.id, teamId: this.id } })
+    return teamMember
   }
 
   Model.prototype.editTeamMember = async function ({ userId, email, firstName, lastName, phoneNumber }) {
@@ -118,6 +120,7 @@ const Team = function (sequelize, DataTypes) {
   Model.prototype.removeTeamMember = async function (userId) {
     const teamMember = await api.models.TeamMember.findOne({ where: { teamId: this.id, userId } })
     if (!teamMember) { throw new Error('team member not found') }
+    await api.models.Notification.destroy({ where: { userId: teamMember.id, teamId: this.id } })
     return teamMember.destroy()
   }
 

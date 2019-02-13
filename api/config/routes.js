@@ -13,6 +13,7 @@ exports['default'] = {
         { path: '/contacts', action: 'contacts:list' },
         { path: '/messages', action: 'messages:list' },
         { path: '/tasks', action: 'tasks:list' },
+        { path: '/notifications', action: 'notifications:list' },
         { path: '/twilio/listNumbers', action: 'twilio:listNumbers' }
       ],
 
@@ -34,6 +35,7 @@ exports['default'] = {
         { path: '/twilio/in', action: 'twilio:in' },
         { path: '/twilio/voice', action: 'twilio:voice' },
         { path: '/folder', action: 'folder:edit' },
+        { path: '/notification', action: 'notification:edit' },
         { path: '/contact', action: 'contact:edit' },
         { path: '/task', action: 'task:edit' }
       ],
