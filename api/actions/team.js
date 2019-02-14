@@ -183,3 +183,30 @@ exports.teamEdit = class teamEdit extends Action {
     response.team = team.apiData()
   }
 }
+
+exports.associateWebsocketToTeam = class associateWebsocketToTeam extends Action {
+  constructor () {
+    super()
+    this.name = 'teams:associateWebsocket'
+    this.description = 'to link a ws connection to an HTTP session for access to a team'
+    this.outputExample = {}
+    this.middleware = ['logged-in-session', 'team-membership']
+  }
+
+  inputs () {
+    return {
+      teamId: {
+        required: true,
+        formatter: s => { return parseInt(s) }
+      },
+      websocketConnectionFingerprint: {
+        required: true
+      }
+    }
+  }
+
+  async run ({ team, params, response }) {
+    if (!team) { throw new Error('team not found') }
+    response.success = await api.connections.apply(params.websocketConnectionFingerprint, 'set', ['teamId', params.teamId])
+  }
+}

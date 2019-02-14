@@ -88,7 +88,7 @@ exports.twilioIn = class listNumbers extends Action {
     })
 
     await message.save()
-
+    await api.chatRoom.broadcast({}, `team-${team.id}`, { message: await message.apiData(), method: 'create' })
     connection.setHeader('Content-Type', 'application/xml')
     connection.rawConnection.res.end('<Response></Response>')
     data.toRender = false

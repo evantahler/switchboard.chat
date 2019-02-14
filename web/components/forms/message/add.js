@@ -1,7 +1,6 @@
 import React from 'react'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import MessageRepository from './../../../repositories/message'
-import MessagesRepository from './../../../repositories/messages'
 
 class MessageAddForm extends React.Component {
   constructor () {
@@ -27,11 +26,8 @@ class MessageAddForm extends React.Component {
   async submit () {
     let data = Object.assign({}, this.state)
     delete data.validated
-    const saveResponse = await MessageRepository.create(data)
-    if (saveResponse) {
-      this.setState({ validated: false, message: '', file: null, fileName: '' })
-      await MessagesRepository.hydrate()
-    }
+    await MessageRepository.create(data)
+    this.setState({ message: '', validated: false })
   }
 
   render () {

@@ -33,7 +33,8 @@ exports['default'] = {
         'password',
         'csrfToken',
         'stripeToken',
-        'AccountSid'
+        'AccountSid',
+        'websocketConnectionFingerprint'
       ],
       // values that signify missing params
       missingParamChecks: [null, '', undefined],

@@ -26,5 +26,15 @@ module.exports = class TeamInitializer extends Initializer {
     }
 
     api.actions.addMiddleware(ensureTeamMiddleware)
+
+    const teamRoomProtectionMiddleware = {
+      name: 'team chat room protection middleware',
+      join: async (connection, room) => {
+        const teamId = parseInt(room.split('-')[1])
+        if (teamId !== connection.teamId) { throw new Error('blocked from joining the room.  Did you authorize?') }
+      }
+    }
+
+    api.chatRoom.addMiddleware(teamRoomProtectionMiddleware)
   }
 }

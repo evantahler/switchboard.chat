@@ -25,7 +25,8 @@ exports['default'] = {
         { path: '/folder', action: 'folder:create' },
         { path: '/contact', action: 'contact:create' },
         { path: '/message', action: 'message:send' },
-        { path: '/task', action: 'task:create' }
+        { path: '/task', action: 'task:create' },
+        { path: '/team/associate', action: 'teams:associateWebsocket' }
       ],
 
       post: [

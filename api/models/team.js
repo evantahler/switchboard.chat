@@ -52,10 +52,18 @@ const Team = function (sequelize, DataTypes) {
     paranoid: true
   })
 
+  Model.afterCreate(async (instance) => {
+    await instance.ensureRoom()
+  })
+
   Model.afterDestroy(async (instance) => {
     instance.name = `${instance.name}-destroyed-${instance.id}`
     return instance.save()
   })
+
+  Model.prototype.ensureRoom = async function () {
+    return api.chatRoom.add(`team-${this.id}`)
+  }
 
   Model.prototype.addFolder = async function (folderName) {
     const folder = new api.models.Folder({ teamId: this.id, name: folderName })
@@ -140,7 +148,9 @@ const Team = function (sequelize, DataTypes) {
     const folder = await api.models.Folder.findOne({ where: { teamId: this.id, id: folderId } })
     if (!folder) { throw new Error('folder not found') }
     const contact = new api.models.Contact({ firstName, lastName, phoneNumber, folderId: folder.id, teamId: this.id })
-    return contact.save()
+    await contact.save()
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { contact: await contact.apiData(), method: 'create' })
+    return contact
   }
 
   Model.prototype.updateContact = async function ({ contactId, firstName, lastName, phoneNumber, folderId }) {
@@ -156,7 +166,9 @@ const Team = function (sequelize, DataTypes) {
       contact.folderId = folderId
     }
 
-    return contact.save()
+    await contact.save()
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { contact: await contact.apiData(), method: 'edit' })
+    return contact
   }
 
   Model.prototype.removeContact = async function ({ contactId, folderId }) {
@@ -164,6 +176,7 @@ const Team = function (sequelize, DataTypes) {
     if (!folder) { throw new Error('folder not found') }
     const contact = await api.models.Contact.findOne({ where: { folderId: folder.id, id: contactId, teamId: this.id } })
     if (!contact) { throw new Error('contact not found') }
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { contact: await contact.apiData(), method: 'destroy' })
     return contact.destroy()
   }
 
@@ -200,7 +213,9 @@ const Team = function (sequelize, DataTypes) {
       userId: user.id
     })
 
-    return note.save()
+    await note.save()
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { note: await note.apiData(), method: 'create' })
+    return note
   }
 
   Model.prototype.addMessage = async function (contact, body, attachment) {
@@ -227,6 +242,7 @@ const Team = function (sequelize, DataTypes) {
       throw error
     }
 
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { message: await message.apiData(), method: 'create' })
     return message
   }
 
@@ -245,7 +261,9 @@ const Team = function (sequelize, DataTypes) {
       assignedUserId: (assignedUser ? assignedUser.id : null)
     })
 
-    return task.save()
+    await task.save()
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { task: await task.apiData(), method: 'create' })
+    return task
   }
 
   Model.prototype.updateTask = async function ({ taskId, completedAt, title, description, assignedUser }) {
@@ -256,12 +274,16 @@ const Team = function (sequelize, DataTypes) {
     if (description) { task.description = description }
     if (assignedUser) { task.assignedUserId = assignedUser.id }
 
-    return task.save()
+    await task.save()
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { task: await task.apiData(), method: 'edit' })
+    return task
   }
 
   Model.prototype.removeTask = async function ({ taskId }) {
     const task = await api.models.Task.findOne({ where: { id: taskId, teamId: this.id } })
     if (!task) { throw new Error('task not found') }
+
+    await api.chatRoom.broadcast({}, `team-${this.id}`, { task: await task.apiData(), method: 'destroy' })
     return task.destroy()
   }
 
@@ -288,7 +310,6 @@ const Team = function (sequelize, DataTypes) {
     const contentType = mime.lookup(originalFileName)
     const uuid = uuidv4()
     let remotePath = `team-${this.id}/contact-${contact.id}/${uuid}-${originalFileName}`
-    console.log({ remotePath, localPath, contentType })
     return api.s3.uploadFile(remotePath, localPath, contentType)
   }
 
