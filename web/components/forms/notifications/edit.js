@@ -9,7 +9,7 @@ const MEDIUMS = ['sms']
 const DELAYS = [
   ['instantly', 0],
   ['wait 1 minute', (1000 * 60 * 1)],
-  ['wait 2 minutes', (1000 * 60 * 5)],
+  ['wait 5 minutes', (1000 * 60 * 5)],
   ['wait 10 minutes', (1000 * 60 * 10)],
   ['wait 15 minutes', (1000 * 60 * 15)],
   ['wait 30 minutes', (1000 * 60 * 30)],
@@ -79,7 +79,7 @@ class NotificationCard extends React.Component {
 
             <p>Last Notification Sent:&nbsp;
               {
-                notification.notifiedAt ? <Moment fromNow ago>{notification.notifiedAt}</Moment> : 'Never'
+                notification.notifiedAt ? <span><Moment fromNow ago>{notification.notifiedAt}</Moment> ago</span> : 'Never'
               }
             </p>
 

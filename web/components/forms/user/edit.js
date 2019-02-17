@@ -14,6 +14,7 @@ class SignUpForm extends React.Component {
         lastName: '',
         email: '',
         password: '',
+        phoneNumber: '',
         passwordConfirm: ''
       }
     }
@@ -92,6 +93,12 @@ class SignUpForm extends React.Component {
           <Form.Control required type='email' placeholder='Email Address' value={user.email} onChange={e => update(e)} />
           <Form.Text className='text-muted'>We'll never share your email with anyone else.</Form.Text>
           <Form.Control.Feedback type='invalid'>Email is required</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group controlId='phoneNumber'>
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control type='text' placeholder='Phone Number' value={user.phoneNumber} onChange={e => update(e)} />
+          <Form.Control.Feedback type='invalid'>Phone Number invalid</Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId='password'>

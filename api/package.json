@@ -8,7 +8,7 @@
     "node": "10.x.x"
   },
   "dependencies": {
-    "actionhero": "19.1.1",
+    "actionhero": "19.1.2",
     "ah-sequelize-plugin": "^1.1.0",
     "aws-sdk": "^2.395.0",
     "axios": "^0.18.0",

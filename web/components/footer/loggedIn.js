@@ -1,7 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import VersionRepository from './../../repositories/version'
-import TeamListener from './../../components/teamListener.js'
 
 class Footer extends React.Component {
   constructor () {
@@ -27,9 +26,6 @@ class Footer extends React.Component {
         <Row>
           <Col>
             <p>version {this.state.version.version}</p>
-          </Col>
-          <Col>
-            <TeamListener />
           </Col>
           <Col style={{
             textAlign: 'right'

@@ -226,7 +226,7 @@ const Team = function (sequelize, DataTypes) {
       message: body,
       attachment: attachment,
       direction: 'out',
-      read: false,
+      read: true,
       teamId: this.id,
       contactId: contact.id
     })
@@ -287,7 +287,7 @@ const Team = function (sequelize, DataTypes) {
     return task.destroy()
   }
 
-  Model.prototype.messagesAndNotes = async function (contact, limit = 100, offset = 0) {
+  Model.prototype.messagesAndNotes = async function (contact, limit = 1000, offset = 0) {
     if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
     const messages = await api.models.Message.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
     const notes = await api.models.Note.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })

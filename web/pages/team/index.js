@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col, Jumbotron } from 'react-bootstrap'
 import Layout from './../../components/layouts/loggedIn.js'
+import TeamListener from './../../components/teamListener.js'
 import TeamRepository from './../../repositories/team.js'
 import ContactsList from './../../components/lists/contacts.js'
 import ContactRepository from './../../repositories/contact.js'
@@ -56,6 +57,7 @@ class Page extends React.Component {
     return (
       <Layout>
         <h1>{team.name}</h1>
+        <TeamListener />
         <br />
         <Row>
           <Col md={4}>
