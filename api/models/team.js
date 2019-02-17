@@ -62,7 +62,13 @@ const Team = function (sequelize, DataTypes) {
   })
 
   Model.prototype.ensureRoom = async function () {
-    return api.chatRoom.add(`team-${this.id}`)
+    try {
+      await api.chatRoom.add(`team-${this.id}`)
+    } catch (error) {
+      if (!error.toString().match(/room exists/)) {
+        throw error
+      }
+    }
   }
 
   Model.prototype.addFolder = async function (folderName) {

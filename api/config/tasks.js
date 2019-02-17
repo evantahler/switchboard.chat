@@ -55,7 +55,10 @@ exports.test = {
   tasks: (api) => {
     return {
       timeout: 100,
-      checkTimeout: 50
+      checkTimeout: 50,
+      minTaskProcessors: 0,
+      maxTaskProcessors: 0,
+      scheduler: false
     }
   }
 }
