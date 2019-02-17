@@ -47,7 +47,7 @@ exports.twilioIn = class listNumbers extends Action {
         validator: s => { return parsePhoneNumber(s, api.config.twilio.phoneNumberDefaultCountry).isValid() }
       },
       MediaUrl0: { required: false },
-      Body: { required: true },
+      Body: { required: false },
       AccountSid: { required: true }
     }
   }
@@ -79,7 +79,7 @@ exports.twilioIn = class listNumbers extends Action {
     const message = new api.models.Message({
       from: params.From,
       to: params.To,
-      message: params.Body,
+      message: params.Body || (''),
       attachment: attachment,
       direction: 'in',
       teamId: team.id,
