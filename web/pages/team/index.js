@@ -1,8 +1,7 @@
 import React from 'react'
-import { Row, Col, Jumbotron } from 'react-bootstrap'
+import { Row, Col, Alert } from 'react-bootstrap'
 import Layout from './../../components/layouts/loggedIn.js'
 import TeamListener from './../../components/teamListener.js'
-import TeamRepository from './../../repositories/team.js'
 import ContactsList from './../../components/lists/contacts.js'
 import ContactRepository from './../../repositories/contact.js'
 import FoldersRepository from './../../repositories/folders.js'
@@ -37,9 +36,6 @@ class Page extends React.Component {
   }
 
   async load () {
-    const teamResponse = await TeamRepository.get()
-    if (teamResponse) { this.setState({ team: teamResponse.team }) }
-
     const contactResponse = await ContactRepository.get()
     if (contactResponse) { this.setState({ contact: contactResponse.contact }) }
 
@@ -48,7 +44,7 @@ class Page extends React.Component {
   }
 
   render () {
-    const { team, contact, folders } = this.state
+    const { contact, folders } = this.state
     let folder
     if (contact && contact.folderId && folders.length > 0) {
       folder = (folders.filter(folder => folder.id === contact.folderId))[0]
@@ -56,32 +52,30 @@ class Page extends React.Component {
 
     return (
       <Layout>
-        <h1>{team.name}</h1>
-        <TeamListener />
         <br />
         <Row>
-          <Col md={4}>
+          <Col md={3}>
             <h2>Contacts <AddContactModal /></h2>
             <ContactsList />
           </Col>
 
-          <Col md={8}>
+          <Col md={9}>
             {
               folder && contact
-                ? <Jumbotron>
-                  <p>{folder.name}</p>
+                ? <Alert variant='warning'>
                   <h2>{contact.firstName} {contact.lastName}</h2>
-                  <br />
-                  <br />
+                  <p>{folder.name}</p>
                   <EditContactModal /> <DestroyContactModal /> <AddTaskModal />
-                </Jumbotron>
+                </Alert>
                 : null
             }
-
-            <TasksList />
-            <MessagesList />
+            <Row>
+              <Col md={4}><TasksList /></Col>
+              <Col md={8}><MessagesList /></Col>
+            </Row>
           </Col>
         </Row>
+        <TeamListener />
       </Layout>
     )
   }

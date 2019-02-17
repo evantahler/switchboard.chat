@@ -14,7 +14,7 @@ class ContactCard extends React.Component {
 
   render () {
     const contact = this.props.contact
-    const bg = this.props.active ? 'primary' : 'light'
+    const bg = this.props.active ? 'info' : 'light'
 
     return (
       <Card bg={bg} onClick={this.showMessages.bind(this)}>

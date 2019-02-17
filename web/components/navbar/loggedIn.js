@@ -63,14 +63,14 @@ class NavbarLoggedIn extends React.Component {
     const team = this.state.team
 
     return (
-      <Navbar bg='dark' variant='dark' expand='lg'>
+      <Navbar bg='light' variant='light' expand='lg'>
         <Navbar.Brand href='/team'>Switchboard ☎️</Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mr-auto'>
             {
               team.id
-                ? <HighlightableNavigationLink href='/team'>{team.name} Dashboard</HighlightableNavigationLink>
+                ? <HighlightableNavigationLink href='/team'><strong>{team.name}</strong></HighlightableNavigationLink>
                 : null
             }
             {

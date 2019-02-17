@@ -60,7 +60,6 @@ class MessagesList extends React.Component {
     ContactRepository.subscribe('message-list', this.subscription.bind(this))
     MessagesRepository.subscribe('message-list', this.subscription.bind(this))
     await this.load()
-    this.scrollToBottom()
   }
 
   componentWillUnmount () {
@@ -69,14 +68,7 @@ class MessagesList extends React.Component {
   }
 
   async subscription () {
-    const { messages } = this.state
-    let oldMessageCount = messages.length
     await this.load()
-    let newMessageCount = this.state.messages.length
-
-    if (newMessageCount > oldMessageCount) {
-      this.scrollToBottom()
-    }
   }
 
   async load () {
@@ -87,11 +79,6 @@ class MessagesList extends React.Component {
       const messagesResponse = await MessagesRepository.get()
       if (messagesResponse) { this.setState({ messages: messagesResponse.messages }) }
     }
-  }
-
-  scrollToBottom () {
-    if (!this.messagesEnd) { return }
-    this.messagesEnd.scrollIntoView({ behavior: 'auto' })
   }
 
   render () {
@@ -116,7 +103,7 @@ class MessagesList extends React.Component {
         <h3>Messages</h3>
         { messages.length > 0
           ? <ListGroup style={containerStyle}>
-            { messages.map((message) => {
+            { messages.reverse().map((message) => {
               if (message.type === 'message') {
                 return <MessageCard key={`message-${message.id}`} message={message} />
               } else if (message.type === 'note') {
