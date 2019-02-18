@@ -14,7 +14,7 @@ class NavbarLoggedOut extends React.Component {
 
   render () {
     return (
-      <Navbar  bg='light' variant='light' expand='lg'>
+      <Navbar bg='light' variant='light' expand='lg'>
         <Navbar.Brand href='/'>Switchboard ☎️</Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
