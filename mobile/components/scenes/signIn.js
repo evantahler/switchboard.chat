@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import LoggedOutLayout from './../layouts/loggedOut.js'
 import { Text, Card, CardItem, Left, Thumbnail, Body } from 'native-base'
-
-const IconImage = require('./../../assets/images/phone.png')
+import IconImage from './../../assets/images/phone.png'
 
 export default class Welcome extends Component {
   render () {

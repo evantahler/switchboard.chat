@@ -1,4 +1,4 @@
 web: cd web && yarn run dev
 api: cd api && yarn run start
-# ios: cd mobile && yarn run ios
+mobile: cd mobile && yarn run start
 ngrok: ngrok http 8080 -subdomain=switchboard-development

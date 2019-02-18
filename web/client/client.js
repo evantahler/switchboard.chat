@@ -4,6 +4,8 @@ import * as PackgeJSON from './../package.json'
 class Client {
   constructor () {
     this.apiEndpoint = process.env.API_URL
+    // TODO: Rendering this out as a string forces webpack to redner in the env varible, which is needed by the mobile client
+    this.apiEndpointMessage = `API Endpoint: ${this.apiEndpoint}`
   }
 
   async test () {

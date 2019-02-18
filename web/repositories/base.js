@@ -4,7 +4,7 @@ import StorageMock from './utils/storageMock'
 class BaseRepository {
   constructor () {
     let storage
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.localStorage) {
       storage = window.localStorage
     } else {
       storage = new StorageMock()
