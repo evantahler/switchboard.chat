@@ -5,9 +5,9 @@ import Moment from 'react-moment'
 import NotificationsRepository from './../../../repositories/notifications'
 import NotificationRepository from './../../../repositories/notification'
 
-const MEDIUMS = ['sms']
+const MEDIUMS = ['sms', 'email']
 const DELAYS = [
-  ['instantly', 0],
+  // ['instantly', 0],
   ['wait 1 minute', (1000 * 60 * 1)],
   ['wait 5 minutes', (1000 * 60 * 5)],
   ['wait 10 minutes', (1000 * 60 * 10)],

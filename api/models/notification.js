@@ -13,12 +13,12 @@ const Notification = function (sequelize, DataTypes) {
     enabled: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: true
     },
     medium: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'sms'
+      defaultValue: 'email'
     },
     delayMiliseconds: {
       type: DataTypes.INTEGER,
@@ -53,7 +53,7 @@ const Notification = function (sequelize, DataTypes) {
   }
 
   Model.allowedMediums = function () {
-    return ['sms']
+    return ['sms', 'email']
   }
 
   return Model

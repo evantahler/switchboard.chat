@@ -5,7 +5,7 @@ module.exports = class NotifyTeams extends Task {
     super()
     this.name = 'notifyTeams'
     this.description = 'check all teams that might be need to notifued'
-    this.frequency = 1000 * 60
+    this.frequency = 1000 * 30
     this.queue = 'notifications'
     this.middleware = []
   }
