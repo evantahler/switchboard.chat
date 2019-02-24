@@ -123,6 +123,21 @@ jobs:
           path: /home/circleci/project/web/reports/junit/
 
 
+  deploy-web:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "18:9f:d8:b1:f7:9b:44:44:ec:0e:3d:88:7f:a2:0d:4f"
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: deploy-gh-pages
+          command: cd web && ./bin/deploy
+
+
 
 # Run all the tests is parallel
 workflows:
@@ -156,3 +171,10 @@ workflows:
             <<: *ignored-branches
           requires:
             - linter-web
+
+      - deploy-web:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - test-web
+            - test-api
