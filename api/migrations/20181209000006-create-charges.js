@@ -13,54 +13,29 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      paid: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      paidAt: {
+      capturedAt: {
         type: DataTypes.DATE,
         allowNull: true
       },
-      refunded: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-      },
-      refundedAt: {
+      billingPeriodStart: {
         type: DataTypes.DATE,
-        allowNull: true
+        allowNull: false
       },
-      billingPeriod: {
+      billingPeriodEnd: {
         type: DataTypes.DATE,
-        allowNull: true
-      },
-      type: {
-        type: DataTypes.STRING(191),
         allowNull: false
       },
-      valueInCents: {
+      totalInCents: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      unitValueInCents: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      unitCount: {
-        type: DataTypes.INTEGER,
+      lineItems: {
+        type: DataTypes.TEXT,
         allowNull: false
       },
       payload: {
         type: DataTypes.TEXT,
         allowNull: true
-      },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      discountValueInCents: {
-        type: DataTypes.INTEGER,
-        allowNull: false
       }
     }, {
       charset: 'utf8mb4'

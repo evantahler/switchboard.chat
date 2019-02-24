@@ -4,54 +4,31 @@ const Charge = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    paid: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    paidAt: {
+    capturedAt: {
       type: DataTypes.DATE,
       allowNull: true
     },
-    refunded: {
-      type: DataTypes.BOOLEAN,
+    billingPeriodStart: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    billingPeriodEnd: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    totalInCents: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: false
+      defaultValue: 0
     },
-    refundedAt: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    billingPeriod: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    type: {
-      type: DataTypes.STRING(191),
-      allowNull: false
-    },
-    valueInCents: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    unitValueInCents: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    unitCount: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    lineItems: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      defaultValue: JSON.stringify([])
     },
     payload: {
       type: DataTypes.TEXT,
       allowNull: true
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
-    discountValueInCents: {
-      type: DataTypes.INTEGER,
-      allowNull: false
     }
   }, {
     tableName: 'charges'
@@ -62,14 +39,12 @@ const Charge = function (sequelize, DataTypes) {
       id: this.id,
       createdAt: this.createdAt,
       teamId: this.teamId,
-      paid: this.paid,
-      paidAt: this.paidAt,
-      type: this.type,
-      valueInCents: this.valueInCents,
-      unitValueInCents: this.unitValueInCents,
-      unitCount: this.unitCount,
-      description: this.description,
-      discountValueInCents: this.discountValueInCents
+      capturedAt: this.capturedAt,
+      billingPeriodStart: this.billingPeriodStart,
+      billingPeriodEnd: this.billingPeriodEnd,
+      totalInCents: this.totalInCents,
+      lineItems: this.lineItems,
+      payload: this.payload
     }
   }
 

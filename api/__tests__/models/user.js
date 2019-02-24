@@ -59,8 +59,7 @@ describe('actionhero Tests', () => {
         billingEmail: 'example@example.com',
         pricePerMonth: 100,
         pricePerMessage: 1,
-        includedMessagesPerMonth: 0,
-        enabled: true
+        includedMessagesPerMonth: 0
       })
 
       team2 = new api.models.Team({
@@ -69,8 +68,7 @@ describe('actionhero Tests', () => {
         billingEmail: 'example@example.com',
         pricePerMonth: 100,
         pricePerMessage: 1,
-        includedMessagesPerMonth: 0,
-        enabled: true
+        includedMessagesPerMonth: 0
       })
 
       await team1.save()

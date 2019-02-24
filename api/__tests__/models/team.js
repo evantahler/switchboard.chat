@@ -17,8 +17,7 @@ describe('actionhero Tests', () => {
       billingEmail: 'example@example.com',
       pricePerMonth: 100,
       pricePerMessage: 1,
-      includedMessagesPerMonth: 0,
-      enabled: true
+      includedMessagesPerMonth: 0
     })
 
     await team.save()

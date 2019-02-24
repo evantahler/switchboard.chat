@@ -125,8 +125,7 @@ exports.teamsList = class teamsList extends Action {
     const teams = await api.models.Team.findAll({ where: {
       id: {
         [Op.in]: teamMemberships.map(t => { return t.teamId })
-      },
-      enabled: true
+      }
     } })
 
     response.teams = []

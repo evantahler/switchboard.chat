@@ -43,11 +43,6 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
-      },
-      enabled: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
       }
     }, {
       charset: 'utf8mb4'

@@ -34,7 +34,8 @@
   "scripts": {
     "start": "actionhero start",
     "pretest": "standard",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "localConsole": "heroku local:run -e ../.env node_modules/.bin/actionhero console"
   },
   "standard": {
     "ignore": [

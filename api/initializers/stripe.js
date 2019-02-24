@@ -46,6 +46,31 @@ module.exports = class StripeInitializer extends Initializer {
         })
 
         return match
+      },
+
+      processTeamCharge: async (team, charge) => {
+        let lines = JSON.parse(charge.lineItems)
+        let description = lines.map((line) => { return `$${line.value / 100} - ${line.label}` }).join(', ')
+
+        const payload = await api.stripe.client.charges.create({
+          amount: charge.totalInCents,
+          currency: 'usd',
+          capture: true,
+          customer: team.stripeCustomerId,
+          description: description,
+          metadata: charge.apiData(),
+          receipt_email: team.billingEmail
+        })
+
+        charge.payload = JSON.stringify(payload)
+        if (payload.captured) {
+          charge.capturedAt = new Date()
+        }
+
+        await charge.save()
+        api.log(`created a charge for team #${team.id}`)
+
+        return payload
       }
     }
   }

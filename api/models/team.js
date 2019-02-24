@@ -41,11 +41,6 @@ const Team = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1000
-    },
-    enabled: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true
     }
   }, {
     tableName: 'teams',
@@ -320,6 +315,47 @@ const Team = function (sequelize, DataTypes) {
     return api.s3.uploadFile(remotePath, localPath, contentType)
   }
 
+  Model.prototype.calculateBillForPeriod = async function (billingPeriodStart, billingPeriodEnd) {
+    let totalInCents = 0
+    let lineItems = []
+    if (this.deletedAt) { throw new Error('team is deleted') }
+    if (this.createdAt.getTime() > billingPeriodStart.getTime()) { throw new Error('team was not created in this period') }
+
+    totalInCents += this.pricePerMonth
+    lineItems.push({ label: `Monthly Fee (team + ${this.includedMessagesPerMonth} messages)`, value: this.pricePerMonth })
+
+    const messagesSent = await api.models.Message.count({
+      where: { teamId: this.id, createdAt: { [Op.and]: { [Op.lt]: billingPeriodEnd, [Op.gte]: billingPeriodStart } } }
+    })
+
+    let extraMessages = messagesSent - this.includedMessagesPerMonth
+    if (extraMessages < 0) { extraMessages = 0 }
+    const extraMessagesFee = extraMessages * this.pricePerMessage
+    totalInCents += extraMessagesFee
+    lineItems.push({ label: `Extra Messages (${extraMessages} messages @ ${this.pricePerMessage} cents per message)`, value: extraMessagesFee })
+
+    return {
+      totalInCents,
+      lineItems
+    }
+  }
+
+  Model.prototype.charge = async function (billingPeriodStart, billingPeriodEnd) {
+    let now = new Date()
+    if (!billingPeriodStart) { billingPeriodStart = new Date(now.getFullYear(), now.getMonth() - 1, 1) }
+    if (!billingPeriodEnd) { billingPeriodEnd = new Date(now.getFullYear(), now.getMonth(), 1) }
+
+    let charges = await api.models.Charge.findOrCreate({ where: { teamId: this.id, billingPeriodStart, billingPeriodEnd } })
+    let charge = charges[0]
+    if (charge.capturedAt) { return charge }
+
+    const billForPeriod = await this.calculateBillForPeriod(billingPeriodStart, billingPeriodEnd)
+    charge.totalInCents = billForPeriod.totalInCents
+    charge.lineItems = JSON.stringify(billForPeriod.lineItems)
+    await charge.save()
+    await api.stripe.processTeamCharge(this, charge)
+  }
+
   Model.prototype.apiData = function () {
     return {
       id: this.id,
@@ -329,9 +365,8 @@ const Team = function (sequelize, DataTypes) {
       voiceResponse: this.voiceResponse,
       pricePerMonth: this.pricePerMonth,
       pricePerMessage: this.pricePerMessage,
-      includedMessagesPerMonth: this.includedMessagesPerMonth,
-      // sid: this.sid,
-      enabled: this.enabled
+      includedMessagesPerMonth: this.includedMessagesPerMonth
+      // sid: this.sid
     }
   }
 

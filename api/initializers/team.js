@@ -19,7 +19,7 @@ module.exports = class TeamInitializer extends Initializer {
         if (!params.teamId) { throw new Error('teamId is required') }
         const initiatingTeamMember = await api.models.TeamMember.findOne({ where: { userId: session.userId, teamId: params.teamId } })
         if (!initiatingTeamMember) { throw new Error('you are not a member of this team') }
-        const team = await api.models.Team.findOne({ where: { id: params.teamId, enabled: true } })
+        const team = await api.models.Team.findOne({ where: { id: params.teamId } })
         if (!team) { throw new Error('team not found') }
         data.team = team
       }

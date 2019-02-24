@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Button, Card, Row, Col } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import TeamRepository from './../../../repositories/team'
+import TeamsRepository from './../../../repositories/teams'
 import StripeFormContainer from './../stripe/stripeFormContainer'
 
 class NewTeamForm extends React.Component {
@@ -45,6 +46,8 @@ class NewTeamForm extends React.Component {
     const data = FormSerializer(form)
     if (this.state.stripeToken) { data.stripeToken = this.state.stripeToken }
     const { team } = await TeamRepository.update(data)
+    await TeamRepository.hydrate()
+    await TeamsRepository.hydrate()
     this.setState({ team })
   }
 
@@ -66,8 +69,10 @@ class NewTeamForm extends React.Component {
                 <Card.Text>
                   Billing Zip Code: {billingInformation.address_zip}<br />
                   Expiry: {billingInformation.exp_month}/{billingInformation.exp_year}<br />
-                  <br />
-                  <br />
+                  <hr />
+                  Price per Month: ${team.pricePerMonth / 100}<br />
+                  Messages Included: {team.includedMessagesPerMonth}<br />
+                Price per additional Message: ${team.pricePerMessage / 100}
                 </Card.Text>
               </Card.Body>
             </Card>
