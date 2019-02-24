@@ -1,5 +1,6 @@
 import React from 'react'
 import Router from 'next/router'
+import Link from 'next/link'
 import Layout from './../components/layouts/loggedOut.js'
 import { Jumbotron, Button, Row, Col, Card } from 'react-bootstrap'
 import WhatIsSwitchboardCard from './../components/cards/whatIsSwitchboard'
@@ -8,12 +9,13 @@ import FeaturesTable from './../components/lists/features'
 
 class IndustryCard extends React.Component {
   render () {
+    const link = `/industries/${this.props.title}`.replace(' ', '-').toLowerCase()
+
     return (
       <Card border='info'>
         <Card.Body>
-          <Card.Title>{this.props.title}</Card.Title>
-          <Card.Text>
-          </Card.Text>
+          <Card.Title><Link href={link}><a>{this.props.title}</a></Link></Card.Title>
+          <Card.Text>...</Card.Text>
         </Card.Body>
       </Card>
     )
