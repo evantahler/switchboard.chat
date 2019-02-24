@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import VersionRepository from '../../repositories/version'
+import VersionRepository from './../../repositories/version'
 
 class Footer extends React.Component {
   constructor () {
@@ -24,10 +24,13 @@ class Footer extends React.Component {
     return (
       <footer>
         <Row>
-          <Col>
-            <p>version {this.state.version.version}</p>
+          <Col md={6}>
+            <p>
+              email <a href='mailto:support@switchboard.chat'>support@switchboard.chat</a> for help<br />
+              version {this.state.version.version}
+            </p>
           </Col>
-          <Col style={{
+          <Col md={6} style={{
             textAlign: 'right'
           }}>
             <p>{ this.copyright() } <a target='_blank' href='https://www.delicioushat.com'>Delicious Hat</a></p>

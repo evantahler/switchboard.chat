@@ -2,7 +2,7 @@ import React from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import Layout from './../components/layouts/loggedOut.js'
-import { Jumbotron, Button, Row, Col, Card } from 'react-bootstrap'
+import { Jumbotron, Button, Row, Col, Card, Image } from 'react-bootstrap'
 import WhatIsSwitchboardCard from './../components/cards/whatIsSwitchboard'
 import HowDoesSwitchboardWorkCard from './../components/cards/howDoesSwitchboardWork'
 import FeaturesTable from './../components/lists/features'
@@ -27,11 +27,15 @@ class Page extends React.Component {
     return (
       <Layout>
         <Jumbotron>
-          <h1>Switchboard</h1>
-          <p>Centralized SMS Communication for Teams</p>
-          <p>
-            <Button variant='success' onClick={() => Router.push('/session/sign-up')}>Sign Up</Button>
-          </p>
+          <Row>
+            <Col md={6}>
+              <h1>Switchboard</h1>
+              <p>Centralized SMS Communication for Teams</p>
+              <p>
+                <Button variant='success' onClick={() => Router.push('/session/sign-up')}>Sign Up</Button>
+              </p>
+            </Col>
+          </Row>
         </Jumbotron>
         <Row>
           <Col md={6}>
