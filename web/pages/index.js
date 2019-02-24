@@ -1,7 +1,9 @@
 import React from 'react'
 import Router from 'next/router'
 import Layout from './../components/layouts/loggedOut.js'
-import { Jumbotron, Button } from 'react-bootstrap'
+import { Jumbotron, Button, Row, Col } from 'react-bootstrap'
+import WhatIsSwitchboardCard from './../components/cards/whatIsSwitchboard'
+import HowDoesSwitchboardWorkCard from './../components/cards/howDoesSwitchboardWork'
 
 class Page extends React.Component {
   render () {
@@ -14,7 +16,14 @@ class Page extends React.Component {
             <Button variant='success' onClick={() => Router.push('/session/sign-up')}>Sign Up</Button>
           </p>
         </Jumbotron>
-
+        <Row>
+          <Col>
+            <WhatIsSwitchboardCard />
+          </Col>
+          <Col>
+            <HowDoesSwitchboardWorkCard />
+          </Col>
+        </Row>
       </Layout>
     )
   }
