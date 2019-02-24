@@ -1,5 +1,6 @@
 import React from 'react'
 import Router from 'next/router'
+import Link from 'next/link'
 import { Navbar, Nav, ButtonToolbar, Button, NavDropdown } from 'react-bootstrap'
 import HighlightableNavigationLink from './highlightableNavigationLink'
 
@@ -15,7 +16,7 @@ class NavbarLoggedOut extends React.Component {
   render () {
     return (
       <Navbar bg='light' variant='light' expand='lg'>
-        <Navbar.Brand href='/'>Switchboard ☎️</Navbar.Brand>
+        <Link href='/'><Navbar.Brand>Switchboard ☎️</Navbar.Brand></Link>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mr-auto'>

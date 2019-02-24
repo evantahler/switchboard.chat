@@ -2,7 +2,7 @@ import { Card } from 'react-bootstrap'
 
 const WhatIsSwitchboard = () => {
   return (
-    <Card >
+    <Card border='info'>
       <Card.Body>
         <Card.Title>What is Switchboard?</Card.Title>
         <Card.Text>
