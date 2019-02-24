@@ -36,11 +36,8 @@ class TeamCard extends React.Component {
         <Card.Body>
           <Card.Title>{team.phoneNumber}</Card.Title>
           <Card.Text>
-            Messages In: {team.stats.messagesIn}<br />
-            Messages Out: {team.stats.messagesOut}<br />
-            Price per Month: {team.pricePerMonth}<br />
-            Price per Message: {team.pricePerMessage}<br />
-            Included Messages per Month: {team.includedMessagesPerMonth}<br />
+            Total Messages In: {team.stats.messagesIn}<br />
+            Total Messages Out: {team.stats.messagesOut}<br />
           </Card.Text>
           <ButtonToolbar>
             <Button variant='primary' onClick={this.goToTeam.bind(this, team, '')}>Go to to {team.name}</Button>
