@@ -103,7 +103,8 @@ const Team = function (sequelize, DataTypes) {
     } else if (email) {
       user = await api.models.User.findOne({ where: { email } })
       if (!user) {
-        user = new api.models.User({ email, firstName, lastName })
+        let passwordResetToken = uuidv4()
+        user = new api.models.User({ email, firstName, lastName, passwordResetToken })
         await user.save()
       }
     } else {

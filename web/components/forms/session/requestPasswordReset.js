@@ -1,12 +1,10 @@
 import React from 'react'
-import Router from 'next/router'
 import Link from 'next/link'
 import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import SessionRepository from './../../../repositories/session'
-import UserRepository from './../../../repositories/user'
 
-class SignUpForm extends React.Component {
+class RequestPasswordResetForm extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -25,10 +23,7 @@ class SignUpForm extends React.Component {
 
   async submit (form) {
     const data = FormSerializer(form)
-    const sessionData = await SessionRepository.create(data)
-    if (!sessionData) { return }
-    const user = await UserRepository.get(sessionData)
-    if (user) { Router.push('/user/teams') }
+    await SessionRepository.requestPasswordReset(data)
   }
 
   render () {
@@ -48,22 +43,16 @@ class SignUpForm extends React.Component {
             <Form.Control.Feedback type='invalid'>Email is required</Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
-            <Form.Control required type='password' placeholder='Password' />
-            <Form.Control.Feedback type='invalid'>A password is required</Form.Control.Feedback>
-          </Form.Group>
-
           <Button variant='primary' type='submit'>
             Submit
           </Button>
         </Form>
 
         <br />
-        <Link href='/session/request-password-reset'><a>Forgot your password?</a></Link>
+        <Link href='/session/sign-in'><a>... or sign in</a></Link>
       </>
     )
   }
 }
 
-export default SignUpForm
+export default RequestPasswordResetForm

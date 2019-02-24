@@ -86,11 +86,7 @@ class MessagesList extends React.Component {
     const contact = this.state.contact
 
     if (!contact || !contact.id) {
-      return <div>
-        <br />
-        <br />
-        <Alert variant='warning'>Choose a Contact to view messages</Alert>
-      </div>
+      return null
     }
 
     const containerStyle = {

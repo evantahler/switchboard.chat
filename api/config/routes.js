@@ -19,6 +19,8 @@ exports['default'] = {
 
       put: [
         { path: '/user', action: 'user:create' },
+        { path: '/user/requestResetPassword', action: 'user:requestResetPassword' },
+        { path: '/user/resetPassword', action: 'user:resetPassword' },
         { path: '/team', action: 'team:create' },
         { path: '/session', action: 'session:create' },
         { path: '/teamMember', action: 'teamMember:create' },

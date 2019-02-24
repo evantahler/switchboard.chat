@@ -1,7 +1,6 @@
 const { Action, api } = require('actionhero')
 const validator = require('validator')
 const { parsePhoneNumber } = require('libphonenumber-js')
-const minPasswordLength = 6
 
 exports.userCreate = class userCreate extends Action {
   constructor () {
@@ -27,7 +26,7 @@ exports.userCreate = class userCreate extends Action {
       },
       password: {
         required: true,
-        validator: s => { return validator.isLength(s, { min: minPasswordLength }) }
+        validator: s => { return validator.isLength(s, { min: api.models.User.minPasswordLength }) }
       },
       phoneNumber: {
         required: false,
@@ -90,7 +89,7 @@ exports.userEdit = class userEdit extends Action {
       },
       password: {
         required: false,
-        validator: s => { return validator.isLength(s, { min: minPasswordLength }) }
+        validator: s => { return validator.isLength(s, { min: api.models.User.minPasswordLength }) }
       },
       phoneNumber: {
         required: false,
@@ -104,6 +103,68 @@ exports.userEdit = class userEdit extends Action {
     let user = await api.models.User.findOne({ where: { id: session.userId } })
     user = Object.assign(user, params)
     await user.save()
+    if (params.password) {
+      await user.updatePassword(params.password)
+    }
+    response.user = user.apiData()
+  }
+}
+
+exports.userRequestResetPassword = class userRequestResetPassword extends Action {
+  constructor () {
+    super()
+    this.name = 'user:requestResetPassword'
+    this.description = 'to request a password reset email for a user'
+    this.outputExample = {}
+    this.middleware = []
+  }
+
+  inputs () {
+    return {
+      email: {
+        required: true,
+        validator: s => { return validator.isEmail(s) }
+      }
+    }
+  }
+
+  async run ({ response, params }) {
+    const user = await api.models.User.findOne({ where: { email: params.email } })
+    if (!user) { throw new Error('user not found') }
+    await user.sendPasswordResetEmail()
+  }
+}
+
+exports.userResetPassword = class userResetPassword extends Action {
+  constructor () {
+    super()
+    this.name = 'user:resetPassword'
+    this.description = 'to update the password for a uesr'
+    this.outputExample = {}
+    this.middleware = []
+  }
+
+  inputs () {
+    return {
+      passwordResetToken: {
+        required: true,
+        validator: s => { return validator.isLength(s, { min: 1 }) }
+      },
+      email: {
+        required: true,
+        validator: s => { return validator.isEmail(s) }
+      },
+      password: {
+        required: true,
+        validator: s => { return validator.isLength(s, { min: api.models.User.minPasswordLength }) }
+      }
+    }
+  }
+
+  async run ({ response, params }) {
+    const user = await api.models.User.findOne({ where: { email: params.email, passwordResetToken: params.passwordResetToken } })
+    if (!user) { throw new Error('user not found or did not request a new password') }
+    await user.updatePassword(params.password)
     response.user = user.apiData()
   }
 }

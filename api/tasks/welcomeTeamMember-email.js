@@ -17,7 +17,7 @@ module.exports = class WelcomeTeamMemberViaEmail extends Task {
     if (!user.email) { return }
 
     const subject = `Your have been invited to ${team.name} on Switchboard`
-    const emailData = {
+    let emailData = {
       paragraphs: [
         `Hello!`,
         `Your have been invited to ${team.name} on Switchboard.  Switchboard is a tool you can use to share and send SMS messages with your clients and customers.`
@@ -26,6 +26,11 @@ module.exports = class WelcomeTeamMemberViaEmail extends Task {
       ctaLink: process.env.ALLOWED_ORIGIN + '/session/sign-in',
       signoff: 'Thanks, the Switchboard team.',
       greeting: 'Hi, ' + user.firstName
+    }
+
+    if (user.passwordResetToken) {
+      emailData.cta = 'Sign Up'
+      emailData.ctaLink = process.env.ALLOWED_ORIGIN + `/session/reset-password?passwordResetToken=${user.passwordResetToken}&userId=${user.id}&email=${user.email}`
     }
 
     await api.email.send(user.email, subject, emailData)

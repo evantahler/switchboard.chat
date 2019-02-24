@@ -26,11 +26,6 @@ module.exports = {
         type: DataTypes.TEXT,
         allowNull: true
       },
-      requirePasswordChange: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-      },
       firstName: {
         type: DataTypes.STRING(191),
         allowNull: false

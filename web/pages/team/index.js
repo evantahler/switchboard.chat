@@ -67,7 +67,7 @@ class Page extends React.Component {
                   <p>{folder.name}</p>
                   <EditContactModal /> <DestroyContactModal /> <AddTaskModal />
                 </Alert>
-                : null
+                : <Alert variant='warning'>Choose a Contact to view messages</Alert>
             }
             <Row>
               <Col md={4}><TasksList /></Col>

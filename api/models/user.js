@@ -1,5 +1,6 @@
 const { api } = require('actionhero')
 const { Op } = require('sequelize')
+const uuidv4 = require('uuid/v4')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
@@ -22,11 +23,6 @@ const User = function (sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    requirePasswordChange: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
     firstName: {
       type: DataTypes.STRING(191),
       allowNull: false
@@ -44,6 +40,8 @@ const User = function (sequelize, DataTypes) {
     paranoid: true
   })
 
+  Model.minPasswordLength = 6
+
   Model.afterDestroy(async (instance) => {
     instance.email = `${instance.email}-destroyed-${instance.id}`
     instance.phoneNumber = `${instance.phoneNumber}-destroyed-${instance.id}`
@@ -57,11 +55,18 @@ const User = function (sequelize, DataTypes) {
   Model.prototype.updatePassword = async function (password) {
     if (!password) { throw new Error('password required') }
     this.passwordHash = await bcrypt.hash(password, saltRounds)
+    this.passwordResetToken = null
     await this.save()
   }
 
   Model.prototype.checkPassword = async function (password) {
     return bcrypt.compare(password, this.passwordHash)
+  }
+
+  Model.prototype.sendPasswordResetEmail = async function () {
+    this.passwordResetToken = uuidv4()
+    await this.save()
+    await api.tasks.enqueue(`resetPassword-email`, { userId: this.id }, 'notifications')
   }
 
   Model.prototype.joinTeam = async function (team) {
@@ -95,7 +100,6 @@ const User = function (sequelize, DataTypes) {
       phoneNumber: this.phoneNumber,
       firstName: this.firstName,
       lastName: this.lastName
-      // requirePasswordChange: this.requirePasswordChange
     }
   }
 
