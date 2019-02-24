@@ -21,6 +21,11 @@ const Charge = function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: 0
     },
+    totalMessages: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     lineItems: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -43,6 +48,7 @@ const Charge = function (sequelize, DataTypes) {
       billingPeriodStart: this.billingPeriodStart,
       billingPeriodEnd: this.billingPeriodEnd,
       totalInCents: this.totalInCents,
+      totalMessages: this.totalMessages,
       lineItems: this.lineItems,
       payload: this.payload
     }

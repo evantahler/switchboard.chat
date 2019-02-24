@@ -25,6 +25,10 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false
       },
+      totalMessages: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       totalInCents: {
         type: DataTypes.INTEGER,
         allowNull: false

@@ -18,7 +18,7 @@ class NewTeamForm extends React.Component {
         billingEmail: '',
         voiceResponse: ''
       },
-      billingInformation: {}
+      card: {}
     }
   }
 
@@ -26,7 +26,7 @@ class NewTeamForm extends React.Component {
     const teamResponse = await TeamRepository.get()
     if (teamResponse) { this.setState({ team: teamResponse.team }) }
     const billingInformation = await TeamRepository.loadBillingInformation()
-    if (billingInformation) { this.setState({ billingInformation }) }
+    if (billingInformation) { this.setState({ card: billingInformation.card }) }
   }
 
   setStripeToken (stripeResponse) {
@@ -52,7 +52,7 @@ class NewTeamForm extends React.Component {
   }
 
   render () {
-    const { validated, team, billingInformation } = this.state
+    const { validated, team, card } = this.state
 
     const update = async (event) => {
       team[event.target.id] = event.target.value
@@ -65,10 +65,10 @@ class NewTeamForm extends React.Component {
           <Col md={4}>
             <Card>
               <Card.Body>
-                <Card.Title>Card on File: {billingInformation.brand}, xxxx-{billingInformation.last4}</Card.Title>
+                <Card.Title>Card on File: {card.brand}, xxxx-{card.last4}</Card.Title>
                 <Card.Text>
-                  Billing Zip Code: {billingInformation.address_zip}<br />
-                  Expiry: {billingInformation.exp_month}/{billingInformation.exp_year}<br />
+                  Billing Zip Code: {card.address_zip}<br />
+                  Expiry: {card.exp_month}/{card.exp_year}<br />
                   <hr />
                   Price per Month: ${team.pricePerMonth / 100}<br />
                   Messages Included: {team.includedMessagesPerMonth}<br />

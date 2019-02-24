@@ -324,11 +324,11 @@ const Team = function (sequelize, DataTypes) {
     totalInCents += this.pricePerMonth
     lineItems.push({ label: `Monthly Fee (team + ${this.includedMessagesPerMonth} messages)`, value: this.pricePerMonth })
 
-    const messagesSent = await api.models.Message.count({
+    const totalMessages = await api.models.Message.count({
       where: { teamId: this.id, createdAt: { [Op.and]: { [Op.lt]: billingPeriodEnd, [Op.gte]: billingPeriodStart } } }
     })
 
-    let extraMessages = messagesSent - this.includedMessagesPerMonth
+    let extraMessages = totalMessages - this.includedMessagesPerMonth
     if (extraMessages < 0) { extraMessages = 0 }
     const extraMessagesFee = extraMessages * this.pricePerMessage
     totalInCents += extraMessagesFee
@@ -336,7 +336,8 @@ const Team = function (sequelize, DataTypes) {
 
     return {
       totalInCents,
-      lineItems
+      lineItems,
+      totalMessages
     }
   }
 
@@ -352,6 +353,7 @@ const Team = function (sequelize, DataTypes) {
     const billForPeriod = await this.calculateBillForPeriod(billingPeriodStart, billingPeriodEnd)
     charge.totalInCents = billForPeriod.totalInCents
     charge.lineItems = JSON.stringify(billForPeriod.lineItems)
+    charge.totalMessages = billForPeriod.totalMessages
     await charge.save()
     await api.stripe.processTeamCharge(this, charge)
   }

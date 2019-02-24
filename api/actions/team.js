@@ -103,6 +103,13 @@ exports.teamViewBilling = class teamView extends Action {
   }
 
   async run ({ response, team }) {
+    const charges = await api.models.Charge.findAll({ where: { teamId: team.id } })
+    response.charges = []
+    for (let i in charges) {
+      let apiData = await charges[i].apiData()
+      response.charges.push(apiData)
+    }
+
     response.card = await api.stripe.cardDetails(team)
   }
 }

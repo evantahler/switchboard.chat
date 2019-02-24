@@ -23,8 +23,8 @@ class TeamRepository extends BaseRepository {
 
     this.loadBillingInformation = async () => {
       const params = await this.mergeAdditionalParams({})
-      const { card } = await this.client.action('get', '/api/team/billing', params)
-      return card
+      const { card, charges } = await this.client.action('get', '/api/team/billing', params)
+      return { card, charges }
     }
   }
 }
