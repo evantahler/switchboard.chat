@@ -173,9 +173,10 @@ workflows:
             - linter-web
 
       - deploy-web:
-          branches:
-              only:
-                - master
+          filters:
+            branches:
+                only:
+                  - master
           requires:
             - test-web
             - test-api
