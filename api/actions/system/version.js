@@ -2,7 +2,9 @@ const ActionHero = require('actionhero')
 const path = require('path')
 
 const packageJSON = require(path.join(__dirname, '..', '..', 'package.json'))
-const sha = require('child_process').execSync('git rev-parse HEAD').toString().trim()
+const sha = process.env.HEROKU_SLUG_COMMIT
+  ? process.env.HEROKU_SLUG_COMMIT // `heroku labs:enable runtime-dyno-metadata` to enable on heroku
+  : require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
 module.exports = class SystemVersion extends ActionHero.Action {
   constructor () {
