@@ -319,7 +319,10 @@ const Team = function (sequelize, DataTypes) {
     let totalInCents = 0
     let lineItems = []
     if (this.deletedAt) { throw new Error('team is deleted') }
-    if (this.createdAt.getTime() > billingPeriodStart.getTime()) { throw new Error('team was not created in this period') }
+    if (this.createdAt.getTime() > billingPeriodStart.getTime()) {
+      api.log(`team #${this.id} was not created in this period`, 'error')
+      return
+    }
 
     totalInCents += this.pricePerMonth
     lineItems.push({ label: `Monthly Fee (team + ${this.includedMessagesPerMonth} messages)`, value: this.pricePerMonth })

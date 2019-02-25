@@ -63,7 +63,7 @@ exports.twilioIn = class listNumbers extends Action {
       const folder = await api.models.Folder.findOne({ where: { teamId: team.id, deletable: false } })
       contact = await team.addContact({
         firstName: 'unknown',
-        lastName: 'unknown',
+        lastName: 'person',
         phoneNumber: params.From,
         folderId: folder.id
       })
