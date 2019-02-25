@@ -49,6 +49,7 @@ class NavbarLoggedIn extends React.Component {
     await SessionRepository.set(session)
     await this.loadSessionTeam()
     Router.push('/team')
+    window.location.reload() // TODO how to tell the parent to re-render?
   }
 
   async goTo (path) {
