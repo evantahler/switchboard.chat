@@ -319,7 +319,7 @@ const Team = function (sequelize, DataTypes) {
     let totalInCents = 0
     let lineItems = []
     if (this.deletedAt) { throw new Error('team is deleted') }
-    if (this.createdAt.getTime() > billingPeriodStart.getTime()) {
+    if (this.createdAt.getTime() > billingPeriodEnd.getTime()) {
       api.log(`team #${this.id} was not created in this period`, 'error')
       return
     }

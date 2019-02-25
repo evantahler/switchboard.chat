@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "actionhero": "19.1.2",
+    "ah-newrelic-plugin": "^0.7.1",
     "ah-sequelize-plugin": "^1.1.2",
     "aws-sdk": "^2.395.0",
     "axios": "^0.18.0",
@@ -17,6 +18,7 @@
     "libphonenumber-js": "^1.6.9",
     "mime-types": "^2.1.21",
     "mustache": "^3.0.1",
+    "newrelic": "^5.5.0",
     "nodemailer": "^5.1.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "sequelize": "^4.41.2",
