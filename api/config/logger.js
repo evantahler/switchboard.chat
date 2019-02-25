@@ -14,7 +14,8 @@ function buildConsoleLogger (level = 'info') {
         winston.format.timestamp(),
         winston.format.colorize(),
         winston.format.printf(info => {
-          return `${api.id} @ ${info.timestamp} - ${info.level}: ${info.message} ${stringifyExtraMessagePropertiesForConsole(info)}`
+          const prefix = process.env.NODE_ENV === 'production' ? '' : `${api.id} @ ${info.timestamp} - `
+          return `${prefix}${info.level}: ${info.message} ${stringifyExtraMessagePropertiesForConsole(info)}`
         })
       ),
       level,
