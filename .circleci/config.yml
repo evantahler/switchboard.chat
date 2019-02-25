@@ -136,6 +136,10 @@ jobs:
       - run:
           name: deploy-gh-pages
           command: cd web && ./bin/deploy
+          environment:
+            ALLOWED_ORIGIN: https://www.switchboard.chat
+            API_URL: https://api.switchboard.chat
+            STRIPE_API_PUBLISHABLE_KEY: pk_live_sxpTuPW4S79nW6FMAGclq3QD
 
 
 
