@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Alert, Form, Badge } from 'react-bootstrap'
+import { Alert, Form, Badge, ListGroup } from 'react-bootstrap'
 import Moment from 'react-moment'
 import SessionRepository from './../../repositories/session'
 import ContactRepository from './../../repositories/contact'
@@ -17,30 +17,32 @@ class ContactCard extends React.Component {
     const bg = this.props.active ? 'info' : 'light'
 
     return (
-      <Card bg={bg} onClick={this.showMessages.bind(this)}>
-        <Card.Body>
-          <Card.Title>
-            {contact.firstName} {contact.lastName}
-            &nbsp;
-            {
-              contact.unreadCount > 0 ? <Badge pill variant='danger'>{contact.unreadCount}</Badge> : null
-            }
-            &nbsp;
-            {
-              contact.tasksCount > 0 ? <Badge pill variant='warning'>{contact.tasksCount}</Badge> : null
-            }
-          </Card.Title>
-          <Card.Text>
-            <span>{contact.phoneNumber}</span>
-            <br />
-            {
-              contact.mostRecentMessage
-                ? <span className='text-muted'>Last Message <Moment fromNow ago>{contact.mostRecentMessage}</Moment> ago</span>
-                : <span className='text-muted'>No message</span>
-            }
-          </Card.Text>
-        </Card.Body>
-      </Card>
+      <ListGroup.Item variant={bg} onClick={this.showMessages.bind(this)}>
+        {
+          this.props.active
+            ? <div id='selected-contact-card' />
+            : null
+        }
+
+        {contact.firstName} {contact.lastName}
+        &nbsp;
+        {
+          contact.unreadCount > 0 ? <Badge pill variant='danger'>{contact.unreadCount}</Badge> : null
+        }
+        &nbsp;
+        {
+          contact.tasksCount > 0 ? <Badge pill variant='warning'>{contact.tasksCount}</Badge> : null
+        }
+
+        <br />
+        <span className='text-muted'>{contact.phoneNumber}</span>
+        <br />
+        {
+          contact.mostRecentMessage
+            ? <span className='text-muted'>Last Message <Moment fromNow ago>{contact.mostRecentMessage}</Moment> ago</span>
+            : <span className='text-muted'>No messages</span>
+        }
+      </ListGroup.Item>
     )
   }
 }
@@ -78,6 +80,13 @@ class ContactsList extends React.Component {
     if (contactResponse) { this.setState({ contact: contactResponse.contact }) }
     const foldersResponse = await FoldersRepository.get()
     if (foldersResponse) { this.setState({ folders: foldersResponse.folders }) }
+
+    if (window) {
+      let selectedContactCard = window.document.getElementById('selected-contact-card')
+      if (selectedContactCard) {
+        selectedContactCard.scrollIntoView()
+      }
+    }
   }
 
   async updateSessionWithFolder (id) {
@@ -108,6 +117,11 @@ class ContactsList extends React.Component {
       if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
     }
 
+    const containerStyle = {
+      maxHeight: 1000,
+      overflow: 'auto'
+    }
+
     return (
       <div>
         <Form.Group controlId='folderId'>
@@ -120,13 +134,15 @@ class ContactsList extends React.Component {
           </Form.Control>
         </Form.Group>
 
-        { contacts.length > 0
-          ? contacts.map((c) => {
-            const active = contact ? (c.id === contact.id) : false
-            return <ContactCard key={`contact-${c.id}`} active={active} contact={c} />
-          })
-          : <Alert variant='warning'>You have no contacts.  Why not create one?.</Alert>
-        }
+        <ListGroup style={containerStyle} id='contact-card-container'>
+          { contacts.length > 0
+            ? contacts.map((c) => {
+              const active = contact ? (c.id === contact.id) : false
+              return <ContactCard key={`contact-${c.id}`} active={active} contact={c} />
+            })
+            : <Alert variant='warning'>You have no contacts.  Why not create one?.</Alert>
+          }
+        </ListGroup>
       </div>
     )
   }

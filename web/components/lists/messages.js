@@ -90,13 +90,15 @@ class MessagesList extends React.Component {
     }
 
     const containerStyle = {
-      maxHeight: 500,
+      maxHeight: 1000,
       overflow: 'auto'
     }
 
     return (
       <div>
         <h3>Messages</h3>
+        <MessageAddForm />
+        <br />
         { messages.length > 0
           ? <ListGroup style={containerStyle}>
             { messages.reverse().map((message) => {
@@ -111,8 +113,6 @@ class MessagesList extends React.Component {
           </ListGroup>
           : <Alert variant='info'>No messages yet</Alert>
         }
-        <br />
-        <MessageAddForm />
       </div>
     )
   }
