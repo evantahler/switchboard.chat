@@ -13,7 +13,7 @@ const Notification = function (sequelize, DataTypes) {
     enabled: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true
+      defaultValue: false
     },
     medium: {
       type: DataTypes.STRING,
