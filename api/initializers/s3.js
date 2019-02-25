@@ -45,6 +45,8 @@ module.exports = class S3Initializer extends Initializer {
       uploadFile: async (remotePath, localPath, contentType, bucket = api.config.aws.bucket) => {
         const data = await readAsync(localPath)
 
+        remotePath = escape(remotePath.replace(/\s/g, '-'))
+
         const params = {
           Bucket: bucket,
           Key: remotePath,
