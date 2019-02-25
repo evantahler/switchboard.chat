@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Form, Button, Card } from 'react-bootstrap'
+import { Row, Col, Form, Button, Card, Alert } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import Moment from 'react-moment'
 import NotificationsRepository from './../../../repositories/notifications'
@@ -152,6 +152,10 @@ class SignUpForm extends React.Component {
 
   render () {
     const { notifications } = this.state
+
+    if (notifications.length === 0) {
+      return <Alert variant='warning'>You are not a member of any teams.</Alert>
+    }
 
     return (
       <>
