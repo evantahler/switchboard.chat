@@ -1,0 +1,182 @@
+version: 2
+
+# Define common steps all parts of the test workflow use
+refrences:
+  ignored-branches: &ignored-branches
+     branches:
+      ignore:
+        - gh-pages
+
+  cache-options: &cache-options
+    key: package-cache-{{ .Branch }}-{{ .Revision }}
+
+# Define Jobs to run
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: yarn-install
+          command: yarn install
+      - save_cache:
+          <<: *cache-options
+          paths:
+            - ./node_modules
+            - ./web/node_modules
+            - ./api/node_modules
+
+  linter-api:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: linter-api
+          command: cd api && node_modules/.bin/standard
+
+  linter-web:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: linter-web
+          command: cd web && node_modules/.bin/standard
+
+  test-api:
+    docker:
+      - image: circleci/node:10
+      - image: redis:latest
+      - image: circleci/mysql:5
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: display-node-version
+          command: node --version
+      - run:
+          name: display-yarn-version
+          command: yarn --version
+      - run:
+          name: test-log-setup
+          command: mkdir -p /home/circleci/project/api/log
+      - run:
+          name: test-reporter-setup
+          command: mkdir /home/circleci/project/api/junit
+      - run:
+          name: install mysql client
+          command: sudo apt install -y mysql-client
+      - run:
+          name: create test databases
+          command: mysql -e "create database switchboard_test_1" -u root -h 127.0.0.1
+      - run:
+          name: test
+          command: cd api && ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
+          environment:
+            NODE_ENV: test
+          when: always
+      - store_test_results:
+          path: /home/circleci/project/api/reports/junit/
+      - store_artifacts:
+          path: /home/circleci/project/api/reports/junit/
+
+  test-web:
+    docker:
+      - image: circleci/node:10
+      - image: selenium/standalone-chrome:latest
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: display-node-version
+          command: node --version
+      - run:
+          name: display-yarn-version
+          command: yarn --version
+      - run:
+          name: test-log-setup
+          command: mkdir -p /home/circleci/project/web/log
+      - run:
+          name: test-reporter-setup
+          command: mkdir /home/circleci/project/web/junit
+      - run:
+          name: test
+          command: cd web && ./node_modules/.bin/jest --ci --testResultsProcessor="jest-junit" --runInBand
+          environment:
+            NODE_ENV: test
+            SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+            JEST_JUNIT_OUTPUT: reports/junit/jest.xml
+          when: always
+      - store_test_results:
+          path: /home/circleci/project/web/reports/junit/
+      - store_artifacts:
+          path: /home/circleci/project/web/reports/junit/
+
+
+  deploy-web:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "0c:68:2f:2b:41:ed:27:eb:8d:87:6e:10:4a:7c:7f:f4"
+      - checkout
+      - restore_cache:
+          <<: *cache-options
+      - run:
+          name: deploy-gh-pages
+          command: cd web && ./bin/deploy
+
+
+
+# Run all the tests is parallel
+workflows:
+  version: 2
+  test-switchboard:
+    jobs:
+      - build:
+          filters:
+            <<: *ignored-branches
+
+      - linter-api:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - build
+
+      - linter-web:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - build
+
+      - test-api:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - linter-api
+
+      - test-web:
+          filters:
+            <<: *ignored-branches
+          requires:
+            - linter-web
+
+      - deploy-web:
+          filters:
+            branches:
+                only:
+                  - master
+          requires:
+            - test-web
+            - test-api

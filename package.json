@@ -1,42 +1,15 @@
 {
-  "author": "evan tahler <evantahler@gmail.com>",
-  "name": "switchboard.chat",
-  "description": "switchboard.chat",
-  "license": "UNLICENSED",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/evantahler/switchboard.chat.git"
-  },
-  "version": "0.0.1",
-  "engines": {
-    "node": "4.x.x"
-  },
-  "dependencies": {
-    "actionhero": "15.1.0",
-    "ah-swagger-plugin": "^1.0.0",
-    "async": "^2.0.0",
-    "bcrypt": "^0.8.5",
-    "glob": "^7.0.0",
-    "grunt": "latest",
-    "ioredis": "^2.1.0",
-    "mustache": "^2.2.1",
-    "mysql": "^2.9.0",
-    "nodemailer": "^2.2.1",
-    "nodemailer-sendgrid-transport": "^0.2.0",
-    "sequelize": "^3.14.2",
-    "stripe": "^4.1.0",
-    "twilio": "^2.7.0",
-    "ws": "latest"
-  },
-  "devDependencies": {
-    "mocha": "latest",
-    "should": "latest"
-  },
+  "private": true,
+  "license": "UNLICENCED",
+  "workspaces": [
+    "api",
+    "web"
+  ],
   "scripts": {
-    "help": "actionhero help",
-    "start": "actionhero start",
-    "actionhero": "actionhero",
-    "startCluster": "actionhero startCluster",
-    "test": "NODE_ENV=test mocha"
+    "start": "heroku local",
+    "test": "yarn run test-api && yarn run test-web",
+    "test-api": "cd api && yarn test",
+    "test-web": "cd web && yarn test",
+    "test-mobile": "cd mobile && yarn test"
   }
 }

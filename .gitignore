@@ -1,9 +1,13 @@
-node_modules/*
-log/*
-pids/*
-locales/*
+node_modules
+log
+pids
+.next
+
+api/public/javascript/ActionheroWebsocketClient.js
+api/public/javascript/ActionheroWebsocketClient.min.js
 
 npm-debug.log
+yarn-error.log
 .DS_Store
 .env
 dump.rdb
