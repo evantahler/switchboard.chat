@@ -48,7 +48,7 @@ class NavbarLoggedIn extends React.Component {
     session.team = team
     await SessionRepository.set(session)
     await this.loadSessionTeam()
-    Router.push('/team')
+    Router.push('/team/stream')
     window.location.reload() // TODO how to tell the parent to re-render?
   }
 
@@ -65,18 +65,21 @@ class NavbarLoggedIn extends React.Component {
 
     return (
       <Navbar bg='light' variant='light' expand='lg'>
-        <Navbar.Brand href='/team'>Switchboard ☎️</Navbar.Brand>
+        <Navbar.Brand href='/team/stream'>Switchboard ☎️</Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mr-auto'>
             {
               team.id
-                ? <HighlightableNavigationLink href='/team'><strong>{team.name}</strong></HighlightableNavigationLink>
+                ? <>
+                  <HighlightableNavigationLink href='/team/stream'>Stream</HighlightableNavigationLink>
+                  <HighlightableNavigationLink href='/team/contacts'>Contacts</HighlightableNavigationLink>
+                  </>
                 : null
             }
             {
               team.id
-                ? <NavDropdown title='Team Settings' id='team-dropdown'>
+                ? <NavDropdown title={`${team.name} Settings`} id='team-dropdown'>
                   <NavDropdown.Item onClick={() => this.goTo('/team/folders')}>Folders</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => this.goTo('/team/members')}>Members</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => this.goTo('/team/edit')}>Settings</NavDropdown.Item>

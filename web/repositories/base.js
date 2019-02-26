@@ -79,6 +79,7 @@ class BaseRepository {
 
   async remove () {
     await this.storage.removeItem(this.key)
+    await this.publish(null)
   }
 
   async publish (data) {

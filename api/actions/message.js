@@ -73,16 +73,18 @@ exports.messagesAndNotesList = class messagesAndNotesList extends Action {
         formatter: s => { return parseInt(s) }
       },
       contactId: {
-        required: true,
+        required: false,
+        formatter: s => { return parseInt(s) }
+      },
+      folderId: {
+        required: false,
         formatter: s => { return parseInt(s) }
       }
     }
   }
 
   async run ({ response, params, team }) {
-    const contact = await api.models.Contact.findOne({ where: { id: params.contactId, teamId: team.id } })
-    if (!contact) { throw new Error('contact not a member of this team') }
-    const messages = await team.messagesAndNotes(contact)
+    const messages = await team.messagesAndNotes(params)
 
     response.messages = []
     for (let i in messages) {

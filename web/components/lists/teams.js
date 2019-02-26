@@ -40,7 +40,7 @@ class TeamCard extends React.Component {
             Total Messages Out: {team.stats.messagesOut}<br />
           </Card.Text>
           <ButtonToolbar>
-            <Button variant='primary' onClick={this.goToTeam.bind(this, team, '')}>Go to to {team.name}</Button>
+            <Button variant='primary' onClick={this.goToTeam.bind(this, team, '/stream')}>Go to to {team.name}</Button>
             &nbsp;
             <Button variant='outline-warning' onClick={this.goToTeam.bind(this, team, '/members')}>Team Members</Button>
             &nbsp;

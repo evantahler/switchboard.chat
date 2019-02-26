@@ -289,10 +289,31 @@ const Team = function (sequelize, DataTypes) {
     return task.destroy()
   }
 
-  Model.prototype.messagesAndNotes = async function (contact, limit = 1000, offset = 0) {
-    if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
-    const messages = await api.models.Message.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
-    const notes = await api.models.Note.findAll({ where: { contactId: contact.id, teamId: this.id }, limit, offset })
+  Model.prototype.messagesAndNotes = async function ({ folderId, contactId }, limit = 1000, offset = 0) {
+    let contacts = []
+
+    if (contactId) {
+      let contact = await api.models.Contact.findOne({ where: { id: contactId, teamId: this.id } })
+      if (!contact) { throw new Error('contact not a member of this team') }
+      contacts.push(contact)
+    }
+
+    if (folderId) {
+      let folder = await api.models.Folder.findOne({ where: { id: folderId, teamId: this.id } })
+      if (!folder) { throw new Error('folder not for this team') }
+      let folderContacts = await api.models.Contact.findAll({ where: { teamId: this.id, folderId: folder.id } })
+      contacts = contacts.concat(folderContacts)
+    }
+
+    if (contacts.length === 0) {
+      let teamContacts = await api.models.Contact.findAll({ where: { teamId: this.id } })
+      contacts = contacts.concat(teamContacts)
+    }
+
+    let contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
+
+    const messages = await api.models.Message.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset })
+    const notes = await api.models.Note.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset })
     let orderedResults = [].concat(messages, notes)
     orderedResults.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime() })
 

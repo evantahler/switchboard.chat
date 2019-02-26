@@ -5,7 +5,12 @@ import ContactsRepository from './../repositories/contacts'
 import SessionRepository from './../repositories/session'
 import ContactRepository from './../repositories/contact'
 import MessagesRepository from './../repositories/messages'
+import StreamRepository from './../repositories/stream'
 import TasksRepository from './../repositories/tasks'
+
+// this keeps an array of messagesIds recieved do we don't double-render
+// TODO: why doesn't the websocket connection ever close?
+let messageIds = []
 
 class TeamListener extends React.Component {
   constructor () {
@@ -20,7 +25,7 @@ class TeamListener extends React.Component {
   async componentDidMount () {
     const client = new ActionheroWebsocketClient() //eslint-disable-line
 
-    this.setState({ client })
+    this.state.client = client
     client.connect()
 
     client.on('connected', () => this.setState({ status: 'connected' }))
@@ -41,7 +46,7 @@ class TeamListener extends React.Component {
     client.removeAllListeners('reconnecting')
     client.removeAllListeners('error')
     client.removeAllListeners('say')
-    client.disconnect()
+    client.client.end()
   }
 
   async joinRoom (message) {
@@ -62,22 +67,21 @@ class TeamListener extends React.Component {
   }
 
   async update (message) {
-    // TODO: chose what to check based on message content
-    // console.log(message)
+    let id = `${message.message.message.type}-${message.message.message.id}`
+    if (messageIds.indexOf(id) >= 0) { return }
+    messageIds.push(id)
 
     const sessionResponse = await SessionRepository.get()
     if (sessionResponse && sessionResponse.team) {
       await ContactsRepository.hydrate()
+      await StreamRepository.hydrate()
     }
 
     const contactResponse = await ContactRepository.get()
     if (sessionResponse && sessionResponse.team && contactResponse && contactResponse.contact) {
       await MessagesRepository.hydrate()
       await TasksRepository.hydrate()
-    }
-
-    // check again to see new read-at counts
-    if (sessionResponse && sessionResponse.team) {
+      // check again to see new read-at counts
       await ContactsRepository.hydrate()
     }
   }

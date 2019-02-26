@@ -82,8 +82,7 @@ class MessagesList extends React.Component {
   }
 
   render () {
-    const messages = this.state.messages
-    const contact = this.state.contact
+    const { messages, contact } = this.state
 
     if (!contact || !contact.id) {
       return null

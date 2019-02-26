@@ -81,12 +81,12 @@ class ContactsList extends React.Component {
     const foldersResponse = await FoldersRepository.get()
     if (foldersResponse) { this.setState({ folders: foldersResponse.folders }) }
 
-    if (window) {
-      let selectedContactCard = window.document.getElementById('selected-contact-card')
-      if (selectedContactCard) {
-        selectedContactCard.scrollIntoView()
-      }
-    }
+    // if (window) {
+    //   let selectedContactCard = window.document.getElementById('selected-contact-card')
+    //   if (selectedContactCard) {
+    //     selectedContactCard.scrollIntoView()
+    //   }
+    // }
   }
 
   async updateSessionWithFolder (id) {

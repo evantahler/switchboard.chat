@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from './../../components/layouts/loggedIn.js'
 import TeamRepository from './../../repositories/team.js'
 import AddFoldertModal from './../../components/modals/folder/add'
-import FoldersList from './../../components/lists/folders.js'
+import FolderGrid from './../../components/forms/folder/grid.js'
 
 class Page extends React.Component {
   constructor () {
@@ -27,7 +27,7 @@ class Page extends React.Component {
         <AddFoldertModal />
         <br />
         <br />
-        <FoldersList />
+        <FolderGrid />
       </Layout>
     )
   }
