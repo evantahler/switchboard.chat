@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "actionhero": "19.1.2",
-    "ah-newrelic-plugin": "^0.7.2",
+    "ah-newrelic-plugin": "^0.7.3",
     "ah-sequelize-plugin": "^1.1.2",
     "aws-sdk": "^2.395.0",
     "axios": "^0.18.0",

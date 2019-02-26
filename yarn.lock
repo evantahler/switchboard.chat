@@ -1141,10 +1141,10 @@ agent-base@^4.1.0:
   dependencies:
     es6-promisify "^5.0.0"
 
-ah-newrelic-plugin@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/ah-newrelic-plugin/-/ah-newrelic-plugin-0.7.2.tgz#cfc418466932eeda4a36a83958b1a2079f0cc0fe"
-  integrity sha512-FmswIU3XPPjeeiRFsXyvQ0St5T1hquwzGnAh3NcB4JZ3d497KCj48xnDLzcKKU8mycLHlECCjuwyLK3e21p5Bg==
+ah-newrelic-plugin@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/ah-newrelic-plugin/-/ah-newrelic-plugin-0.7.3.tgz#37733a12e11bce6f924293376eed504422dd1332"
+  integrity sha512-lOA21kbbEdSon8kgVZvGDB7sks/cD/65mRNxCYSZxMB0/ipFSLoyPfVjSUnw1WmwbNKmMJHTGd3e52wDkgAdEg==
 
 ah-sequelize-plugin@^1.1.2:
   version "1.1.2"
