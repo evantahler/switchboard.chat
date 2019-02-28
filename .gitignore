@@ -15,3 +15,6 @@ newrelic_agent.log
 *.retry
 mobile/fastlane/report.xml
 mobile/tmp/*
+mobile/*.mobileprovision
+mobile/*.cer
+mobile/*.dSYM.zip
