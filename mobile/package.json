@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "ios": "react-native run-ios",
-    "ios:beta": "fastlane ios beta",
+    "ios:beta": "./fastlane/build_production_app",
     "test": "jest",
     "pretest": "standard"
   },
