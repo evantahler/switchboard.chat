@@ -13,4 +13,5 @@ yarn-error.log
 dump.rdb
 newrelic_agent.log
 *.retry
-fastlane/report.xml
+mobile/fastlane/report.xml
+mobile/tmp/*
