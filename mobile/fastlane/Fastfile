@@ -13,29 +13,25 @@ default_platform(:ios)
 
 before_all do
   ensure_git_branch
-  # ensure_git_status_clean
-  # git_pull
+  ensure_git_status_clean
+  git_pull
 end
 
 platform :ios do
-  # desc 'Fetch certificates and provisioning profiles'
-  # lane :certificates do
-  #   match(app_identifier: 'com.app.bundle', type: 'development', readonly: true)
-  #   match(app_identifier: 'com.app.bundle', type: 'appstore', readonly: true)
-  # end
-
   desc 'Build the iOS application'
   private_lane :build do
     # certificates
-    increment_build_number(xcodeproj: './ios/name.xcodeproj')
-    gym(scheme: 'name', project: './ios/name.xcodeproj')
+    increment_build_number(xcodeproj: './ios/Switchboard.xcodeproj')
+    gym(scheme: 'Switchboard', project: './ios/Switchboard.xcodeproj')
   end
 
   desc 'Ship to Testflight'
   lane :beta do
+    get_certificates
+    get_provisioning_profile
     build
     pilot
-    commit_version_bump(message: 'Bump build', xcodeproj: './ios/name.xcodeproj')
+    commit_version_bump(message: 'Bump build', xcodeproj: './ios/Switchboard.xcodeproj')
     push_to_git_remote
   end
 end
