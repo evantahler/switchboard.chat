@@ -6,6 +6,7 @@ import FolderRepository from './../../repositories/folder'
 import StreamRepository from './../../repositories/stream'
 import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
+import Loader from './../loader'
 
 class MessageRow extends React.Component {
   constructor () {
@@ -90,7 +91,8 @@ class StreamList extends React.Component {
     this.state = {
       folder: {},
       contacts: [],
-      messages: []
+      messages: [],
+      loading: false
     }
   }
 
@@ -110,6 +112,7 @@ class StreamList extends React.Component {
   }
 
   async load () {
+    this.setState({ loading: true })
     const folderResponse = await FolderRepository.get()
     if (folderResponse) { this.setState({ folder: folderResponse.folder ? folderResponse.folder : {} }) }
 
@@ -119,30 +122,36 @@ class StreamList extends React.Component {
     await StreamRepository.setKey()
     const streamResponse = await StreamRepository.get()
     if (streamResponse) { this.setState({ messages: streamResponse.messages.reverse() }) }
+    this.setState({ loading: false })
   }
 
   render () {
-    const { folder, messages } = this.state
+    const { folder, messages, loading } = this.state
 
     return (
       <>
         <h2>{ folder.name ? `${folder.name} Messages` : 'All Messages' }</h2>
         <p className='text-muted'>Click a contect to see thread and send messages</p>
-        <Table striped bordered hover size='sm'>
-          <thead>
-            <tr>
-              <th>Contact</th>
-              <th>Message</th>
-              <th>Direction</th>
-              <th>When</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} />)
-            }
-          </tbody>
-        </Table>
+        {
+          loading
+            ? <Loader />
+            : <Table striped bordered hover size='sm'>
+              <thead>
+                <tr>
+                  <th>Contact</th>
+                  <th>Message</th>
+                  <th>Direction</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} />)
+                }
+              </tbody>
+            </Table>
+        }
+
       </>
     )
   }

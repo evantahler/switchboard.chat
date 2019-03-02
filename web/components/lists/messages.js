@@ -4,6 +4,7 @@ import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import MessageAddForm from './../forms/message/add.js'
+import Loader from './../loader'
 
 class MessageCard extends React.Component {
   render () {
@@ -53,7 +54,11 @@ class NoteCard extends React.Component {
 class MessagesList extends React.Component {
   constructor () {
     super()
-    this.state = { contact: {}, messages: [] }
+    this.state = {
+      contact: {},
+      messages: [],
+      loading: false
+    }
   }
 
   async componentDidMount () {
@@ -72,17 +77,21 @@ class MessagesList extends React.Component {
   }
 
   async load () {
+    this.setState({ loading: true })
     const contactResponse = await ContactRepository.get()
     if (contactResponse && contactResponse.contact) {
       this.setState({ contact: contactResponse.contact })
       await MessagesRepository.setKey()
       const messagesResponse = await MessagesRepository.get()
       if (messagesResponse) { this.setState({ messages: messagesResponse.messages }) }
+      this.setState({ loading: false })
+    } else {
+      this.setState({ loading: false })
     }
   }
 
   render () {
-    const { messages, contact } = this.state
+    const { messages, contact, loading } = this.state
 
     if (!contact || !contact.id) {
       return null
@@ -99,17 +108,19 @@ class MessagesList extends React.Component {
         <MessageAddForm />
         <br />
         { messages.length > 0
-          ? <ListGroup style={containerStyle}>
-            { messages.reverse().map((message) => {
-              if (message.type === 'message') {
-                return <MessageCard key={`message-${message.id}`} message={message} />
-              } else if (message.type === 'note') {
-                return <NoteCard key={`note-${message.id}`} note={message} />
+          ? loading
+            ? <Loader />
+            : <ListGroup style={containerStyle}>
+              { messages.reverse().map((message) => {
+                if (message.type === 'message') {
+                  return <MessageCard key={`message-${message.id}`} message={message} />
+                } else if (message.type === 'note') {
+                  return <NoteCard key={`note-${message.id}`} note={message} />
+                }
+              })
               }
-            })
-            }
-            <div ref={(el) => { this.messagesEnd = el }} />
-          </ListGroup>
+              <div ref={(el) => { this.messagesEnd = el }} />
+            </ListGroup>
           : <Alert variant='info'>No messages yet</Alert>
         }
       </div>
