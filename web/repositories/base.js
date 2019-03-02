@@ -21,6 +21,8 @@ class BaseRepository {
     this.subscriptions = {}
     this.includeParamsInRequests = undefined
 
+    this.loading = false
+
     this.routes = {
       get: {
         verb: 'get',
@@ -39,6 +41,23 @@ class BaseRepository {
         path: undefined
       }
     }
+  }
+
+  async sleep (wait = 1000) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 100)
+    })
+  }
+
+  async ensureNotParalell (next, wait = 1000) {
+    if (this.loading) {
+      await this.sleep(wait)
+      return this.ensureNotParalell(next, wait)
+    }
+
+    this.loading = true
+    await next()
+    this.loading = false
   }
 
   async get (params) {
@@ -91,16 +110,18 @@ class BaseRepository {
   }
 
   async hydrate (params = {}) {
-    params = await this.mergeAdditionalParams(params)
+    await this.ensureNotParalell(async () => {
+      params = await this.mergeAdditionalParams(params)
 
-    try {
-      const response = await this.client.action(this.routes.get.verb, this.routes.get.path, params)
-      this.set(response)
-    } catch (error) {
-      const errorMessage = error.message ? error.message : `cannot hydrate ${this.name}`
-      console.error(errorMessage)
-      throw new Error(errorMessage)
-    }
+      try {
+        const response = await this.client.action(this.routes.get.verb, this.routes.get.path, params)
+        this.set(response)
+      } catch (error) {
+        const errorMessage = error.message ? error.message : `cannot hydrate ${this.name}`
+        console.error(errorMessage)
+        throw new Error(errorMessage)
+      }
+    })
   }
 
   async create (params = {}) {
