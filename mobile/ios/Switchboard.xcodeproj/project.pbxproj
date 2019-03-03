@@ -26,8 +26,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1E5A6226365D4222BA18FD2E /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE55692BED5449809080B3F0 /* EvilIcons.ttf */; };
 		1F1258093C714614AF28B88B /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DA02DDD72734BCC93BA6990 /* FontAwesome5_Regular.ttf */; };
-		20902FA0221A53D6000D0A44 /* old-phone.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20902F9F221A53D6000D0A44 /* old-phone.jpg */; };
-		20902FA4221A55AB000D0A44 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 20902FA3221A55AB000D0A44 /* icons */; };
+		20409496222BAA1B00EEC667 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 20409495222BAA1B00EEC667 /* images */; };
 		225903911EFD43FEB1B15447 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2254422364BC4998A7285E98 /* Ionicons.ttf */; };
 		229DD2CCFB1B420B94F8CBD8 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74ECE265C79F4251B019264C /* Entypo.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -375,8 +374,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Switchboard/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Switchboard/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		20902F9F221A53D6000D0A44 /* old-phone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "old-phone.jpg"; path = "../../assets/images/old-phone.jpg"; sourceTree = "<group>"; };
-		20902FA3221A55AB000D0A44 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = ../../assets/images/icons; sourceTree = "<group>"; };
+		20409495222BAA1B00EEC667 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../assets/images; sourceTree = "<group>"; };
 		2254422364BC4998A7285E98 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		256EE48090CB4D959592D2E6 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		25812A209D914D32B78DB066 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -613,15 +611,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		20902F77221A53CA000D0A44 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				20902FA3221A55AB000D0A44 /* icons */,
-				20902F9F221A53D6000D0A44 /* old-phone.jpg */,
-			);
-			path = Images;
-			sourceTree = "<group>";
-		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -728,7 +717,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				20902F77221A53CA000D0A44 /* Images */,
+				20409495222BAA1B00EEC667 /* images */,
 				13B07FAE1A68108700A75B9A /* Switchboard */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SwitchboardTests */,
@@ -1238,16 +1227,15 @@
 				1F1258093C714614AF28B88B /* FontAwesome5_Regular.ttf in Resources */,
 				7D377173EDF6458AA4345F48 /* FontAwesome5_Solid.ttf in Resources */,
 				65A21C6E82AD4068BEBA2480 /* Foundation.ttf in Resources */,
-				20902FA4221A55AB000D0A44 /* icons in Resources */,
 				225903911EFD43FEB1B15447 /* Ionicons.ttf in Resources */,
 				5940B81856E2415EB10D4A5B /* MaterialCommunityIcons.ttf in Resources */,
 				B1C20BFD9F7A491A882AFF33 /* MaterialIcons.ttf in Resources */,
 				3E9D710FD7324AD8AE17CD80 /* Octicons.ttf in Resources */,
 				B19A2989966845F48B377F0D /* Roboto_medium.ttf in Resources */,
+				20409496222BAA1B00EEC667 /* images in Resources */,
 				9AA40B6F8BE3496AACE3DCFC /* Roboto.ttf in Resources */,
 				098B118711D34DCF88A1EA20 /* rubicon-icon-font.ttf in Resources */,
 				85C463729BC741CC99ADA0D8 /* SimpleLineIcons.ttf in Resources */,
-				20902FA0221A53D6000D0A44 /* old-phone.jpg in Resources */,
 				316AB910D2434A82A9202732 /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1430,7 +1418,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = CX66A3A57X;
 				HEADER_SEARCH_PATHS = (
@@ -1457,7 +1445,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = CX66A3A57X;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
