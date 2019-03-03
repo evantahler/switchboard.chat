@@ -6,8 +6,8 @@ import UserRepository from './../../../../web/repositories/user'
 import * as Validator from 'validator'
 
 export default class Welcome extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
       email: '',
       password: '',
@@ -39,12 +39,12 @@ export default class Welcome extends Component {
 
   async submit () {
     const { email, password } = this.state
+    const { navigation } = this.props
+
     const sessionData = await SessionRepository.create({ email, password })
     if (!sessionData) { return }
     await UserRepository.get(sessionData)
-
-    const { __reloadApp } = global
-    __reloadApp()
+    navigation.navigate('Loading')
   }
 
   render () {
