@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import LoggedOutLayout from './../layouts/loggedOut.js'
 import { Text, Card, CardItem, Left, Thumbnail, Body } from 'native-base'
-import SignInForm from './../forms/session/signIn'
 import IconImage from './../../assets/images/phone.png'
 
 export default class Welcome extends Component {
@@ -14,15 +13,9 @@ export default class Welcome extends Component {
               <Thumbnail source={IconImage} />
               <Body>
                 <Text>Switchbboard</Text>
-                <Text note>Sign In</Text>
+                <Text note>Teams</Text>
               </Body>
             </Left>
-          </CardItem>
-        </Card>
-
-        <Card>
-          <CardItem>
-            <SignInForm style={{ width: '100%' }} />
           </CardItem>
         </Card>
       </LoggedOutLayout>

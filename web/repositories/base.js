@@ -1,13 +1,15 @@
 import Client from './../client/client'
-import StorageMock from './utils/storageMock'
 
 class BaseRepository {
   constructor () {
     let storage
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (typeof global !== 'undefined' && global.localStorage) {
+      storage = global.localStorage
+    } else if (typeof window !== 'undefined' && window.localStorage) {
       storage = window.localStorage
     } else {
-      storage = new StorageMock()
+      const Storage = require('./utils/storageMock').default
+      storage = new Storage()
     }
 
     this.name = '__base'
@@ -62,7 +64,7 @@ class BaseRepository {
 
   async get (params) {
     const now = new Date().getTime()
-    const response = JSON.parse(this.storage.getItem(this.key))
+    const response = JSON.parse(await this.storage.getItem(this.key))
     if (response && response.data && response.expiresAt > now) {
       return response.data
     } else {

@@ -131,7 +131,7 @@ class StreamList extends React.Component {
     return (
       <>
         <h2>{ folder.name ? `${folder.name} Messages` : 'All Messages' }</h2>
-        <p className='text-muted'>Click a contect to see thread and send messages</p>
+        <p className='text-muted'>Click a contact to see thread and send messages</p>
         {
           loading
             ? <Loader />

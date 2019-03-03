@@ -11,14 +11,4 @@ const FormSerializer = (form) => {
   return data
 }
 
-// const inputParsers = {
-//   date (input) {
-//     const [month, day, year] = input.split('/')
-//     return `${year}-${month}-${day}`
-//   },
-//   number (input) {
-//     return parseFloat(input)
-//   }
-// }
-
 export default FormSerializer
