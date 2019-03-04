@@ -68,7 +68,7 @@ class TeamsList extends React.Component {
   }
 
   render () {
-    const teams = this.state.teams
+    const { teams } = this.state
 
     return (
       <div>

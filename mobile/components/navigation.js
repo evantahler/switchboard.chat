@@ -1,4 +1,4 @@
-import { createSwitchNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation'
+import { createSwitchNavigator, createBottomTabNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 
 import Loading from './scenes/loading'
 
@@ -8,7 +8,36 @@ import SignUp from './scenes/signUp'
 import LearnMore from './scenes/learnMore'
 
 import Teams from './scenes/teams'
+import ResetTeam from './scenes/team/resetTeam'
+import Stream from './scenes/team/stream'
+import Contacts from './scenes/team/contacts'
+import Folders from './scenes/team/folders'
+import TeamMembers from './scenes/team/teamMembers'
+import TeamSettings from './scenes/team/settings'
 import SignOut from './scenes/signOut'
+
+const TeamsDrawer = createDrawerNavigator({
+  'Teams': { screen: Teams },
+  'SignOut': { screen: SignOut }
+})
+
+const TeamDrawer = createDrawerNavigator({
+  'Team': {
+    screen: createBottomTabNavigator({
+      'Stream': Stream,
+      'Contacts': Contacts
+    })
+  },
+  'Teams': { screen: ResetTeam },
+  'SignOut': { screen: SignOut }
+})
+
+const LoggedInNavigation = createSwitchNavigator({
+  'TeamsDrawer': TeamsDrawer,
+  'TeamDrawer': TeamDrawer
+}, {
+  initialRouteName: 'TeamsDrawer'
+})
 
 const LoggedOutNavigationStack = createBottomTabNavigator({
   'Welcome': Welcome,
@@ -17,13 +46,8 @@ const LoggedOutNavigationStack = createBottomTabNavigator({
   'Learn More': LearnMore
 })
 
-const LoggedInNavigationStack = createBottomTabNavigator({
-  'Teams': Teams,
-  'Sign Out': SignOut
-})
-
 const MainStack = createSwitchNavigator({
-  'LoggedInNavigationStack': LoggedInNavigationStack,
+  'LoggedInNavigation': LoggedInNavigation,
   'LoggedOutNavigationStack': LoggedOutNavigationStack,
   'Loading': Loading
 }, {

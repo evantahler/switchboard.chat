@@ -1,23 +1,20 @@
 import React, { Component } from 'react'
+import { Icon } from 'native-base'
 import Layout from './../layouts/layout.js'
-import { Text, Card, CardItem, Left, Thumbnail, Body } from 'native-base'
-import IconImage from './../../assets/images/phone.png'
+import TeamsList from './../lists/teams'
 
-export default class Welcome extends Component {
+export default class Teams extends Component {
+  static navigationOptions () {
+    return {
+      drawerLabel: 'Teams',
+      drawerIcon: <Icon name='home' />
+    }
+  }
+
   render () {
     return (
-      <Layout>
-        <Card>
-          <CardItem>
-            <Left>
-              <Thumbnail source={IconImage} />
-              <Body>
-                <Text>Switchbboard</Text>
-                <Text note>Teams</Text>
-              </Body>
-            </Left>
-          </CardItem>
-        </Card>
+      <Layout title={'Teams'} showNavIcon {...this.props}>
+        <TeamsList {...this.props} />
       </Layout>
     )
   }

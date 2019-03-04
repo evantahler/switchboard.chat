@@ -1,6 +1,14 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
+import { Icon } from 'native-base'
 
-export default class Welcome extends Component {
+export default class SignOut extends Component {
+  static navigationOptions () {
+    return {
+      drawerLabel: 'Sign Out',
+      drawerIcon: <Icon name='log-out' />
+    }
+  }
+
   async componentDidMount () {
     await this.clearLocalStorage()
   }

@@ -9,7 +9,7 @@ const ImageStyle = { flex: 1, height: height, width: width, resizeMode: 'cover' 
 
 const loadingDelay = 1000
 
-export default class LoggedOut extends Component {
+export default class Loading extends Component {
   componentDidMount () {
     setTimeout(() => { this.load() }, loadingDelay)
   }
@@ -22,7 +22,7 @@ export default class LoggedOut extends Component {
       const sessionResponse = await localStorage.getItem(SessionRepository.key)
 
       if (sessionResponse) {
-        navigation.navigate('LoggedInNavigationStack')
+        navigation.navigate('LoggedInNavigation')
       } else {
         navigation.navigate('LoggedOutNavigationStack')
       }
