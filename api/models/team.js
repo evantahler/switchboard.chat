@@ -312,8 +312,8 @@ const Team = function (sequelize, DataTypes) {
 
     let contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
 
-    const messages = await api.models.Message.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset })
-    const notes = await api.models.Note.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset })
+    const messages = await api.models.Message.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset, order: [['createdAt', 'desc']] })
+    const notes = await api.models.Note.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset, order: [['createdAt', 'desc']] })
     let orderedResults = [].concat(messages, notes).sort(function (a, b) { return b.createdAt - a.createdAt })
 
     for (let i in messages) {
