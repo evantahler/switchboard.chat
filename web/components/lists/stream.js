@@ -12,29 +12,19 @@ class MessageRow extends React.Component {
   constructor () {
     super()
     this.state = {
-      contacts: [],
-      contact: {}
+      contact: null
     }
   }
 
   async componentDidMount () {
-    const { message } = this.props
-    const contactsResponse = await ContactsRepository.get()
+    const { message, contactsHashById } = this.props
+    let contact
 
-    if (contactsResponse) {
-      let contacts = contactsResponse.contacts
-      this.setState({ contacts })
-
-      let contact
-      for (let i in contacts) {
-        if (contacts[i].id === message.contactId) {
-          contact = contacts[i]
-          break
-        }
-      }
-
-      this.setState({ contact })
+    if (contactsHashById[message.contactId]) {
+      contact = contactsHashById[message.contactId]
     }
+
+    this.setState({ contact })
   }
 
   async showContact () {
@@ -90,7 +80,7 @@ class StreamList extends React.Component {
     super()
     this.state = {
       folder: {},
-      contacts: [],
+      contactsHashById: {},
       messages: [],
       loading: false
     }
@@ -117,16 +107,20 @@ class StreamList extends React.Component {
     if (folderResponse) { this.setState({ folder: folderResponse.folder ? folderResponse.folder : {} }) }
 
     const contactsResponse = await ContactsRepository.get()
-    if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
+    if (contactsResponse) {
+      let contactsHashById = {}
+      contactsResponse.contacts.map((contact) => { contactsHashById[contact.id] = contact })
+      this.setState({ contactsHashById: contactsHashById })
+    }
 
     await StreamRepository.setKey()
     const streamResponse = await StreamRepository.get()
-    if (streamResponse) { this.setState({ messages: streamResponse.messages.reverse() }) }
+    if (streamResponse) { this.setState({ messages: streamResponse.messages }) }
     this.setState({ loading: false })
   }
 
   render () {
-    const { folder, messages, loading } = this.state
+    const { folder, messages, loading, contactsHashById } = this.state
 
     return (
       <>
@@ -146,7 +140,7 @@ class StreamList extends React.Component {
               </thead>
               <tbody>
                 {
-                  messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} />)
+                  messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} contactsHashById={contactsHashById} />)
                 }
               </tbody>
             </Table>

@@ -111,7 +111,7 @@ class MessagesList extends React.Component {
           ? loading
             ? <Loader />
             : <ListGroup style={containerStyle}>
-              { messages.reverse().map((message) => {
+              { messages.map((message) => {
                 if (message.type === 'message') {
                   return <MessageCard key={`message-${message.id}`} message={message} />
                 } else if (message.type === 'note') {
