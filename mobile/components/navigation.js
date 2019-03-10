@@ -1,3 +1,4 @@
+import React, { Component } from 'react'
 import { createSwitchNavigator, createBottomTabNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation'
 
 import Loading from './scenes/loading'
@@ -8,13 +9,16 @@ import SignUp from './scenes/signUp'
 import LearnMore from './scenes/learnMore'
 
 import Teams from './scenes/teams'
-import ResetTeam from './scenes/team/resetTeam'
 import Stream from './scenes/team/stream'
 import Contacts from './scenes/team/contacts'
 import Folders from './scenes/team/folders'
 import TeamMembers from './scenes/team/teamMembers'
 import TeamSettings from './scenes/team/settings'
 import SignOut from './scenes/signOut'
+
+class TeamsWithReset extends React.Component {
+  render () { return <Teams reset /> }
+}
 
 const TeamsDrawer = createDrawerNavigator({
   'Teams': { screen: Teams },
@@ -28,7 +32,7 @@ const TeamDrawer = createDrawerNavigator({
       'Contacts': Contacts
     })
   },
-  'Teams': { screen: ResetTeam },
+  'Teams': { screen: TeamsWithReset },
   'SignOut': { screen: SignOut }
 })
 

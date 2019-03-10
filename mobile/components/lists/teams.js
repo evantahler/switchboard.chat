@@ -63,6 +63,18 @@ export default class TeamsList extends Component {
   }
 
   async load () {
+    const { navigation } = this.props
+    const { reset } = this.props
+
+    if (reset) {
+      const sessionResponse = await SessionRepository.get()
+      delete sessionResponse.team
+      await SessionRepository.set(sessionResponse)
+    }
+
+    const sessionResponse = await SessionRepository.get()
+    if (sessionResponse.team) { return navigation.navigate('Stream') }
+
     const response = await TeamsRepository.get()
     if (response) { this.setState({ teams: response.teams }) }
   }
@@ -76,7 +88,13 @@ export default class TeamsList extends Component {
         {
           teams.length > 0
             ? teams.map((team) => { return <TeamCard key={`team-${team.id}`} team={team} navigation={navigation} /> })
-            : <Text variant='warning'>You are not yet a member of any teams.  You can create a new team.</Text>
+            : <Card>
+              <CardItem>
+                <Body>
+                  <Text variant='warning'>You are not yet a member of any teams.  You can create a new team.</Text>
+                </Body>
+              </CardItem>
+            </Card>
         }
       </>
     )
