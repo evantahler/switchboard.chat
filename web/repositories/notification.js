@@ -24,8 +24,7 @@ repository.successHandler = SuccessRepository
 repository.includeParamsInRequests = async () => {
   const session = await SessionRepository.get()
   return {
-    csrfToken: session ? session.csrfToken : '',
-    teamId: session && session.team ? session.team.id : null
+    csrfToken: session ? session.csrfToken : ''
   }
 }
 

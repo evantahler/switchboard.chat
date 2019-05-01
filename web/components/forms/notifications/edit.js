@@ -51,7 +51,9 @@ class NotificationCard extends React.Component {
   }
 
   async submit (form) {
+    const { notification } = this.state
     const data = FormSerializer(form)
+    data.teamId = notification.team.id
     await NotificationRepository.update(data)
     await NotificationsRepository.hydrate()
   }
@@ -131,7 +133,7 @@ class NotificationCard extends React.Component {
   }
 }
 
-class SignUpForm extends React.Component {
+class NotificationsList extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -169,4 +171,4 @@ class SignUpForm extends React.Component {
   }
 }
 
-export default SignUpForm
+export default NotificationsList
