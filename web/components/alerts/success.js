@@ -28,6 +28,7 @@ class ErrorAlert extends React.Component {
   }
 
   handleHide () { this.setState({ show: false, message: null }) }
+
   handleShow () { this.setState({ show: true }) }
 
   render () {

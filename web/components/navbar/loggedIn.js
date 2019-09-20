@@ -74,7 +74,7 @@ class NavbarLoggedIn extends React.Component {
                 ? <>
                   <HighlightableNavigationLink href='/team/stream'>Stream</HighlightableNavigationLink>
                   <HighlightableNavigationLink href='/team/contacts'>Contacts</HighlightableNavigationLink>
-                  </>
+                </>
                 : null
             }
             {
