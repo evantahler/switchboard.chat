@@ -14,7 +14,7 @@ refrences:
 jobs:
   build:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
@@ -31,7 +31,7 @@ jobs:
 
   linter-api:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
@@ -42,7 +42,7 @@ jobs:
 
   linter-web:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
@@ -53,7 +53,7 @@ jobs:
 
   test-api:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
       - image: redis:latest
       - image: circleci/mysql:5
     steps:
@@ -91,7 +91,7 @@ jobs:
 
   test-web:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
       - image: selenium/standalone-chrome:latest
     steps:
       - checkout
@@ -124,7 +124,7 @@ jobs:
 
   deploy-api:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
@@ -138,7 +138,7 @@ jobs:
 
   deploy-web:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - add_ssh_keys:
           fingerprints:
