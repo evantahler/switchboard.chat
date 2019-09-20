@@ -16,7 +16,7 @@ module.exports = class Billing extends Task {
 
   async run (params) {
     const teams = await api.models.Team.findAll()
-    for (let i in teams) {
+    for (const i in teams) {
       await this.billTeam(teams[i])
     }
   }

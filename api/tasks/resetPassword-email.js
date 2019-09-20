@@ -14,11 +14,11 @@ module.exports = class ResetPasswordViaEmail extends Task {
     const user = await api.models.User.findOne({ where: { id: params.userId } })
     if (!user.email) { return }
 
-    const subject = `Reset your password`
-    let emailData = {
+    const subject = 'Reset your password'
+    const emailData = {
       paragraphs: [
-        `Hello!`,
-        `Someone has requested to reset your password.  If you didn't request to reset your passowrd, pleaase contact customer support.`
+        'Hello!',
+        'Someone has requested to reset your password.  If you didn\'t request to reset your passowrd, pleaase contact customer support.'
       ],
       cta: 'Reset Password',
       ctaLink: process.env.ALLOWED_ORIGIN + `/session/reset-password?passwordResetToken=${user.passwordResetToken}&email=${user.email}`,

@@ -7,7 +7,7 @@ describe('status', () => {
   afterAll(async () => { await actionhero.stop() })
 
   test('can retrieve server version', async () => {
-    let {
+    const {
       sha,
       id,
       actionheroVersion,

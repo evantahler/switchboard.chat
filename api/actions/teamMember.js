@@ -44,7 +44,7 @@ exports.teamMemberCreate = class teamMemberCreate extends Action {
   async run ({ response, params, team }) {
     if (!params.userId && !params.email) { throw new Error('either userId or email is required') }
     const teamMember = await team.addTeamMember(params)
-    await api.tasks.enqueue(`welcomeTeamMember-email`, { teamId: team.id, userId: teamMember.userId }, 'notifications')
+    await api.tasks.enqueue('welcomeTeamMember-email', { teamId: team.id, userId: teamMember.userId }, 'notifications')
     response.teamMember = teamMember.apiData()
   }
 }

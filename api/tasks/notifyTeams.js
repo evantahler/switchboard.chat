@@ -12,8 +12,8 @@ module.exports = class NotifyTeams extends Task {
 
   async run () {
     const teams = await api.models.Team.findAll()
-    for (let i in teams) {
-      let team = teams[i]
+    for (const i in teams) {
+      const team = teams[i]
       await api.tasks.enqueue('notifyTeam', { teamId: team.id }, 'notifications')
     }
   }

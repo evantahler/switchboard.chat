@@ -43,11 +43,13 @@ module.exports = {
     })
 
     await migration.addIndex('users', ['email'], {
-      indicesType: 'UNIQUE'
+      unique: true,
+      fields: 'email'
     })
 
     await migration.addIndex('users', ['phoneNumber'], {
-      indicesType: 'UNIQUE'
+      unique: true,
+      fields: 'phoneNumber'
     })
   },
 

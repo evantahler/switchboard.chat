@@ -20,7 +20,7 @@ describe('session', () => {
   beforeAll(async () => { api = await actionhero.start() })
   beforeAll(async () => { await helper.truncate() })
   beforeAll(async () => {
-    let userResponse = await api.specHelper.runAction('user:create', {
+    const userResponse = await api.specHelper.runAction('user:create', {
       firstName: 'Peach',
       lastName: 'Toadstool',
       email: 'peach@example.com',
@@ -28,13 +28,13 @@ describe('session', () => {
     })
     user = await api.models.User.findOne({ where: { id: userResponse.user.id } })
 
-    connection = new api.specHelper.Connection()
+    connection = await api.specHelper.Connection.createAsync()
     connection.params = {
       email: 'peach@example.com',
       password: 'passw0rd'
     }
 
-    let sessionResponse = await api.specHelper.runAction('session:create', connection)
+    const sessionResponse = await api.specHelper.runAction('session:create', connection)
     csrfToken = sessionResponse.csrfToken
   })
 

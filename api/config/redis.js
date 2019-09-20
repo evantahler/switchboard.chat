@@ -1,6 +1,6 @@
 let host = process.env.REDIS_HOST || '127.0.0.1'
 let port = process.env.REDIS_PORT || 6379
-let db = parseInt(process.env.REDIS_DB || process.env.JEST_WORKER_ID || 0)
+const db = parseInt(process.env.REDIS_DB || process.env.JEST_WORKER_ID || 0)
 let password = process.env.REDIS_PASSWORD || null
 const maxBackoff = 1000
 
@@ -10,7 +10,7 @@ if (process.env.REDIS_URL) {
   port = parseInt(process.env.REDIS_URL.match(/redis:\/\/.*:.*@.*:(\d*)$/i)[1])
 }
 
-exports['default'] = {
+exports.default = {
   redis: (api) => {
     // konstructor: The redis client constructor method.  All redis methods must be promises
     // args: The arguments to pass to the constructor
@@ -28,7 +28,7 @@ exports['default'] = {
     return {
       enabled: true,
 
-      '_toExpand': false,
+      _toExpand: false,
       client: {
         konstructor: require('ioredis'),
         args: [{ port: port, host: host, password: password, db: db, retryStrategy: retryStrategy }],

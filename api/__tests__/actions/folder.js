@@ -22,10 +22,10 @@ describe('folder', () => {
     })
     user = userResponse.user
 
-    connection = new api.specHelper.Connection()
+    connection = await api.specHelper.Connection.createAsync()
     connection.params = { email: 'peach@example.com', password: 'passw0rd' }
 
-    let sessionResponse = await api.specHelper.runAction('session:create', connection)
+    const sessionResponse = await api.specHelper.runAction('session:create', connection)
     csrfToken = sessionResponse.csrfToken
 
     connection.params = {
@@ -36,7 +36,7 @@ describe('folder', () => {
       billingEmail: user.email,
       stripeToken: 'xxx'
     }
-    let createResponse = await api.specHelper.runAction('team:create', connection)
+    const createResponse = await api.specHelper.runAction('team:create', connection)
     team = createResponse.team
   })
 
@@ -49,7 +49,7 @@ describe('folder', () => {
         teamId: team.id,
         name: 'Royal Family'
       }
-      let { error, folder: responseFolder } = await api.specHelper.runAction('folder:create', connection)
+      const { error, folder: responseFolder } = await api.specHelper.runAction('folder:create', connection)
 
       expect(error).toBeUndefined()
       expect(responseFolder.name).toEqual('Royal Family')
@@ -60,7 +60,7 @@ describe('folder', () => {
   describe('folders:list', () => {
     test('can list folders', async () => {
       connection.params = { csrfToken, teamId: team.id }
-      let { error, folders } = await api.specHelper.runAction('folders:list', connection)
+      const { error, folders } = await api.specHelper.runAction('folders:list', connection)
 
       expect(error).toBeUndefined()
       expect(folders.length).toEqual(2)
@@ -72,12 +72,12 @@ describe('folder', () => {
   describe('folder:remove', () => {
     test('can remove a folder', async () => {
       connection.params = { csrfToken, teamId: team.id, folderId: folder.id }
-      let { error, success } = await api.specHelper.runAction('folder:destroy', connection)
+      const { error, success } = await api.specHelper.runAction('folder:destroy', connection)
       expect(error).toBeUndefined()
       expect(success).toEqual(true)
 
       connection.params = { csrfToken, teamId: team.id }
-      let { folders } = await api.specHelper.runAction('folders:list', connection)
+      const { folders } = await api.specHelper.runAction('folders:list', connection)
 
       expect(folders.length).toEqual(1)
       expect(folders[0].name).toEqual('default folder')
@@ -85,10 +85,10 @@ describe('folder', () => {
 
     test('cannot delete the default folder', async () => {
       connection.params = { csrfToken, teamId: team.id }
-      let { folders } = await api.specHelper.runAction('folders:list', connection)
+      const { folders } = await api.specHelper.runAction('folders:list', connection)
 
       connection.params = { csrfToken, teamId: team.id, folderId: folders[0].id }
-      let { error } = await api.specHelper.runAction('folder:destroy', connection)
+      const { error } = await api.specHelper.runAction('folder:destroy', connection)
       expect(error).toEqual('Error: this folder cannot be deleted')
     })
   })

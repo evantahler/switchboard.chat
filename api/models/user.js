@@ -66,7 +66,7 @@ const User = function (sequelize, DataTypes) {
   Model.prototype.sendPasswordResetEmail = async function () {
     this.passwordResetToken = uuidv4()
     await this.save()
-    await api.tasks.enqueue(`resetPassword-email`, { userId: this.id }, 'notifications')
+    await api.tasks.enqueue('resetPassword-email', { userId: this.id }, 'notifications')
   }
 
   Model.prototype.joinTeam = async function (team) {
@@ -86,11 +86,13 @@ const User = function (sequelize, DataTypes) {
       where: { userId: this.id }
     })
 
-    return api.models.Team.findAll({ where: {
-      id: {
-        [Op.in]: teamMemberships.map(t => { return t.teamId })
+    return api.models.Team.findAll({
+      where: {
+        id: {
+          [Op.in]: teamMemberships.map(t => { return t.teamId })
+        }
       }
-    } })
+    })
   }
 
   Model.prototype.apiData = function () {

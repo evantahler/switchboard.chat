@@ -86,7 +86,7 @@ module.exports = class TwilioInitializer extends Initializer {
         response.data.pipe(writer)
 
         // twilo/amazon returns the original filename as a header
-        let originalFileName = response.headers['content-disposition'].match(/filename="(.*)"/)[1]
+        const originalFileName = response.headers['content-disposition'].match(/filename="(.*)"/)[1]
 
         return new Promise((resolve, reject) => {
           writer.once('error', reject)

@@ -1,10 +1,10 @@
 const Contact = function (sequelize, DataTypes) {
   const Model = sequelize.define('TeamMember', {
-    'userId': {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    'teamId': {
+    teamId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

@@ -22,7 +22,8 @@ module.exports = {
     })
 
     await migration.addIndex('teamMembers', ['userId', 'teamId'], {
-      indicesType: 'UNIQUE'
+      unique: true,
+      fields: ['userId', 'teamId']
     })
   },
 

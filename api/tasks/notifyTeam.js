@@ -18,18 +18,18 @@ module.exports = class NotifyTeam extends Task {
         direction: 'in',
         read: false
       },
-      order: [[ 'createdAt', 'desc' ]]
+      order: [['createdAt', 'desc']]
     })
 
     if (unreadMessages.length === 0) { return }
 
-    let oldestUnreadMessage = unreadMessages[(unreadMessages.length - 1)]
-    let oldestUnreadMessageSentMsAgo = (new Date()).getTime() - oldestUnreadMessage.createdAt.getTime()
+    const oldestUnreadMessage = unreadMessages[(unreadMessages.length - 1)]
+    const oldestUnreadMessageSentMsAgo = (new Date()).getTime() - oldestUnreadMessage.createdAt.getTime()
 
     const notifications = await api.models.Notification.findAll({ where: { teamId: team.id } })
-    let notifiedUserIds = []
-    for (let i in notifications) {
-      let notification = notifications[i]
+    const notifiedUserIds = []
+    for (const i in notifications) {
+      const notification = notifications[i]
 
       // console.log({
       //   enabled: notification.enabled,

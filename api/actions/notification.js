@@ -12,8 +12,8 @@ exports.notificationsList = class notificationsList extends Action {
   async run ({ connection, response, session }) {
     response.notifications = []
     const notifications = await api.models.Notification.findAll({ where: { userId: session.userId } })
-    for (let i in notifications) {
-      let notification = await notifications[i].apiData()
+    for (const i in notifications) {
+      const notification = await notifications[i].apiData()
       response.notifications.push(notification)
     }
   }

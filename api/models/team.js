@@ -98,7 +98,7 @@ const Team = function (sequelize, DataTypes) {
     } else if (email) {
       user = await api.models.User.findOne({ where: { email } })
       if (!user) {
-        let passwordResetToken = uuidv4()
+        const passwordResetToken = uuidv4()
         user = new api.models.User({ email, firstName, lastName, passwordResetToken })
         await user.save()
       }
@@ -136,13 +136,14 @@ const Team = function (sequelize, DataTypes) {
 
   Model.prototype.teamMembers = async function () {
     const teamMembers = await api.models.TeamMember.findAll({ where: { teamId: this.id } })
-    return api.models.User.findAll({ where:
+    return api.models.User.findAll({
+      where:
     {
       id: {
         [Op.in]: teamMembers.map(t => { return t.userId })
       }
     },
-    order: [['lastName', 'asc'], ['firstName', 'asc']]
+      order: [['lastName', 'asc'], ['firstName', 'asc']]
     })
   }
 
@@ -183,10 +184,10 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.contacts = async function (folderId) {
-    let folderWhere = { teamId: this.id }
+    const folderWhere = { teamId: this.id }
     if (folderId) { folderWhere.id = folderId }
     const folders = await api.models.Folder.findAll({ where: folderWhere })
-    let contacts = api.models.Contact.findAll({
+    const contacts = api.models.Contact.findAll({
       where: {
         teamId: this.id,
         folderId: {
@@ -236,7 +237,7 @@ const Team = function (sequelize, DataTypes) {
     await message.save()
 
     try {
-      let twilioData = { to: message.to, from: message.from, body }
+      const twilioData = { to: message.to, from: message.from, body }
       if (attachment) { twilioData.mediaUrl = attachment }
       await api.twilio.client.messages.create(twilioData)
     } catch (error) {
@@ -293,31 +294,31 @@ const Team = function (sequelize, DataTypes) {
     let contacts = []
 
     if (contactId) {
-      let contact = await api.models.Contact.findOne({ where: { id: contactId, teamId: this.id } })
+      const contact = await api.models.Contact.findOne({ where: { id: contactId, teamId: this.id } })
       if (!contact) { throw new Error('contact not a member of this team') }
       contacts.push(contact)
     }
 
     if (folderId) {
-      let folder = await api.models.Folder.findOne({ where: { id: folderId, teamId: this.id } })
+      const folder = await api.models.Folder.findOne({ where: { id: folderId, teamId: this.id } })
       if (!folder) { throw new Error('folder not for this team') }
-      let folderContacts = await api.models.Contact.findAll({ where: { teamId: this.id, folderId: folder.id } })
+      const folderContacts = await api.models.Contact.findAll({ where: { teamId: this.id, folderId: folder.id } })
       contacts = contacts.concat(folderContacts)
     }
 
     if (contacts.length === 0) {
-      let teamContacts = await api.models.Contact.findAll({ where: { teamId: this.id } })
+      const teamContacts = await api.models.Contact.findAll({ where: { teamId: this.id } })
       contacts = contacts.concat(teamContacts)
     }
 
-    let contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
+    const contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
 
     const messages = await api.models.Message.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset, order: [['createdAt', 'desc']] })
     const notes = await api.models.Note.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset, order: [['createdAt', 'desc']] })
-    let orderedResults = [].concat(messages, notes).sort(function (a, b) { return b.createdAt - a.createdAt })
+    const orderedResults = [].concat(messages, notes).sort(function (a, b) { return b.createdAt - a.createdAt })
 
-    for (let i in messages) {
-      let message = messages[i]
+    for (const i in messages) {
+      const message = messages[i]
       if (message.read !== true) {
         message.read = true
         message.save() // actually, don't await here
@@ -331,13 +332,13 @@ const Team = function (sequelize, DataTypes) {
     if (contact.teamId !== this.id) { throw new Error('contact is not a member of this team') }
     const contentType = mime.lookup(originalFileName)
     const uuid = uuidv4()
-    let remotePath = `team-${this.id}/contact-${contact.id}/${uuid}-${originalFileName}`
+    const remotePath = `team-${this.id}/contact-${contact.id}/${uuid}-${originalFileName}`
     return api.s3.uploadFile(remotePath, localPath, contentType)
   }
 
   Model.prototype.calculateBillForPeriod = async function (billingPeriodStart, billingPeriodEnd) {
     let totalInCents = 0
-    let lineItems = []
+    const lineItems = []
     if (this.deletedAt) { throw new Error('team is deleted') }
     if (this.createdAt.getTime() > billingPeriodEnd.getTime()) {
       api.log(`team #${this.id} was not created in this period`, 'error')
@@ -365,12 +366,12 @@ const Team = function (sequelize, DataTypes) {
   }
 
   Model.prototype.charge = async function (billingPeriodStart, billingPeriodEnd) {
-    let now = new Date()
+    const now = new Date()
     if (!billingPeriodStart) { billingPeriodStart = new Date(now.getFullYear(), now.getMonth() - 1, 1) }
     if (!billingPeriodEnd) { billingPeriodEnd = new Date(now.getFullYear(), now.getMonth(), 1) }
 
-    let charges = await api.models.Charge.findOrCreate({ where: { teamId: this.id, billingPeriodStart, billingPeriodEnd } })
-    let charge = charges[0]
+    const charges = await api.models.Charge.findOrCreate({ where: { teamId: this.id, billingPeriodStart, billingPeriodEnd } })
+    const charge = charges[0]
     if (charge.capturedAt) { return charge }
 
     const billForPeriod = await this.calculateBillForPeriod(billingPeriodStart, billingPeriodEnd)

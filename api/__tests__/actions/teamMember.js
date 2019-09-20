@@ -21,10 +21,10 @@ describe('user', () => {
     })
     user = userResponse.user
 
-    connection = new api.specHelper.Connection()
+    connection = await api.specHelper.Connection.createAsync()
     connection.params = { email: 'peach@example.com', password: 'passw0rd' }
 
-    let sessionResponse = await api.specHelper.runAction('session:create', connection)
+    const sessionResponse = await api.specHelper.runAction('session:create', connection)
     csrfToken = sessionResponse.csrfToken
 
     connection.params = {
@@ -35,7 +35,7 @@ describe('user', () => {
       billingEmail: user.email,
       stripeToken: 'xxx'
     }
-    let createResponse = await api.specHelper.runAction('team:create', connection)
+    const createResponse = await api.specHelper.runAction('team:create', connection)
     team = createResponse.team
   })
 
@@ -50,7 +50,7 @@ describe('user', () => {
         firstName: 'Mario',
         lastName: 'Mario'
       }
-      let { error, teamMember } = await api.specHelper.runAction('teamMember:create', connection)
+      const { error, teamMember } = await api.specHelper.runAction('teamMember:create', connection)
 
       expect(error).toBeUndefined()
       expect(teamMember.id).toBeTruthy()
@@ -69,7 +69,7 @@ describe('user', () => {
     test('can edit team members', async () => {
       const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
       connection.params = { csrfToken, teamId: team.id, userId: mario.id, firstName: 'Mario!!!' }
-      let { error, teamMember } = await api.specHelper.runAction('teamMember:edit', connection)
+      const { error, teamMember } = await api.specHelper.runAction('teamMember:edit', connection)
 
       expect(error).toBeUndefined()
       expect(teamMember.firstName).toEqual('Mario!!!')
@@ -79,7 +79,7 @@ describe('user', () => {
 
     test('cannot edit myself', async () => {
       connection.params = { csrfToken, teamId: team.id, userId: user.id, firstName: 'NewName' }
-      let { error } = await api.specHelper.runAction('teamMember:edit', connection)
+      const { error } = await api.specHelper.runAction('teamMember:edit', connection)
 
       expect(error).toEqual('Error: you cannot edit yourself via this method')
     })
@@ -88,7 +88,7 @@ describe('user', () => {
   describe('team:members:list', () => {
     test('can list team members sorted by name', async () => {
       connection.params = { csrfToken, teamId: team.id }
-      let { error, teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
+      const { error, teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
 
       expect(error).toBeUndefined()
       expect(teamMembers.length).toEqual(2)
@@ -100,19 +100,19 @@ describe('user', () => {
   describe('team:members:remove', () => {
     test('cannot remove yourself from the team', async () => {
       connection.params = { csrfToken, teamId: team.id, userId: user.id }
-      let { error } = await api.specHelper.runAction('teamMember:destroy', connection)
+      const { error } = await api.specHelper.runAction('teamMember:destroy', connection)
       expect(error).toEqual('Error: you cannot remove yourself from a team')
     })
 
     test('can remove a team teamMembers', async () => {
       const mario = await api.models.User.findOne({ where: { email: 'mario@example.com' } })
       connection.params = { csrfToken, teamId: team.id, userId: mario.id }
-      let { error, success } = await api.specHelper.runAction('teamMember:destroy', connection)
+      const { error, success } = await api.specHelper.runAction('teamMember:destroy', connection)
       expect(error).toBeUndefined()
       expect(success).toEqual(true)
 
       connection.params = { csrfToken, teamId: team.id }
-      let { teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
+      const { teamMembers } = await api.specHelper.runAction('teamMembers:list', connection)
 
       expect(teamMembers.length).toEqual(1)
       expect(teamMembers[0].firstName).toEqual('Peach')

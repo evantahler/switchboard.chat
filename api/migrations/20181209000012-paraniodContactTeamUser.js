@@ -28,8 +28,9 @@ module.exports = {
 
     await migration.removeIndex('teams', ['name'])
     await migration.addIndex('teams', ['name'], {
-      indicesType: 'UNIQUE',
-      where: { deletedAt: { [Op.ne]: null } }
+      unique: true,
+      fields: 'name',
+      where: {  deletedAt: { [Op.ne]: null } }
     })
 
     // users

@@ -35,7 +35,7 @@ module.exports = class notifyTeamMemberViaEmail extends Task {
     }
 
     unredMessages.forEach((message) => {
-      let stanza = `[${message.from}] ${message.message}`
+      const stanza = `[${message.from}] ${message.message}`
       emailData.paragraphs.push(stanza)
     })
 
