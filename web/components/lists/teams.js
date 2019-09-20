@@ -32,7 +32,7 @@ class TeamCard extends React.Component {
 
     return (
       <Card>
-        <Card.Header>{team.name}</Card.Header>
+        <Card.Header><h3>{team.name}</h3></Card.Header>
         <Card.Body>
           <Card.Title>{team.phoneNumber}</Card.Title>
           <Card.Text>

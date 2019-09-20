@@ -9,13 +9,8 @@ class Page extends React.Component {
   render () {
     return (
       <Layout>
-        <br />
         <Row>
-          <Col md={3}>
-            <h2>Stream</h2>
-            <FoldersList />
-          </Col>
-          <Col md={9}>
+          <Col>
             <Stream />
           </Col>
         </Row>
