@@ -14,9 +14,11 @@ class IndustryCard extends React.Component {
     const image = `/static/images/cards/${slug}.jpg`
 
     return (
-      <Card border='info' style={{
-        minHeight: 200,
-      }}>
+      <Card
+        border='info' style={{
+          minHeight: 200
+        }}
+      >
         <Card.Img variant='top' src={image} />
         <Card.Body>
           <Card.Title style={{ textAlign: 'center' }}><Link href={link}><a>{this.props.title}</a></Link></Card.Title>
@@ -76,7 +78,7 @@ class Page extends React.Component {
           </Col>
         </Row>
 
-       <Row>
+        <Row>
           <Col>
             <br />
             <h2>Industries</h2>
@@ -86,13 +88,13 @@ class Page extends React.Component {
 
         <Row>
           <Col>
-            <IndustryCard title={'Education'} />
+            <IndustryCard title='Education' />
           </Col>
           <Col>
-            <IndustryCard title={'Real Estate'} />
+            <IndustryCard title='Real Estate' />
           </Col>
           <Col>
-            <IndustryCard title={'Logistics'} />
+            <IndustryCard title='Logistics' />
           </Col>
         </Row>
 

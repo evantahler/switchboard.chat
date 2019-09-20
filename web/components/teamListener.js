@@ -10,7 +10,7 @@ import TasksRepository from './../repositories/tasks'
 
 // this keeps an array of messagesIds recieved do we don't double-render
 // TODO: why doesn't the websocket connection ever close?
-let messageIds = []
+const messageIds = []
 
 class TeamListener extends React.Component {
   constructor () {
@@ -67,7 +67,7 @@ class TeamListener extends React.Component {
   }
 
   async update (message) {
-    let id = `${message.message.message.type}-${message.message.message.id}`
+    const id = `${message.message.message.type}-${message.message.message.id}`
     if (messageIds.indexOf(id) >= 0) { return }
     messageIds.push(id)
 

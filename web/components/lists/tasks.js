@@ -63,10 +63,9 @@ class TasksList extends React.Component {
         {
           tasks.length > 0
             ? <ListGroup>
-              { tasks.map((task) => {
+              {tasks.map((task) => {
                 return <TaskCard key={`task-${task.id}`} task={task} />
-              })
-              }
+              })}
             </ListGroup>
             : <Alert variant='info'>No Tasks</Alert>
         }

@@ -32,10 +32,12 @@ class Footer extends React.Component {
               version {this.state.version.version}
             </p>
           </Col>
-          <Col md={6} style={{
-            textAlign: 'right'
-          }}>
-            <p>{ this.copyright() } <a target='_blank' href='https://www.delicioushat.com'>Delicious Hat</a></p>
+          <Col
+            md={6} style={{
+              textAlign: 'right'
+            }}
+          >
+            <p>{this.copyright()} <a target='_new' href='https://www.delicioushat.com'>Delicious Hat</a></p>
           </Col>
         </Row>
       </footer>

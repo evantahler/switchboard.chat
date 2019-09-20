@@ -19,7 +19,7 @@ exports.default = {
 exports.test = {
   sequelize: (api) => {
     return {
-      logging:false,
+      logging: false,
       port: 3306,
       database: `switchboard_test_${process.env.JEST_WORKER_ID || 1}`,
       host: 'localhost',

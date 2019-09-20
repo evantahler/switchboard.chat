@@ -53,7 +53,7 @@ class MessageRow extends React.Component {
         <td>
           {contact ? `${contact.firstName} ${contact.lastName}` : message.contactId}
           {
-            contact ? <><br /><span className='text-muted'>{ contact.phoneNumber }</span></> : null
+            contact ? <><br /><span className='text-muted'>{contact.phoneNumber}</span></> : null
           }
         </td>
         <td>
@@ -108,7 +108,7 @@ class StreamList extends React.Component {
 
     const contactsResponse = await ContactsRepository.get()
     if (contactsResponse) {
-      let contactsHashById = {}
+      const contactsHashById = {}
       contactsResponse.contacts.map((contact) => { contactsHashById[contact.id] = contact })
       this.setState({ contactsHashById: contactsHashById })
     }
@@ -124,7 +124,7 @@ class StreamList extends React.Component {
 
     return (
       <>
-        <h2>{ folder.name ? `${folder.name} Messages` : 'All Messages' }</h2>
+        <h2>{folder.name ? `${folder.name} Messages` : 'All Messages'}</h2>
         <p className='text-muted'>Click a contact to see thread and send messages</p>
         {
           loading

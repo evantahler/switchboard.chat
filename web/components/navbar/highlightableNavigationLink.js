@@ -44,7 +44,7 @@ class HighlightableNavigationLink extends React.Component {
   }
 
   render () {
-    let href = this.props.href
+    const href = this.props.href
 
     return (
       <Nav.Link

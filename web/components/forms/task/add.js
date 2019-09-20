@@ -25,7 +25,7 @@ class AddTaskForm extends React.Component {
   }
 
   async load () {
-    let task = this.state.task
+    const task = this.state.task
     const teamMembersResponse = await TeamMembersRepository.get()
     if (teamMembersResponse) {
       task.assignedUserId = teamMembersResponse.teamMembers[0].id
@@ -72,9 +72,9 @@ class AddTaskForm extends React.Component {
         <Form.Group controlId='assignedUserId'>
           <Form.Label>Assigned Team Member</Form.Label>
           <Form.Control value={task.assignedUserId} required as='select' onChange={e => update(e)}>
-            { teamMembers.map(user => {
+            {teamMembers.map(user => {
               return <option value={user.id} key={`user-${user.id}`}>{user.firstName} {user.lastName}</option>
-            }) }
+            })}
           </Form.Control>
           <Form.Control.Feedback type='invalid'>Folder is Required</Form.Control.Feedback>
         </Form.Group>

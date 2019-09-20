@@ -24,7 +24,7 @@ class MessageAddForm extends React.Component {
   }
 
   async submit () {
-    let data = Object.assign({}, this.state)
+    const data = Object.assign({}, this.state)
     delete data.validated
     await MessageRepository.create(data)
     this.setState({ message: '', validated: false })

@@ -43,7 +43,7 @@ class Page extends React.Component {
 
         <Row>
           <Col>
-            <Jumbotron style={{textAlign: 'center'}}>
+            <Jumbotron style={{ textAlign: 'center' }}>
               <h4>Join Switchboard today to make running your business even easier!</h4>
               <br />
               <Button size='lg' variant='success' onClick={() => Router.push('/session/sign-up')}>Sign Up</Button>

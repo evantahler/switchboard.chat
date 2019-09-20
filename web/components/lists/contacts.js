@@ -90,7 +90,7 @@ class ContactsList extends React.Component {
   }
 
   async updateSessionWithFolder (id) {
-    let session = await SessionRepository.get()
+    const session = await SessionRepository.get()
 
     if (id === '__all') {
       delete session.folder
@@ -128,20 +128,19 @@ class ContactsList extends React.Component {
           <Form.Label>Folder</Form.Label>
           <Form.Control value={folder.id} required as='select' onChange={e => updateFolder(e)}>
             <option value='__all'>* All Contacts *</option>
-            { folders.map(f => {
+            {folders.map(f => {
               return <option value={f.id} key={`folder-${f.id}`}>{f.name}</option>
-            }) }
+            })}
           </Form.Control>
         </Form.Group>
 
         <ListGroup style={containerStyle} id='contact-card-container'>
-          { contacts.length > 0
+          {contacts.length > 0
             ? contacts.map((c) => {
               const active = contact ? (c.id === contact.id) : false
               return <ContactCard key={`contact-${c.id}`} active={active} contact={c} />
             })
-            : <Alert variant='warning'>You have no contacts.  Why not create one?.</Alert>
-          }
+            : <Alert variant='warning'>You have no contacts.  Why not create one?.</Alert>}
         </ListGroup>
       </div>
     )

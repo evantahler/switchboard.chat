@@ -5,7 +5,7 @@ import Education from '../../../pages/industries/real-estate.js'
 
 describe('Education', () => {
   it('renders the page', () => {
-    let rendered = shallow(<Education />)
+    const rendered = shallow(<Education />)
     expect(rendered.html()).toContain('Switchboard for Real Estate')
   })
 })

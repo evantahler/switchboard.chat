@@ -49,30 +49,28 @@ class ContactsColumn extends React.Component {
 
     let idx = -1
 
-    return <Droppable droppableId={`folder-${folder.id}`}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          style={{
-            backgroundColor: snapshot.isDraggingOver ? 'lightGrey' : null,
-            minHeight: 300
-          }}
-          {...provided.droppableProps}
-        >
-          {
-            contacts.map((contact) => {
-              idx++
-              return <ContactCard
-                key={`ContactCard-${contact.id}`}
-                contact={contact}
-                idx={idx}
-              />
-            })
-          }
-          { provided.placeholder }
-        </div>
-      )}
-    </Droppable>
+    return (
+      <Droppable droppableId={`folder-${folder.id}`}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            style={{
+              backgroundColor: snapshot.isDraggingOver ? 'lightGrey' : null,
+              minHeight: 300
+            }}
+            {...provided.droppableProps}
+          >
+            {
+              contacts.map((contact) => {
+                idx++
+                return <ContactCard key={`ContactCard-${contact.id}`} contact={contact} idx={idx} />
+              })
+            }
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    )
   }
 }
 
@@ -80,17 +78,19 @@ class HeaderCard extends React.Component {
   render () {
     const folder = this.props.folder
 
-    return <th key={`header-${folder.id}`}>
-      <strong>{folder.name}</strong>
-      <br />
-      <FolderEditModal folder={folder} />
-      &nbsp;
-      {
-        folder.deletable
-          ? <FolderDestroyModal folder={folder} />
-          : null
-      }
-    </th>
+    return (
+      <th key={`header-${folder.id}`}>
+        <strong>{folder.name}</strong>
+        <br />
+        <FolderEditModal folder={folder} />
+        &nbsp;
+        {
+          folder.deletable
+            ? <FolderDestroyModal folder={folder} />
+            : null
+        }
+      </th>
+    )
   }
 }
 
@@ -133,7 +133,7 @@ class FodlersGrid extends React.Component {
   }
 
   async onDragEnd (args) {
-    let { contacts } = this.state
+    const { contacts } = this.state
 
     if (!args.draggableId) { return }
     if (!args.destination) { return }
@@ -144,7 +144,7 @@ class FodlersGrid extends React.Component {
     contact.folderId = folderId
     contact.contactId = contact.id
 
-    for (let i in contacts) {
+    for (const i in contacts) {
       if (contacts[i].id === contact.id) {
         contacts[i] = contact
         break
@@ -158,7 +158,7 @@ class FodlersGrid extends React.Component {
 
   render () {
     const folders = this.state.folders
-    let contacts = {}
+    const contacts = {}
 
     if (folders.length > 0) {
       folders.forEach((folder) => {
@@ -187,12 +187,14 @@ class FodlersGrid extends React.Component {
               <tr>
                 {
                   folders.map((folder) => {
-                    return <td key={`contactsColumn-${folder.id}`}>
-                      <ContactsColumn
-                        folder={folder}
-                        contacts={contacts[folder.id]}
-                      />
-                    </td>
+                    return (
+                      <td key={`contactsColumn-${folder.id}`}>
+                        <ContactsColumn
+                          folder={folder}
+                          contacts={contacts[folder.id]}
+                        />
+                      </td>
+                    )
                   })
                 }
               </tr>

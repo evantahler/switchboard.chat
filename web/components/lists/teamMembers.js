@@ -69,10 +69,9 @@ class TeamMemberList extends React.Component {
 
     return (
       <div>
-        { teamMembers.length > 0
+        {teamMembers.length > 0
           ? teamMembers.map((teamMember) => { return <TeamMemberCard key={`message-${teamMember.id}`} teamMember={teamMember} /> })
-          : <Alert variant='info'>No messages yet</Alert>
-        }
+          : <Alert variant='info'>No messages yet</Alert>}
       </div>
     )
   }

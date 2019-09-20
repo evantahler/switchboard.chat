@@ -21,7 +21,7 @@ class TeamCard extends React.Component {
     await TeamMemberRepository.remove()
     await TeamMembersRepository.remove()
 
-    let session = await SessionRepository.get()
+    const session = await SessionRepository.get()
     session.team = team
     await SessionRepository.set(session)
     Router.push(`/team${subpath}`)
@@ -72,10 +72,9 @@ class TeamsList extends React.Component {
 
     return (
       <div>
-        { teams.length > 0
+        {teams.length > 0
           ? teams.map((team) => { return <TeamCard key={`team-${team.id}`} team={team} /> })
-          : <Alert variant='warning'>You are not yet a member of any teams.  You can create a new team.</Alert>
-        }
+          : <Alert variant='warning'>You are not yet a member of any teams.  You can create a new team.</Alert>}
       </div>
     )
   }

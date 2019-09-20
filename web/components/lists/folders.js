@@ -19,7 +19,7 @@ class FolderCard extends React.Component {
 
     return (
       <ListGroup.Item variant={bg} onClick={this.toggleSelectedFolder.bind(this)}>
-        { folder.name }
+        {folder.name}
       </ListGroup.Item>
     )
   }

@@ -20,7 +20,7 @@ class MessagesRepository extends BaseRepository {
     if (contactResponse && contactResponse.contact) {
       this.key = `repository:messages:${contactResponse.contact.id}`
     } else {
-      this.key = `repository:messages`
+      this.key = 'repository:messages'
     }
   }
 }

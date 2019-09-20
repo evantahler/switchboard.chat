@@ -25,7 +25,7 @@ class AddContactForm extends React.Component {
   }
 
   async load () {
-    let conatct = this.state.contact
+    const conatct = this.state.contact
     const foldersResponse = await FoldersRepository.get()
     if (foldersResponse) {
       conatct.folderId = foldersResponse.folders[0].id
@@ -72,9 +72,9 @@ class AddContactForm extends React.Component {
         <Form.Group controlId='folderId'>
           <Form.Label>Folder</Form.Label>
           <Form.Control value={contact.folderId} required as='select' onChange={e => update(e)}>
-            { folders.map(folder => {
+            {folders.map(folder => {
               return <option value={folder.id} key={`folder-${folder.id}`}>{folder.name}</option>
-            }) }
+            })}
           </Form.Control>
           <Form.Control.Feedback type='invalid'>Folder is Required</Form.Control.Feedback>
         </Form.Group>

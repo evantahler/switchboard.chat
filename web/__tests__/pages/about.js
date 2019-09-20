@@ -5,7 +5,7 @@ import About from '../../pages/about.js'
 
 describe('About', () => {
   it('renders the page', () => {
-    let rendered = shallow(<About />)
+    const rendered = shallow(<About />)
     expect(rendered.html()).toContain('About')
   })
 })

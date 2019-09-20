@@ -17,20 +17,20 @@ class Page extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header as="h5">Email</Card.Header>
+              <Card.Header as='h5'>Email</Card.Header>
               <Card.Body>
                 <Card.Text>
-                  <a href="mailto:support@switchboard.chat">support@switchboard.chat</a>
+                  <a href='mailto:support@switchboard.chat'>support@switchboard.chat</a>
                 </Card.Text>
               </Card.Body>
             </Card>
           </Col>
           <Col>
             <Card>
-              <Card.Header as="h5">Phone</Card.Header>
+              <Card.Header as='h5'>Phone</Card.Header>
               <Card.Body>
                 <Card.Text>
-                  <a href="tel:+14123019086">+1 412 301 9086</a>
+                  <a href='tel:+14123019086'>+1 412 301 9086</a>
                 </Card.Text>
               </Card.Body>
             </Card>

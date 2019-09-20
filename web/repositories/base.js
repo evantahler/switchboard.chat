@@ -83,10 +83,10 @@ class BaseRepository {
 
   async set (data) {
     const now = new Date().getTime()
-    let cleanedData = {}
+    const cleanedData = {}
     const keys = Object.keys(data)
-    for (let i in keys) {
-      let k = keys[i]
+    for (const i in keys) {
+      const k = keys[i]
       if (this.responseKeys.indexOf(k) >= 0) { cleanedData[k] = data[k] }
     }
 
@@ -105,8 +105,8 @@ class BaseRepository {
 
   async publish (data) {
     const subscriptionKeys = Object.keys(this.subscriptions)
-    for (let i in subscriptionKeys) {
-      let key = subscriptionKeys[i]
+    for (const i in subscriptionKeys) {
+      const key = subscriptionKeys[i]
       await this.subscriptions[key](data)
     }
   }
@@ -196,8 +196,8 @@ class BaseRepository {
 
   async mergeAdditionalParams (params) {
     if (typeof this.includeParamsInRequests === 'function') {
-      let additionalParams = await this.includeParamsInRequests()
-      for (let i in additionalParams) { params[i] = additionalParams[i] }
+      const additionalParams = await this.includeParamsInRequests()
+      for (const i in additionalParams) { params[i] = additionalParams[i] }
     }
     return params
   }

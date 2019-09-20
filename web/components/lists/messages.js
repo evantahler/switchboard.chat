@@ -107,22 +107,20 @@ class MessagesList extends React.Component {
         <h3>Messages</h3>
         <MessageAddForm />
         <br />
-        { messages.length > 0
+        {messages.length > 0
           ? loading
             ? <Loader />
             : <ListGroup style={containerStyle}>
-              { messages.map((message) => {
+              {messages.map((message) => {
                 if (message.type === 'message') {
                   return <MessageCard key={`message-${message.id}`} message={message} />
                 } else if (message.type === 'note') {
                   return <NoteCard key={`note-${message.id}`} note={message} />
                 }
-              })
-              }
+              })}
               <div ref={(el) => { this.messagesEnd = el }} />
             </ListGroup>
-          : <Alert variant='info'>No messages yet</Alert>
-        }
+          : <Alert variant='info'>No messages yet</Alert>}
       </div>
     )
   }

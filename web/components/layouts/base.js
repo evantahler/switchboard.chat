@@ -36,14 +36,14 @@ class PageBase extends React.Component {
   render () {
     return (
       <div>
-        { this.header() }
+        {this.header()}
         <SuccessAlert />
         <ErrorAlert />
         <br />
         <Container>
           <Row>
             <Col>
-              { this.props.children }
+              {this.props.children}
             </Col>
           </Row>
         </Container>

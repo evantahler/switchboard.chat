@@ -13,26 +13,26 @@ class Client {
   }
 
   async action (verb = 'get', path, data) {
-    let options = {
+    const options = {
       url: this.apiEndpoint + path,
       withCredentials: true,
       agent: `switchboard-web-${PackgeJSON.version}`,
       method: verb.toLowerCase(),
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       }
     }
 
     if (data) {
-      for (let i in data) {
+      for (const i in data) {
         if (data[i] === null || data[i] === undefined) { delete data[i] }
       }
 
       if (data.file) {
         delete options.headers
         let dataForm = new FormData() // eslint-disable-line
-        for (let i in data) { dataForm.append(i, data[i]) }
+        for (const i in data) { dataForm.append(i, data[i]) }
         data = dataForm
       }
 
