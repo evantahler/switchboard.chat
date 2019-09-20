@@ -1,4 +1,5 @@
 import React from 'react'
+import { Card } from 'react-bootstrap'
 import Layout from './../../components/layouts/loggedIn.js'
 import UserEditForm from './../../components/forms/user/edit'
 
@@ -7,7 +8,11 @@ class Page extends React.Component {
     return (
       <Layout>
         <h1>Profile</h1>
-        <UserEditForm />
+        <Card border='success'>
+          <Card.Body>
+            <UserEditForm />
+          </Card.Body>
+        </Card>
       </Layout>
     )
   }

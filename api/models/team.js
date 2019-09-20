@@ -110,7 +110,7 @@ const Team = function (sequelize, DataTypes) {
 
     const teamMember = new api.models.TeamMember({ teamId: this.id, userId: user.id })
     await teamMember.save()
-    await api.models.Notification.findOrCreate({ where: { userId: teamMember.id, teamId: this.id } })
+    await api.models.Notification.findOrCreate({ where: { userId: user.id, teamId: this.id } })
     return teamMember
   }
 

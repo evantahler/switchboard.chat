@@ -86,9 +86,6 @@ class ResetPasswordForm extends React.Component {
             Submit
           </Button>
         </Form>
-
-        <br />
-        <Link href='/session/request-password-reset'><a>Forgot your password?</a></Link>
       </>
     )
   }

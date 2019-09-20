@@ -1,4 +1,5 @@
 import React from 'react'
+import { Card } from 'react-bootstrap'
 import Layout from './../../components/layouts/loggedOut.js'
 import SignInForm from './../../components/forms/session/signIn'
 
@@ -7,7 +8,11 @@ class Page extends React.Component {
     return (
       <Layout>
         <h1>Log In</h1>
-        <SignInForm />
+        <Card border='success'>
+          <Card.Body>
+            <SignInForm />
+          </Card.Body>
+        </Card>
       </Layout>
     )
   }

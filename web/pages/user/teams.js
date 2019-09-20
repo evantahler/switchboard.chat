@@ -9,12 +9,15 @@ class Page extends React.Component {
     return (
       <Layout>
         <Row>
-          <Col md={8}>
+          <Col>
             <h1>Your Teams</h1>
             <TeamsList />
           </Col>
+        </Row>
+        <Row>
           <Col>
-            <h1>New Team</h1>
+            <br />
+            <h3>Create a New Team</h3>
             <p>You can be a member of many Switchboard teams.  Each team has its own phone number and contact list.</p>
             <p>Creating a new team will require a payment method.</p>
             <Button onClick={() => { Router.push('/team/new') }}>Create new Team</Button>
