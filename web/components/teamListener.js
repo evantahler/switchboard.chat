@@ -67,9 +67,12 @@ class TeamListener extends React.Component {
   }
 
   async update (message) {
-    const id = `${message.message.message.type}-${message.message.message.id}`
-    if (messageIds.indexOf(id) >= 0) { return }
-    messageIds.push(id)
+    // check if we have a message or note
+    if (message.message.message) {
+      const id = `${message.message.message.type}-${message.message.message.id}`
+      if (messageIds.indexOf(id) >= 0) { return }
+      messageIds.push(id)
+    }
 
     const sessionResponse = await SessionRepository.get()
     if (sessionResponse && sessionResponse.team) {
