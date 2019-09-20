@@ -1,6 +1,5 @@
 import React from 'react'
-// import { css } from 'react-emotion'
-import ScaleLoader from 'react-spinners/ScaleLoader'
+import { Spinner } from 'react-bootstrap'
 
 class Loader extends React.Component {
   constructor () {
@@ -9,17 +8,8 @@ class Loader extends React.Component {
   }
 
   render () {
-    return (
-      <ScaleLoader
-        // className={override}
-        sizeUnit={'px'}
-        height={35}
-        width={4}
-        radius={2}
-        // color={'#123abc'}
-        loading={this.state.loading}
-      />
-    )
+    if (!this.state.loading) { return null }
+    return <Spinner annimation='grow' />
   }
 }
 

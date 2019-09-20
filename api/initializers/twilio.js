@@ -47,6 +47,7 @@ module.exports = class TwilioInitializer extends Initializer {
         try {
           await api.twilio.updateIncommingUrl(team)
         } catch (error) {
+          api.log(error, 'error')
           await api.twilio.realeaseTeamPhoneNumber(team)
           throw error
         }
