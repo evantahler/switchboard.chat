@@ -1,5 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
+import Link from 'next/link'
 import VersionRepository from './../../repositories/version'
 
 class Footer extends React.Component {
@@ -26,7 +27,7 @@ class Footer extends React.Component {
         <Row>
           <Col md={6}>
             <p>
-              email <a href='mailto:support@switchboard.chat'>support@switchboard.chat</a> for help<br />
+              <a target='_new' href='/support'>Need Help?</a><br />
               version {this.state.version.version}
             </p>
           </Col>
