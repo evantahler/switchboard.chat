@@ -6,6 +6,7 @@ import FolderRepository from './../../repositories/folder'
 import StreamRepository from './../../repositories/stream'
 import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
+import FoldersList from './folders.js'
 import Loader from './../loader'
 
 class MessageRow extends React.Component {
@@ -109,9 +110,22 @@ class StreamList extends React.Component {
   render () {
     const { folder, messages, loading, contactsHashById } = this.state
 
+    if (!loading && messages.length === 0) {
+      return (
+        <>
+          <h2>{folder.name ? `${folder.name} Messages` : 'All Messages'}</h2>
+          <FoldersList />
+          <br />
+          <p className='text-muted'>No messages yet...</p>
+        </>
+      )
+    }
+
     return (
       <>
         <h2>{folder.name ? `${folder.name} Messages` : 'All Messages'}</h2>
+        <FoldersList />
+        <br />
         <p className='text-muted'>Click a contact to see thread and send messages</p>
         {
           loading

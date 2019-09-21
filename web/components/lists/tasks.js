@@ -25,7 +25,10 @@ class TaskCard extends React.Component {
 class TasksList extends React.Component {
   constructor () {
     super()
-    this.state = { tasks: [], contact: {} }
+    this.state = {
+      tasks: [],
+      contact: {}
+    }
   }
 
   async componentDidMount () {
@@ -59,7 +62,6 @@ class TasksList extends React.Component {
 
     return (
       <div>
-        <h3>Tasks</h3>
         {
           tasks.length > 0
             ? <ListGroup>

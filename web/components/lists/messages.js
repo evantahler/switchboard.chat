@@ -1,33 +1,46 @@
 import React from 'react'
-import { ListGroup, Alert } from 'react-bootstrap'
+import { ListGroup, Alert, Row, Col } from 'react-bootstrap'
 import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
-import MessageAddForm from './../forms/message/add.js'
 import Loader from './../loader'
 
 class MessageCard extends React.Component {
   render () {
-    const message = this.props.message
-    let variant = 'success'
-    if (message.direction === 'out') { variant = 'info' }
+    const { message } = this.props
 
     const imageStyle = {
-      maxWidth: 400,
-      maxHeight: 400,
-      minWidth: 200,
-      minHeight: 200
+      maxWidth: 200,
+      maxHeight: 200,
+      minWidth: 100,
+      minHeight: 100
     }
+
+    let variant = 'none'; let prefix = 'to'
+    if (message.type === 'note') { variant = 'warning'; prefix = 'about' }
+    if (message.direction === 'in') { variant = 'info'; prefix = 'from' }
 
     return (
       <ListGroup.Item variant={variant}>
-        <p>{message.message}</p>
-        {
-          message.attachment
-            ? <img style={imageStyle} src={message.attachment} />
-            : null
-        }
-        <p className='text-muted'><Moment fromNow ago>{message.createdAt}</Moment> ago</p>
+        <Row>
+          <Col md={8}>
+            {
+              message.type === 'message'
+                ? message.message
+                : <span>{message.message}<br /><span className='text-muted'> - {message.user.firstName} {message.user.lastName}</span></span>
+            }
+            {
+              message.attachment
+                ? <><br /><br /><img style={imageStyle} src={message.attachment} /></>
+                : null
+            }
+          </Col>
+          <Col md={4}>
+            <p className='text-muted' style={{ textAlign: 'right' }}>
+              <Moment fromNow ago>{message.createdAt}</Moment> ago
+            </p>
+          </Col>
+        </Row>
       </ListGroup.Item>
     )
   }
@@ -43,7 +56,7 @@ class NoteCard extends React.Component {
     }
 
     return (
-      <ListGroup.Item style={style} variant='secondary'>
+      <ListGroup.Item style={style} variant='warning'>
         <p>{note.message}</p>
         <p className='text-muted'>{note.user.firstName} {note.user.lastName}, <Moment fromNow ago>{note.createdAt}</Moment> ago</p>
       </ListGroup.Item>
@@ -97,20 +110,12 @@ class MessagesList extends React.Component {
       return null
     }
 
-    const containerStyle = {
-      maxHeight: 1000,
-      overflow: 'auto'
-    }
-
     return (
       <div>
-        <h3>Messages</h3>
-        <MessageAddForm />
-        <br />
         {messages.length > 0
           ? loading
             ? <Loader />
-            : <ListGroup style={containerStyle}>
+            : <ListGroup>
               {messages.map((message) => {
                 if (message.type === 'message') {
                   return <MessageCard key={`message-${message.id}`} message={message} />

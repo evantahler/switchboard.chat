@@ -10,7 +10,7 @@ class MessageAddForm extends React.Component {
       message: '',
       file: null,
       fileName: '',
-      type: 'message'
+      type: 'note'
     }
   }
 
@@ -38,12 +38,6 @@ class MessageAddForm extends React.Component {
       this.setState(this.state)
     }
 
-    const updateFile = async (event) => {
-      this.state.file = event.target.files[0]
-      this.state.fileName = event.target.value
-      await this.setState(this.state)
-    }
-
     return (
       <Form
         id='form'
@@ -59,11 +53,7 @@ class MessageAddForm extends React.Component {
 
         <Row>
           <Col>
-            <Form.Group controlId='file'>
-              <Form.Control type='file' placeholder='Add Attachment' value={fileName} onChange={e => updateFile(e)} />
-            </Form.Group>
-
-            <Button className='float-left' variant='outline-primary' size='md' type='submit'>{`Send Message`}</Button>
+            <Button className='float-left' variant='outline-primary' size='md' type='submit'>{`Add Note`}</Button>
           </Col>
         </Row>
 

@@ -306,7 +306,7 @@ const Team = function (sequelize, DataTypes) {
       contacts = contacts.concat(folderContacts)
     }
 
-    if (contacts.length === 0) {
+    if (!contactId && !folderId) {
       const teamContacts = await api.models.Contact.findAll({ where: { teamId: this.id } })
       contacts = contacts.concat(teamContacts)
     }
