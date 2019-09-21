@@ -82,7 +82,7 @@ class ContactsList extends React.Component {
 
     let filteredContacts = contacts
     if (folder && folder.id) {
-      filteredContacts = contacts.filter(c => c.folderId === folder.id )
+      filteredContacts = contacts.filter(c => c.folderId === folder.id)
     }
 
     return (

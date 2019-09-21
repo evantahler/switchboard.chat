@@ -31,7 +31,7 @@ class MessageAddForm extends React.Component {
   }
 
   render () {
-    const { validated, message, fileName } = this.state
+    const { validated, message } = this.state
 
     const updateMessage = async (event) => {
       this.state[event.target.id] = event.target.value

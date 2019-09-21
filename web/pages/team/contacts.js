@@ -5,7 +5,6 @@ import Layout from './../../components/layouts/loggedIn.js'
 import TeamListener from './../../components/teamListener.js'
 import ContactsList from './../../components/lists/contacts.js'
 import ContactRepository from './../../repositories/contact.js'
-import ContactsRepository from './../../repositories/contacts.js'
 import FolderRepository from './../../repositories/folder.js'
 import MessagesList from './../../components/lists/messages.js'
 import TasksList from './../../components/lists/tasks.js'
@@ -23,21 +22,18 @@ class Page extends React.Component {
     this.state = {
       team: {},
       contact: {},
-      folder: {},
-      contacts: []
+      folder: {}
     }
   }
 
   async componentDidMount () {
     ContactRepository.subscribe('team-index', this.subscription.bind(this))
-    ContactsRepository.subscribe('team-index', this.subscription.bind(this))
     FolderRepository.subscribe('team-index', this.subscription.bind(this))
     await this.load()
   }
 
   componentWillUnmount () {
     ContactRepository.unsubscribe('team-index')
-    ContactsRepository.unsubscribe('team-index')
     FolderRepository.unsubscribe('team-index')
   }
 
@@ -46,9 +42,6 @@ class Page extends React.Component {
   }
 
   async load () {
-    const contactsResponse = await ContactsRepository.get()
-    if (contactsResponse) { this.setState({ contacts: contactsResponse.contacts }) }
-
     const contactResponse = await ContactRepository.get()
     if (contactResponse) { this.setState({ contact: contactResponse.contact }) }
 
@@ -57,7 +50,7 @@ class Page extends React.Component {
   }
 
   render () {
-    const { contact, folder, contacts } = this.state
+    const { contact, folder } = this.state
 
     return (
       <Layout>
@@ -82,51 +75,51 @@ class Page extends React.Component {
             {
               contact && (!folder || contact.folderId === folder.id)
                 ? <div>
-                    <Row>
-                        <Col>
-                          <h2>{contact.firstName} {contact.lastName} <span className='text-muted'> / {contact.phoneNumber}</span></h2>
+                  <Row>
+                    <Col>
+                      <h2>{contact.firstName} {contact.lastName} <span className='text-muted'> / {contact.phoneNumber}</span></h2>
 
-                          <Tabs defaultActiveKey="messages">
-                            <Tab eventKey="info" title="Info">
-                              <br />
-                              <h3>Contact Information</h3>
-                              <p>
-                                {/* <p>{contact.folderId}</p> */}
+                      <Tabs defaultActiveKey='messages'>
+                        <Tab eventKey='info' title='Info'>
+                          <br />
+                          <h3>Contact Information</h3>
+                          <p>
+                            {/* <p>{contact.folderId}</p> */}
                                 Most Recent Message: {
-                                  contact.mostRecentMessage ? <span><Moment fromNow ago>{contact.mostRecentMessage}</Moment> ago </span> : 'never'
-                                }<br />
+                              contact.mostRecentMessage ? <span><Moment fromNow ago>{contact.mostRecentMessage}</Moment> ago </span> : 'never'
+                            }<br />
                                 Unread Messages: {contact.unreadCount}<br />
                                 Tasks: {contact.tasksCount}
-                              </p>
-                              <EditContactModal /> <DestroyContactModal />
-                            </Tab>
-                            <Tab eventKey="messages" title="Messages">
-                              <br />
-                              <h3>Messages & Notes</h3>
-                              <MessagesList />
-                            </Tab>
-                            <Tab eventKey="send-message" title="Send Message">
-                              <br />
-                              <h3>Send Message</h3>
-                              <MessageAddForm />
-                            </Tab>
-                            <Tab eventKey="add-note" title="Add Note">
-                              <br />
-                              <h3>Add Note</h3>
-                              <NoteAddForm />
-                            </Tab>
-                            <Tab eventKey="tasks" title="Tasks">
-                              <br />
-                              <h3>Tasks</h3>
-                              <AddTaskModal />
-                              <br />
-                              <br />
-                              <TasksList />
-                            </Tab>
-                          </Tabs>
-                        </Col>
-                    </Row>
-                  </div>
+                          </p>
+                          <EditContactModal /> <DestroyContactModal />
+                        </Tab>
+                        <Tab eventKey='messages' title='Messages'>
+                          <br />
+                          <h3>Messages & Notes</h3>
+                          <MessagesList />
+                        </Tab>
+                        <Tab eventKey='send-message' title='Send Message'>
+                          <br />
+                          <h3>Send Message</h3>
+                          <MessageAddForm />
+                        </Tab>
+                        <Tab eventKey='add-note' title='Add Note'>
+                          <br />
+                          <h3>Add Note</h3>
+                          <NoteAddForm />
+                        </Tab>
+                        <Tab eventKey='tasks' title='Tasks'>
+                          <br />
+                          <h3>Tasks</h3>
+                          <AddTaskModal />
+                          <br />
+                          <br />
+                          <TasksList />
+                        </Tab>
+                      </Tabs>
+                    </Col>
+                  </Row>
+                </div>
                 : null
             }
           </Col>

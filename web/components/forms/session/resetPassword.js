@@ -1,6 +1,5 @@
 import React from 'react'
 import Router from 'next/router'
-import Link from 'next/link'
 import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import SessionRepository from './../../../repositories/session'

@@ -16,9 +16,9 @@ class MessageCard extends React.Component {
       minHeight: 100
     }
 
-    let variant = 'none'; let prefix = 'to'
-    if (message.type === 'note') { variant = 'warning'; prefix = 'about' }
-    if (message.direction === 'in') { variant = 'info'; prefix = 'from' }
+    let variant = 'none'
+    if (message.type === 'note') { variant = 'warning' }
+    if (message.direction === 'in') { variant = 'info' }
 
     return (
       <ListGroup.Item variant={variant}>
