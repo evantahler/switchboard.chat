@@ -38,7 +38,8 @@ module.exports = {
     })
 
     await migration.addIndex('notifications', ['userId', 'teamId'], {
-      indicesType: 'UNIQUE'
+      unique: true,
+      fields: ['userId', 'teamId']
     })
   },
 

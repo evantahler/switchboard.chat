@@ -7,10 +7,10 @@ class MessageAddForm extends React.Component {
     super()
     this.state = {
       validated: false,
-      type: 'message',
       message: '',
       file: null,
-      fileName: ''
+      fileName: '',
+      type: 'message'
     }
   }
 
@@ -24,14 +24,14 @@ class MessageAddForm extends React.Component {
   }
 
   async submit () {
-    let data = Object.assign({}, this.state)
+    const data = Object.assign({}, this.state)
     delete data.validated
     await MessageRepository.create(data)
     this.setState({ message: '', validated: false })
   }
 
   render () {
-    const { validated, message, type, fileName } = this.state
+    const { validated, message, fileName } = this.state
 
     const updateMessage = async (event) => {
       this.state[event.target.id] = event.target.value
@@ -42,12 +42,6 @@ class MessageAddForm extends React.Component {
       this.state.file = event.target.files[0]
       this.state.fileName = event.target.value
       await this.setState(this.state)
-    }
-
-    const updateCheck = async (event) => {
-      const state = this.state
-      if (event.target.checked) { state.type = 'note' } else { state.type = 'message' }
-      this.setState(state)
     }
 
     return (
@@ -64,18 +58,12 @@ class MessageAddForm extends React.Component {
         </Form.Group>
 
         <Row>
-          <Col md={4}>
+          <Col>
             <Form.Group controlId='file'>
               <Form.Control type='file' placeholder='Add Attachment' value={fileName} onChange={e => updateFile(e)} />
             </Form.Group>
 
-            <Button className='float-left' variant='outline-primary' size='sm' type='submit'>{`Send ${type}`}</Button>
-          </Col>
-          <Col md={4} />
-          <Col md={4}>
-            <Form.Group className='float-right' controlId='sendAsText'>
-              <Form.Check type='checkbox' label='Save as note' onChange={e => updateCheck(e)} />
-            </Form.Group>
+            <Button className='float-left' variant='outline-primary' size='md' type='submit'>{`Send Message`}</Button>
           </Col>
         </Row>
 

@@ -27,7 +27,7 @@ class EditTaskForm extends React.Component {
   }
 
   async load () {
-    let task = this.props.task
+    const task = this.props.task
     await TaskRepository.hydrate(this.props.task)
     const { teamMembers } = await TeamMembersRepository.get()
     this.setState({ teamMembers, task })
@@ -73,9 +73,9 @@ class EditTaskForm extends React.Component {
         <Form.Group controlId='assignedUserId'>
           <Form.Label>Assigned Team Member</Form.Label>
           <Form.Control value={task.assignedUserId} required as='select' onChange={e => update(e)}>
-            { teamMembers.map(teamMember => {
+            {teamMembers.map(teamMember => {
               return <option value={teamMember.id} key={`teamMember-${teamMember.id}`}>{teamMember.firstName} {teamMember.lastName}</option>
-            }) }
+            })}
           </Form.Control>
           <Form.Control.Feedback type='invalid'>Assugned Team Member is Required</Form.Control.Feedback>
         </Form.Group>

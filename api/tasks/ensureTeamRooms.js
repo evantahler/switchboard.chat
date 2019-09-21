@@ -12,8 +12,8 @@ module.exports = class EnsureTeamRooms extends Task {
 
   async run (data) {
     const teams = await api.models.Team.findAll()
-    for (let i in teams) {
-      let team = teams[i]
+    for (const i in teams) {
+      const team = teams[i]
       try {
         await team.ensureRoom()
       } catch (error) {

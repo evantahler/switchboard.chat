@@ -1,76 +1,64 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
 import Moment from 'react-moment'
 import Router from 'next/router'
+import { Row, Col, ListGroup } from 'react-bootstrap'
 import FolderRepository from './../../repositories/folder'
 import StreamRepository from './../../repositories/stream'
 import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
+import FoldersList from './folders.js'
 import Loader from './../loader'
 
 class MessageRow extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      contact: null
-    }
-  }
-
-  async componentDidMount () {
-    const { message, contactsHashById } = this.props
-    let contact
-
-    if (contactsHashById[message.contactId]) {
-      contact = contactsHashById[message.contactId]
-    }
-
-    this.setState({ contact })
-  }
-
   async showContact () {
-    const { contact } = this.state
+    const { contact } = this.props
     await ContactRepository.hydrate(contact)
     Router.push('/team/contacts')
   }
 
   render () {
-    const { message } = this.props
-    const { contact } = this.state
+    const { message, contact } = this.props
 
     const imageStyle = {
-      maxWidth: 400,
-      maxHeight: 400,
-      minWidth: 200,
-      minHeight: 200
+      maxWidth: 200,
+      maxHeight: 200,
+      minWidth: 100,
+      minHeight: 100
     }
 
-    let variant = 'success'
-    if (message.type === 'note') { variant = 'secondary' }
-    if (message.direction === 'out') { variant = 'info' }
+    let variant = 'none'; let prefix = 'to'
+    if (message.type === 'note') { variant = 'warning'; prefix = 'about' }
+    if (message.direction === 'in') { variant = 'info'; prefix = 'from' }
 
     return (
-      <tr className={`table-${variant}`} onClick={this.showContact.bind(this)}>
-        <td>
-          {contact ? `${contact.firstName} ${contact.lastName}` : message.contactId}
-          {
-            contact ? <><br /><span className='text-muted'>{ contact.phoneNumber }</span></> : null
-          }
-        </td>
-        <td>
-          {
-            message.type === 'message'
-              ? message.message
-              : <span>{message.message}<br /><span className='text-muted'> - {message.user.firstName} {message.user.lastName}</span></span>
-          }
-          {
-            message.attachment
-              ? <><br /><br /><img style={imageStyle} src={message.attachment} /></>
-              : null
-          }
-        </td>
-        <td>{message.direction}</td>
-        <td><Moment fromNow ago>{message.createdAt}</Moment> ago</td>
-      </tr>
+      <ListGroup.Item variant={variant} onClick={this.showContact.bind(this)}>
+        <Row>
+          <Col>
+            <span className={`text-${variant}`}> {prefix} </span>
+            <strong>{contact ? `${contact.firstName} ${contact.lastName}` : message.contactId}</strong>
+            { contact ? <span className='text-muted'> / {contact.phoneNumber}</span> : null }
+          </Col>
+          <Col>
+            <p className='text-muted' style={{ textAlign: 'right' }}>
+              <Moment fromNow ago>{message.createdAt}</Moment> ago
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {
+              message.type === 'message'
+                ? message.message
+                : <span>{message.message}<br /><span className='text-muted'> - {message.user.firstName} {message.user.lastName}</span></span>
+            }
+            {
+              message.attachment
+                ? <><br /><br /><img style={imageStyle} src={message.attachment} /></>
+                : null
+            }
+          </Col>
+        </Row>
+      </ListGroup.Item>
     )
   }
 }
@@ -108,7 +96,7 @@ class StreamList extends React.Component {
 
     const contactsResponse = await ContactsRepository.get()
     if (contactsResponse) {
-      let contactsHashById = {}
+      const contactsHashById = {}
       contactsResponse.contacts.map((contact) => { contactsHashById[contact.id] = contact })
       this.setState({ contactsHashById: contactsHashById })
     }
@@ -122,30 +110,32 @@ class StreamList extends React.Component {
   render () {
     const { folder, messages, loading, contactsHashById } = this.state
 
+    if (!loading && messages.length === 0) {
+      return (
+        <>
+          <h2>{folder.name ? `${folder.name} Messages` : 'All Messages'}</h2>
+          <FoldersList />
+          <br />
+          <p className='text-muted'>No messages yet...</p>
+        </>
+      )
+    }
+
     return (
       <>
-        <h2>{ folder.name ? `${folder.name} Messages` : 'All Messages' }</h2>
+        <h2>{folder.name ? `${folder.name} Messages` : 'All Messages'}</h2>
+        <FoldersList />
+        <br />
         <p className='text-muted'>Click a contact to see thread and send messages</p>
         {
           loading
             ? <Loader />
-            : <Table striped bordered hover size='sm'>
-              <thead>
-                <tr>
-                  <th>Contact</th>
-                  <th>Message</th>
-                  <th>Direction</th>
-                  <th>When</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} contactsHashById={contactsHashById} />)
-                }
-              </tbody>
-            </Table>
+            : <ListGroup>
+              {
+                messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} contact={contactsHashById[message.contactId]} />)
+              }
+            </ListGroup>
         }
-
       </>
     )
   }

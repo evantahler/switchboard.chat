@@ -105,8 +105,8 @@ exports.teamViewBilling = class teamView extends Action {
   async run ({ response, team }) {
     const charges = await api.models.Charge.findAll({ where: { teamId: team.id } })
     response.charges = []
-    for (let i in charges) {
-      let apiData = await charges[i].apiData()
+    for (const i in charges) {
+      const apiData = await charges[i].apiData()
       response.charges.push(apiData)
     }
 
@@ -129,16 +129,18 @@ exports.teamsList = class teamsList extends Action {
 
   async run ({ response, session }) {
     const teamMemberships = await api.models.TeamMember.findAll({ where: { userId: session.userId } })
-    const teams = await api.models.Team.findAll({ where: {
-      id: {
-        [Op.in]: teamMemberships.map(t => { return t.teamId })
+    const teams = await api.models.Team.findAll({
+      where: {
+        id: {
+          [Op.in]: teamMemberships.map(t => { return t.teamId })
+        }
       }
-    } })
+    })
 
     response.teams = []
-    for (let i in teams) {
-      let team = teams[i]
-      let apiData = team.apiData()
+    for (const i in teams) {
+      const team = teams[i]
+      const apiData = team.apiData()
       apiData.stats = await team.stats()
       response.teams.push(apiData)
     }

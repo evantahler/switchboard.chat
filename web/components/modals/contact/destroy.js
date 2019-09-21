@@ -26,7 +26,7 @@ class DestroyContactModal extends React.Component {
   render () {
     return (
       <>
-        <Button variant='outline-danger' size='sm' onClick={this.handleShow}>X</Button>
+        <Button variant='outline-danger' size='sm' onClick={this.handleShow}>Delete</Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

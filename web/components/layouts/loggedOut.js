@@ -9,7 +9,7 @@ class PageLoggedOut extends React.Component {
       <PageBase>
         <NavbarLoggedOut />
         <br />
-        { this.props.children }
+        {this.props.children}
         <hr />
         <LoggedOutFooter />
       </PageBase>

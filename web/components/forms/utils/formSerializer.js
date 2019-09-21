@@ -1,9 +1,9 @@
 // for is an HTML dom node
 const FormSerializer = (form) => {
-  let data = {}
-  for (let i in form.elements) {
-    let key = form.elements[i].id
-    let value = form.elements[i].value
+  const data = {}
+  for (const i in form.elements) {
+    const key = form.elements[i].id
+    const value = form.elements[i].value
     if (key === undefined || key === null || key === '') { continue }
     data[key] = value
   }

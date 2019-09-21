@@ -3,23 +3,23 @@ const { Op } = require('sequelize')
 
 const Contact = function (sequelize, DataTypes) {
   const Model = sequelize.define('Contact', {
-    'teamId': {
+    teamId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    'folderId': {
+    folderId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    'firstName': {
+    firstName: {
       type: DataTypes.STRING(191),
       allowNull: false
     },
-    'lastName': {
+    lastName: {
       type: DataTypes.STRING(191),
       allowNull: false
     },
-    'phoneNumber': {
+    phoneNumber: {
       type: DataTypes.STRING(191),
       allowNull: false
     }
@@ -40,7 +40,7 @@ const Contact = function (sequelize, DataTypes) {
   Model.prototype.mostRecentMessage = async function () {
     const mostRecentMessage = await api.models.Message.findOne({
       where: { contactId: this.id },
-      order: [[ 'createdAt', 'desc' ]]
+      order: [['createdAt', 'desc']]
     })
 
     if (mostRecentMessage) { return mostRecentMessage.createdAt }

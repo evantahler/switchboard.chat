@@ -68,7 +68,7 @@ exports.contactsList = class contactsList extends Action {
   async run ({ response, params, team }) {
     const contacts = await team.contacts(params.folderId)
     response.contacts = []
-    for (let i in contacts) {
+    for (const i in contacts) {
       response.contacts.push(await contacts[i].apiData())
     }
   }

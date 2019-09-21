@@ -13,7 +13,7 @@ describe('team', () => {
   beforeAll(async () => { api = await actionhero.start() })
   beforeAll(async () => { await helper.truncate() })
   beforeAll(async () => {
-    let userResponse = await api.specHelper.runAction('user:create', {
+    const userResponse = await api.specHelper.runAction('user:create', {
       firstName: 'Peach',
       lastName: 'Toadstool',
       email: 'peach@example.com',
@@ -21,13 +21,13 @@ describe('team', () => {
     })
     user = userResponse.user
 
-    connection = new api.specHelper.Connection()
+    connection = await api.specHelper.Connection.createAsync()
     connection.params = {
       email: 'peach@example.com',
       password: 'passw0rd'
     }
 
-    let sessionResponse = await api.specHelper.runAction('session:create', connection)
+    const sessionResponse = await api.specHelper.runAction('session:create', connection)
     csrfToken = sessionResponse.csrfToken
   })
 
@@ -43,10 +43,10 @@ describe('team', () => {
         billingEmail: user.email,
         stripeToken: 'xxx'
       }
-      let createResponse = await api.specHelper.runAction('team:create', connection)
+      const createResponse = await api.specHelper.runAction('team:create', connection)
 
       team = createResponse.team
-      let error = createResponse.error
+      const error = createResponse.error
 
       expect(error).toBeUndefined()
       expect(team.id).toBeTruthy()
@@ -58,13 +58,13 @@ describe('team', () => {
 
     test('creating a team also created a default folder', async () => {
       const teamModel = await api.models.Team.findOne({ where: { id: team.id } })
-      let folders = await teamModel.folders()
+      const folders = await teamModel.folders()
       expect(folders.map(f => f.name)).toEqual(['default folder'])
     })
 
     test('can cannot create a team with no name', async () => {
       connection.params = { csrfToken }
-      let { error } = await api.specHelper.runAction('team:create', connection)
+      const { error } = await api.specHelper.runAction('team:create', connection)
 
       expect(error).toMatch(/name is a required parameter for this action/)
     })
@@ -78,9 +78,8 @@ describe('team', () => {
         billingEmail: user.email,
         stripeToken: 'xxx'
       }
-      let { error } = await api.specHelper.runAction('team:create', connection)
-
-      expect(error).toMatch(/Validation error/)
+      const response = await api.specHelper.runAction('team:create', connection)
+      expect(response.error).toMatch(/Validation error/)
     })
 
     test('can cannot create a team without a stripe token', async () => {
@@ -91,7 +90,7 @@ describe('team', () => {
         phoneNumber: '+1 412 867 5309',
         billingEmail: user.email
       }
-      let { error } = await api.specHelper.runAction('team:create', connection)
+      const { error } = await api.specHelper.runAction('team:create', connection)
 
       expect(error).toMatch(/stripeToken is a required parameter for this action/)
     })
@@ -100,7 +99,7 @@ describe('team', () => {
   describe('team:view', () => {
     test('can view my team', async () => {
       connection.params = { csrfToken, teamId: team.id }
-      let { responseTeam = team, error } = await api.specHelper.runAction('team:view', connection)
+      const { responseTeam = team, error } = await api.specHelper.runAction('team:view', connection)
 
       expect(error).toBeUndefined()
       expect(responseTeam.id).toBeTruthy()
@@ -118,7 +117,7 @@ describe('team', () => {
       await otherTeam.save()
 
       connection.params = { csrfToken, teamId: otherTeam.id }
-      let { error } = await api.specHelper.runAction('team:view', connection)
+      const { error } = await api.specHelper.runAction('team:view', connection)
 
       expect(error).toMatch(/no/)
     })
@@ -127,7 +126,7 @@ describe('team', () => {
   describe('teams:list', () => {
     test('can list my teams', async () => {
       connection.params = { csrfToken }
-      let { teams, error } = await api.specHelper.runAction('teams:list', connection)
+      const { teams, error } = await api.specHelper.runAction('teams:list', connection)
 
       expect(error).toBeUndefined()
       expect(teams.length).toEqual(1)
@@ -144,10 +143,10 @@ describe('team', () => {
         name: 'Mushroom Kingdom!',
         pricePerMonth: 1
       }
-      let response = await api.specHelper.runAction('team:edit', connection)
+      const response = await api.specHelper.runAction('team:edit', connection)
 
-      let responseTeam = response.team
-      let error = response.error
+      const responseTeam = response.team
+      const error = response.error
 
       expect(error).toBeUndefined()
       expect(responseTeam.id).toBeTruthy()

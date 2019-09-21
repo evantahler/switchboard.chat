@@ -1,12 +1,12 @@
 import React from 'react'
-import { ListGroup } from 'react-bootstrap'
+import { ButtonGroup, Button } from 'react-bootstrap'
 import FoldersRepository from './../../repositories/folders'
 import FolderRepository from './../../repositories/folder'
 
-class FolderCard extends React.Component {
+class FolderButton extends React.Component {
   async toggleSelectedFolder () {
-    const folder = this.props.folder
-    if (this.props.active) {
+    const { active, folder } = this.props
+    if (active) {
       await FolderRepository.remove()
     } else {
       await FolderRepository.hydrate(folder)
@@ -14,13 +14,13 @@ class FolderCard extends React.Component {
   }
 
   render () {
-    const folder = this.props.folder
-    const bg = this.props.active ? 'info' : 'light'
+    const { folder, active } = this.props
+    const variant = active ? 'primary' : 'secondary'
 
     return (
-      <ListGroup.Item variant={bg} onClick={this.toggleSelectedFolder.bind(this)}>
-        { folder.name }
-      </ListGroup.Item>
+      <Button variant={variant} onClick={this.toggleSelectedFolder.bind(this)}>
+        {folder.name}
+      </Button>
     )
   }
 }
@@ -60,16 +60,20 @@ class FoldersList extends React.Component {
   render () {
     const { folders, folder } = this.state
 
+    if (folders.length === 1) { return null }
+    const allButtonVariant = folder.id ? 'secondary' : 'primary'
+
     return (
       <div>
-        <ListGroup id='folder-card-container'>
+        <ButtonGroup id='folder-card-container'>
+          <Button variant={allButtonVariant} onClick={(() => FolderRepository.remove())}>All</Button>
           {
             folders.map((f) => {
               const active = folder ? (f.id === folder.id) : false
-              return <FolderCard key={`folder-${f.id}`} active={active} folder={f} />
+              return <FolderButton key={`folder-${f.id}`} active={active} folder={f} />
             })
           }
-        </ListGroup>
+        </ButtonGroup>
       </div>
     )
   }

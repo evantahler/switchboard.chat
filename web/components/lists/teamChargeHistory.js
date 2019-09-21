@@ -40,7 +40,7 @@ class TeamChargeHistory extends React.Component {
         <tbody>
           {
             charges.map((charge) => {
-              let descriptions = JSON.parse(charge.lineItems).map((line) => { return `$${line.value / 100} - ${line.label}` })
+              const descriptions = JSON.parse(charge.lineItems).map((line) => { return `$${line.value / 100} - ${line.label}` })
 
               return <tr key={`charge-${charge.id}`}>
                 <td>{charge.id}</td>
@@ -48,7 +48,7 @@ class TeamChargeHistory extends React.Component {
                 <td>{this.renderDateFromString(charge.billingPeriodEnd)}</td>
                 <td>{charge.totalMessages}</td>
                 <td>${charge.totalInCents / 100}</td>
-                <td>{ descriptions.map((d) => { return <span>{d}<br /></span> }) }</td>
+                <td>{descriptions.map((d) => { return <span>{d}<br /></span> })}</td>
               </tr>
             })
           }

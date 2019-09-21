@@ -155,7 +155,7 @@ exports.tasksList = class tasksList extends Action {
     }
 
     response.tasks = []
-    for (let i in tasks) {
+    for (const i in tasks) {
       response.tasks.push(await tasks[i].apiData())
     }
   }

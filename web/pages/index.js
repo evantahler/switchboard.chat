@@ -9,13 +9,19 @@ import FeaturesTable from './../components/lists/features'
 
 class IndustryCard extends React.Component {
   render () {
-    const link = `/industries/${this.props.title}`.replace(' ', '-').toLowerCase()
+    const slug = this.props.title.replace(' ', '-').toLowerCase()
+    const link = `/industries/${slug}`
+    const image = `/static/images/cards/${slug}.jpg`
 
     return (
-      <Card border='info'>
+      <Card
+        border='info' style={{
+          minHeight: 200
+        }}
+      >
+        <Card.Img variant='top' src={image} />
         <Card.Body>
-          <Card.Title><Link href={link}><a>{this.props.title}</a></Link></Card.Title>
-          <Card.Text>...</Card.Text>
+          <Card.Title style={{ textAlign: 'center' }}><Link href={link}><a>{this.props.title}</a></Link></Card.Title>
         </Card.Body>
       </Card>
     )
@@ -24,27 +30,46 @@ class IndustryCard extends React.Component {
 
 class Page extends React.Component {
   render () {
+    const jumbotronStyle = {
+      backgroundImage: 'url("/static/images/hero.jpg")',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      minHeight: 500,
+      color: 'white'
+    }
+
     return (
       <Layout>
-        <Jumbotron>
+        <Jumbotron style={jumbotronStyle}>
           <Row>
-            <Col md={6}>
-              <h1>Switchboard</h1>
-              <p>Centralized SMS Communication for Teams</p>
+            <Col md={12}>
+              <h1>Switchboard:</h1>
+              <h2>Centralized SMS Communication for Teams</h2>
               <p>
-                <Button variant='success' onClick={() => Router.push('/session/sign-up')}>Sign Up</Button>
+                <br />
+                Sign up to move all of your team's text messages to one easy-to-use place.
               </p>
             </Col>
           </Row>
+          <Row style={{ paddingTop: 200 }}>
+            <Col md={12}>
+              <div>
+                <Button size='lg' variant='success' onClick={() => Router.push('/session/sign-up')}>Sign Up</Button>
+                &nbsp;
+                &nbsp;
+                <Button size='lg' variant='info' onClick={() => Router.push('/session/sign-in')}>Sign In</Button>
+              </div>
+            </Col>
+          </Row>
         </Jumbotron>
+
         <Row>
-          <Col md={6}>
+          <Col md={12}>
+            <h2>What is Switchboard?</h2>
             <WhatIsSwitchboardCard />
           </Col>
-          <Col md={6}>
-            <HowDoesSwitchboardWorkCard />
-          </Col>
         </Row>
+
         <Row>
           <Col>
             <br />
@@ -52,6 +77,7 @@ class Page extends React.Component {
             <FeaturesTable />
           </Col>
         </Row>
+
         <Row>
           <Col>
             <br />
@@ -59,17 +85,28 @@ class Page extends React.Component {
             <p>Learn more how Switchboard can help your industry:</p>
           </Col>
         </Row>
+
         <Row>
           <Col>
-            <IndustryCard title={'Education'} />
+            <IndustryCard title='Education' />
           </Col>
           <Col>
-            <IndustryCard title={'Real Estate'} />
+            <IndustryCard title='Real Estate' />
           </Col>
           <Col>
-            <IndustryCard title={'Logistics'} />
+            <IndustryCard title='Logistics' />
           </Col>
         </Row>
+
+        <br />
+
+        <Row>
+          <Col md={12}>
+            <h2>How does Switchboard Work?</h2>
+            <HowDoesSwitchboardWorkCard />
+          </Col>
+        </Row>
+
       </Layout>
     )
   }

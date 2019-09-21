@@ -17,9 +17,9 @@ module.exports = class WelcomeTeamMemberViaEmail extends Task {
     if (!user.email) { return }
 
     const subject = `Your have been invited to ${team.name} on Switchboard`
-    let emailData = {
+    const emailData = {
       paragraphs: [
-        `Hello!`,
+        'Hello!',
         `Your have been invited to ${team.name} on Switchboard.  Switchboard is a tool you can use to share and send SMS messages with your clients and customers.`
       ],
       cta: 'Sign In',

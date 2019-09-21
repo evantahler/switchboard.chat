@@ -30,7 +30,8 @@ module.exports = {
     })
 
     await migration.addIndex('contacts', ['phoneNumber', 'folderId'], {
-      indicesType: 'UNIQUE'
+      unique: true,
+      fields: ['phoneNumber', 'folderId']
     })
   },
 

@@ -119,7 +119,7 @@ class NewTeamForm extends React.Component {
                 <Form.Label>Area Code</Form.Label>
                 <Form.Control value={team.areaCode} required as='select' onChange={e => update(e)}>
                   <option disabled default value=''>Choose a US area code</option>
-                  { areaCodes.map(areaCode => { return <option key={`areaCode-${areaCode}`}>{areaCode}</option> }) }
+                  {areaCodes.map(areaCode => { return <option key={`areaCode-${areaCode}`}>{areaCode}</option> })}
                 </Form.Control>
                 <Form.Text className='text-muted'>The area code you would like your team phone number to use.  Choose an Area Code to see availalbe phone numbers.</Form.Text>
                 <Form.Control.Feedback type='invalid'>Area Code is required</Form.Control.Feedback>
@@ -132,10 +132,12 @@ class NewTeamForm extends React.Component {
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control value={team.phoneNumber} required as='select' onChange={e => update(e)}>
                       <option disabled default value=''>Choose a phone number</option>
-                      { phoneNumbers.map(phoneNumber => {
-                        return <option key={`phoneNumber-${phoneNumber.phoneNumber}`} value={phoneNumber.phoneNumber}>
-                          {phoneNumber.friendlyName}, {phoneNumber.locality}, {phoneNumber.region}
-                        </option>
+                      {phoneNumbers.map(phoneNumber => {
+                        return (
+                          <option key={`phoneNumber-${phoneNumber.phoneNumber}`} value={phoneNumber.phoneNumber}>
+                            {phoneNumber.friendlyName}, {phoneNumber.locality}, {phoneNumber.region}
+                          </option>
+                        )
                       })}
                     </Form.Control>
                     <Form.Text className='text-muted'>Your team's phone number.</Form.Text>

@@ -21,21 +21,24 @@ class TeamMemberCard extends React.Component {
     const userId = this.state.userId
 
     return (
-      <Card>
-        <Card.Header>{teamMember.firstName} {teamMember.lastName}</Card.Header>
-        <Card.Body>
-          <Card.Text> {teamMember.email} </Card.Text>
-          {
-            userId !== teamMember.id
-              ? <ButtonToolbar>
-                <EditTeamMemberModal teamMember={teamMember} />
-                &nbsp;
-                <DestroyTeamMemberModal teamMember={teamMember} />
-              </ButtonToolbar>
-              : null
-          }
-        </Card.Body>
-      </Card>
+      <>
+        <Card>
+          <Card.Header>{teamMember.firstName} {teamMember.lastName}</Card.Header>
+          <Card.Body>
+            <Card.Text> {teamMember.email} </Card.Text>
+            {
+              userId !== teamMember.id
+                ? <ButtonToolbar>
+                  <EditTeamMemberModal teamMember={teamMember} />
+                  &nbsp;
+                  <DestroyTeamMemberModal teamMember={teamMember} />
+                </ButtonToolbar>
+                : null
+            }
+          </Card.Body>
+        </Card>
+        <br />
+      </>
     )
   }
 }
@@ -69,10 +72,9 @@ class TeamMemberList extends React.Component {
 
     return (
       <div>
-        { teamMembers.length > 0
+        {teamMembers.length > 0
           ? teamMembers.map((teamMember) => { return <TeamMemberCard key={`message-${teamMember.id}`} teamMember={teamMember} /> })
-          : <Alert variant='info'>No messages yet</Alert>
-        }
+          : <Alert variant='info'>No Team Members yet</Alert>}
       </div>
     )
   }

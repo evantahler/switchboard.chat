@@ -26,7 +26,7 @@ class PageBase extends React.Component {
         <link rel='icon' type='image/png' sizes='32x32' href='/static/favicon/favicon-32x32.png' />
         <link rel='icon' type='image/png' sizes='16x16' href='/static/favicon/favicon-16x16.png' />
         <link rel='stylesheet' type='text/css' href='/static/css/bootstrap.min.css' />
-        <script src='https://js.stripe.com/v3/' />
+        <script async src='https://js.stripe.com/v3/' />
         <script src={`${process.env.API_URL}/public/javascript/ActionheroWebsocketClient.min.js`} />
         <title>{this.state.pageTitle}</title>
       </Head>
@@ -36,14 +36,14 @@ class PageBase extends React.Component {
   render () {
     return (
       <div>
-        { this.header() }
+        {this.header()}
         <SuccessAlert />
         <ErrorAlert />
         <br />
         <Container>
           <Row>
             <Col>
-              { this.props.children }
+              {this.props.children}
             </Col>
           </Row>
         </Container>

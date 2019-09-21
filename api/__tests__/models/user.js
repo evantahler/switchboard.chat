@@ -13,7 +13,7 @@ describe('actionhero Tests', () => {
   afterAll(async () => { await actionhero.stop() })
 
   test('a user must have an email', async () => {
-    let user = new api.models.User()
+    const user = new api.models.User()
     try {
       await user.save()
       throw new Error('should not get here')
@@ -87,7 +87,7 @@ describe('actionhero Tests', () => {
 
     test('user can leave a team', async () => {
       await user.leaveTeam(team2)
-      let teams = await user.teams()
+      const teams = await user.teams()
       expect(teams.map(t => { return t.name })).toEqual(['test team'])
     })
   })

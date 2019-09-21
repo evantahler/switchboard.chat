@@ -26,7 +26,7 @@ class AddContactModal extends React.Component {
   render () {
     return (
       <>
-        <Button variant='outline-info' size='sm' onClick={this.handleShow}>+</Button>
+        <Button variant='warning' size='md' onClick={this.handleShow}>Add Contact</Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

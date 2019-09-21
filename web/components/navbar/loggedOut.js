@@ -22,6 +22,7 @@ class NavbarLoggedOut extends React.Component {
           <Nav className='mr-auto'>
             <HighlightableNavigationLink href='/'>Home</HighlightableNavigationLink>
             <HighlightableNavigationLink href='/about'>About</HighlightableNavigationLink>
+            <HighlightableNavigationLink href='/support'>Support</HighlightableNavigationLink>
             <NavDropdown title='Industries' id='nav-dropdown'>
               <NavDropdown.Item onClick={() => this.goTo('/industries/education')}>Education</NavDropdown.Item>
               <NavDropdown.Item onClick={() => this.goTo('/industries/real-estate')}>Real Estate</NavDropdown.Item>

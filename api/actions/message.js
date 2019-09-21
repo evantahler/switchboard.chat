@@ -87,7 +87,7 @@ exports.messagesAndNotesList = class messagesAndNotesList extends Action {
     const messages = await team.messagesAndNotes(params)
 
     response.messages = []
-    for (let i in messages) {
+    for (const i in messages) {
       response.messages.push(await messages[i].apiData())
     }
   }

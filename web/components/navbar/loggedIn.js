@@ -44,7 +44,7 @@ class NavbarLoggedIn extends React.Component {
     await TeamMemberRepository.remove()
     await TeamMembersRepository.remove()
 
-    let session = await SessionRepository.get()
+    const session = await SessionRepository.get()
     session.team = team
     await SessionRepository.set(session)
     await this.loadSessionTeam()
@@ -74,7 +74,7 @@ class NavbarLoggedIn extends React.Component {
                 ? <>
                   <HighlightableNavigationLink href='/team/stream'>Stream</HighlightableNavigationLink>
                   <HighlightableNavigationLink href='/team/contacts'>Contacts</HighlightableNavigationLink>
-                  </>
+                </>
                 : null
             }
             {

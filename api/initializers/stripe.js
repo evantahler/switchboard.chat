@@ -49,8 +49,8 @@ module.exports = class StripeInitializer extends Initializer {
       },
 
       processTeamCharge: async (team, charge) => {
-        let lines = JSON.parse(charge.lineItems)
-        let description = lines.map((line) => { return `$${line.value / 100} - ${line.label}` }).join(', ')
+        const lines = JSON.parse(charge.lineItems)
+        const description = lines.map((line) => { return `$${line.value / 100} - ${line.label}` }).join(', ')
 
         const payload = await api.stripe.client.charges.create({
           amount: charge.totalInCents,

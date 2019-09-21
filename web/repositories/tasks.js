@@ -18,7 +18,7 @@ class TasksRepository extends BaseRepository {
     if (contactResponse && contactResponse.contact) {
       this.key = `repository:tasks:${contactResponse.contact.id}`
     } else {
-      this.key = `repository:tasks`
+      this.key = 'repository:tasks'
     }
   }
 }

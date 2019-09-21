@@ -20,7 +20,7 @@ class MessagesRepository extends BaseRepository {
     if (folderResponse && folderResponse.folder) {
       this.key = `repository:stream:${folderResponse.folder.id}`
     } else {
-      this.key = `repository:stream`
+      this.key = 'repository:stream'
     }
   }
 }

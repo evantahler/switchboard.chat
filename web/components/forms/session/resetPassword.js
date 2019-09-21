@@ -1,6 +1,5 @@
 import React from 'react'
 import Router from 'next/router'
-import Link from 'next/link'
 import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import SessionRepository from './../../../repositories/session'
@@ -49,9 +48,9 @@ class ResetPasswordForm extends React.Component {
     const { validated, password, email, passwordResetToken } = this.state
 
     const update = async (event) => {
-      let key = event.target.id
-      let value = event.target.value
-      let data = {}
+      const key = event.target.id
+      const value = event.target.value
+      const data = {}
       data[key] = value
       this.setState(data)
     }
@@ -86,9 +85,6 @@ class ResetPasswordForm extends React.Component {
             Submit
           </Button>
         </Form>
-
-        <br />
-        <Link href='/session/request-password-reset'><a>Forgot your password?</a></Link>
       </>
     )
   }

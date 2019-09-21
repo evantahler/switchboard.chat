@@ -29,7 +29,7 @@ class SignUpForm extends React.Component {
     const response = await UserRepository.get(sessionData)
     if (response) {
       // we need to not null-out the password so the form element stays controlled
-      let user = response.user
+      const user = response.user
       user.password = ''
       user.passwordConfirm = ''
       this.setState({ user: response.user })

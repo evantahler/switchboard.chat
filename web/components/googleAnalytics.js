@@ -11,7 +11,7 @@ class Loader extends React.Component {
   }
 
   async componentDidMount () {
-    let { initiallyTracked } = this.state
+    const { initiallyTracked } = this.state
     if (!initiallyTracked) {
       this.trackPage()
       await this.setState({ initiallyTracked: true })

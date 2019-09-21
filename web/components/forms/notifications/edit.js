@@ -147,6 +147,7 @@ class NotificationsList extends React.Component {
 
   async load () {
     const response = await NotificationsRepository.get()
+    console.log(response.notifications)
     if (response) {
       this.setState({ notifications: response.notifications })
     }
