@@ -1,6 +1,5 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import Link from 'next/link'
 import VersionRepository from './../../repositories/version'
 
 class Footer extends React.Component {
