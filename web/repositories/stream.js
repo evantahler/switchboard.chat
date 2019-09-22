@@ -10,7 +10,7 @@ class MessagesRepository extends BaseRepository {
     this.name = 'stream'
     this.ttl = 1000 // 1 second (so we allways check for new messages)
     this.key = 'repository:stream'
-    this.responseKeys = ['messages']
+    this.responseKeys = ['messages', 'messagesCount']
     this.routes.get.path = '/api/messages'
     this.routes.create.path = '/api/message'
   }

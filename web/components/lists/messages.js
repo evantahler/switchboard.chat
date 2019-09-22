@@ -50,13 +50,8 @@ class NoteCard extends React.Component {
   render () {
     const note = this.props.note
 
-    const style = {
-      borderLeftColor: '#00000070',
-      borderLeftWidth: 10
-    }
-
     return (
-      <ListGroup.Item style={style} variant='warning'>
+      <ListGroup.Item variant='warning'>
         <p>{note.message}</p>
         <p className='text-muted'>{note.user.firstName} {note.user.lastName}, <Moment fromNow ago>{note.createdAt}</Moment> ago</p>
       </ListGroup.Item>
