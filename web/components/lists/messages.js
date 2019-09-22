@@ -67,7 +67,7 @@ class MessagesList extends React.Component {
       contact: {},
       messages: [],
       loading: false,
-      limit: 5,
+      limit: 100,
       page: 0,
       messagesCount: 0,
       notesCount: 0
