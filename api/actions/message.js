@@ -83,7 +83,7 @@ exports.messagesAndNotesList = class messagesAndNotesList extends Action {
       limit: {
         required: false,
         formatter: s => { return parseInt(s) },
-        default: 3
+        default: 100
       },
       offset: {
         required: false,
@@ -101,6 +101,8 @@ exports.messagesAndNotesList = class messagesAndNotesList extends Action {
       response.messages.push(await messages[i].apiData())
     }
 
-    response.messagesCount = await team.messagesCount(params)
+    const { messagesCount, notesCount } = await team.messagesAndNotesCount(params)
+    response.messagesCount = messagesCount
+    response.notesCount = notesCount
   }
 }

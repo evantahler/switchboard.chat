@@ -72,9 +72,10 @@ class StreamList extends React.Component {
       contactsHashById: {},
       messages: [],
       loading: false,
-      limit: 4,
+      limit: 100,
       page: 0,
-      messagesCount: 0
+      messagesCount: 0,
+      notesCount: 0
     }
   }
 
@@ -109,17 +110,23 @@ class StreamList extends React.Component {
     const { limit, page } = this.state
     const offset = page * limit
     const streamResponse = await StreamRepository.get({ limit, offset })
-    if (streamResponse) { this.setState({ messages: streamResponse.messages, messagesCount: streamResponse.messagesCount }) }
+    if (streamResponse) {
+      this.setState({
+        messages: streamResponse.messages,
+        messagesCount: streamResponse.messagesCount,
+        notesCount: streamResponse.notesCount
+      })
+    }
     this.setState({ loading: false })
   }
 
-  changePage (page) {
-    this.setState({ page })
+  async changePage (page) {
+    await this.setState({ page })
     this.load()
   }
 
   render () {
-    const { folder, messages, messagesCount, limit, page, loading, contactsHashById } = this.state
+    const { folder, messages, messagesCount, notesCount, limit, page, loading, contactsHashById } = this.state
 
     if (!loading && messages.length === 0) {
       return (
@@ -150,7 +157,7 @@ class StreamList extends React.Component {
               </ListGroup>
               <br />
               <Pagination page={page} total={messagesCount} perPage={limit} onPress={(page) => this.changePage(page)} />
-              <p className='text-muted'>{messagesCount} total messages</p>
+              <p className='text-muted'>{messagesCount} total messages, {notesCount} total notes</p>
             </>
         }
       </>

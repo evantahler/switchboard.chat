@@ -290,7 +290,7 @@ const Team = function (sequelize, DataTypes) {
     return task.destroy()
   }
 
-  Model.prototype.messagesCount = async function ({ folderId, contactId }) {
+  Model.prototype.messagesAndNotesCount = async function ({ folderId, contactId }) {
     let contacts = []
 
     if (contactId) {
@@ -313,9 +313,15 @@ const Team = function (sequelize, DataTypes) {
 
     const contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
 
-    return api.models.Message.count({
+    const messagesCount = await api.models.Message.count({
       where: { contactId: contactSearch, teamId: this.id }
     })
+
+    const notesCount = await api.models.Note.count({
+      where: { contactId: contactSearch, teamId: this.id }
+    })
+
+    return { notesCount, messagesCount }
   }
 
   Model.prototype.messagesAndNotes = async function ({ folderId, contactId, limit = 1000, offset = 0 }) {
