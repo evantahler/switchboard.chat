@@ -354,10 +354,27 @@ const Team = function (sequelize, DataTypes) {
       order: [['createdAt', 'desc']]
     })
 
+    const totalMessages = await api.models.Message.count({ where: { contactId: contactSearch, teamId: this.id } })
+
     let notes = []
     const newestMessage = messages[0]
     const oldestMessage = messages[(messages.length - 1)]
-    if (newestMessage && oldestMessage) {
+    if (totalMessages <= 2 && offset === 0) {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id },
+        order: [['createdAt', 'desc']]
+      })
+    } else if (offset === 0) {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id, createdAt: { [Op.gte]: oldestMessage.createdAt } },
+        order: [['createdAt', 'desc']]
+      })
+    } else if ((offset * limit) >= totalMessages) {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id, createdAt: { [Op.lt]: oldestMessage.createdAt } },
+        order: [['createdAt', 'desc']]
+      })
+    } else {
       notes = await api.models.Note.findAll({
         where: { contactId: contactSearch, teamId: this.id, createdAt: { [Op.gte]: oldestMessage.createdAt, [Op.lt]: newestMessage.createdAt } },
         order: [['createdAt', 'desc']]
