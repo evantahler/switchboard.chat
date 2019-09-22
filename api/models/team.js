@@ -290,7 +290,7 @@ const Team = function (sequelize, DataTypes) {
     return task.destroy()
   }
 
-  Model.prototype.messagesAndNotes = async function ({ folderId, contactId }, limit = 1000, offset = 0) {
+  Model.prototype.messagesAndNotesCount = async function ({ folderId, contactId }) {
     let contacts = []
 
     if (contactId) {
@@ -313,15 +313,81 @@ const Team = function (sequelize, DataTypes) {
 
     const contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
 
-    const messages = await api.models.Message.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset, order: [['createdAt', 'desc']] })
-    const notes = await api.models.Note.findAll({ where: { contactId: contactSearch, teamId: this.id }, limit, offset, order: [['createdAt', 'desc']] })
+    const messagesCount = await api.models.Message.count({
+      where: { contactId: contactSearch, teamId: this.id }
+    })
+
+    const notesCount = await api.models.Note.count({
+      where: { contactId: contactSearch, teamId: this.id }
+    })
+
+    return { notesCount, messagesCount }
+  }
+
+  Model.prototype.messagesAndNotes = async function ({ folderId, contactId, limit = 1000, offset = 0 }) {
+    let contacts = []
+
+    if (contactId) {
+      const contact = await api.models.Contact.findOne({ where: { id: contactId, teamId: this.id } })
+      if (!contact) { throw new Error('contact not a member of this team') }
+      contacts.push(contact)
+    }
+
+    if (folderId) {
+      const folder = await api.models.Folder.findOne({ where: { id: folderId, teamId: this.id } })
+      if (!folder) { throw new Error('folder not for this team') }
+      const folderContacts = await api.models.Contact.findAll({ where: { teamId: this.id, folderId: folder.id } })
+      contacts = contacts.concat(folderContacts)
+    }
+
+    if (!contactId && !folderId) {
+      const teamContacts = await api.models.Contact.findAll({ where: { teamId: this.id } })
+      contacts = contacts.concat(teamContacts)
+    }
+
+    const contactSearch = { [Op.in]: contacts.map(contact => contact.id) }
+
+    const messages = await api.models.Message.findAll({
+      where: { contactId: contactSearch, teamId: this.id },
+      limit,
+      offset,
+      order: [['createdAt', 'desc']]
+    })
+
+    const totalMessages = await api.models.Message.count({ where: { contactId: contactSearch, teamId: this.id } })
+
+    let notes = []
+    const newestMessage = messages[0]
+    const oldestMessage = messages[(messages.length - 1)]
+    if (totalMessages <= 2 && offset === 0) {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id },
+        order: [['createdAt', 'desc']]
+      })
+    } else if (offset === 0) {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id, createdAt: { [Op.gte]: oldestMessage.createdAt } },
+        order: [['createdAt', 'desc']]
+      })
+    } else if ((offset * limit) >= totalMessages) {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id, createdAt: { [Op.lt]: oldestMessage.createdAt } },
+        order: [['createdAt', 'desc']]
+      })
+    } else {
+      notes = await api.models.Note.findAll({
+        where: { contactId: contactSearch, teamId: this.id, createdAt: { [Op.gte]: oldestMessage.createdAt, [Op.lt]: newestMessage.createdAt } },
+        order: [['createdAt', 'desc']]
+      })
+    }
+
     const orderedResults = [].concat(messages, notes).sort(function (a, b) { return b.createdAt - a.createdAt })
 
     for (const i in messages) {
       const message = messages[i]
       if (message.read !== true) {
         message.read = true
-        message.save() // actually, don't await here
+        message.save() // actually, don't await here; this can be done out or the response chain
       }
     }
 

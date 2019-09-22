@@ -2,14 +2,14 @@ import React from 'react'
 import { Spinner } from 'react-bootstrap'
 
 class Loader extends React.Component {
-  constructor () {
-    super()
-    this.state = { loading: true }
-  }
-
   render () {
-    if (!this.state.loading) { return null }
-    return <Spinner annimation='grow' />
+    return (
+      <>
+        <Spinner animation='grow' role='status'>
+          <span className='sr-only'>Loading...</span>
+        </Spinner>
+      </>
+    )
   }
 }
 

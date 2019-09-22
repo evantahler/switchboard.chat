@@ -4,6 +4,7 @@ import Moment from 'react-moment'
 import ContactRepository from './../../repositories/contact'
 import MessagesRepository from './../../repositories/messages'
 import Loader from './../loader'
+import Pagination from './../pagination'
 
 class MessageCard extends React.Component {
   render () {
@@ -50,13 +51,8 @@ class NoteCard extends React.Component {
   render () {
     const note = this.props.note
 
-    const style = {
-      borderLeftColor: '#00000070',
-      borderLeftWidth: 10
-    }
-
     return (
-      <ListGroup.Item style={style} variant='warning'>
+      <ListGroup.Item variant='warning'>
         <p>{note.message}</p>
         <p className='text-muted'>{note.user.firstName} {note.user.lastName}, <Moment fromNow ago>{note.createdAt}</Moment> ago</p>
       </ListGroup.Item>
@@ -70,7 +66,11 @@ class MessagesList extends React.Component {
     this.state = {
       contact: {},
       messages: [],
-      loading: false
+      loading: false,
+      limit: 5,
+      page: 0,
+      messagesCount: 0,
+      notesCount: 0
     }
   }
 
@@ -91,20 +91,35 @@ class MessagesList extends React.Component {
 
   async load () {
     this.setState({ loading: true })
+    const { limit, page } = this.state
+    const offset = page * limit
+
     const contactResponse = await ContactRepository.get()
     if (contactResponse && contactResponse.contact) {
       this.setState({ contact: contactResponse.contact })
       await MessagesRepository.setKey()
-      const messagesResponse = await MessagesRepository.get()
-      if (messagesResponse) { this.setState({ messages: messagesResponse.messages }) }
+
+      const messagesResponse = await MessagesRepository.get({ limit, offset })
+      if (messagesResponse) {
+        this.setState({
+          messages: messagesResponse.messages,
+          messagesCount: messagesResponse.messagesCount,
+          notesCount: messagesResponse.notesCount
+        })
+      }
       this.setState({ loading: false })
     } else {
       this.setState({ loading: false })
     }
   }
 
+  async changePage (page) {
+    await this.setState({ page })
+    this.load()
+  }
+
   render () {
-    const { messages, contact, loading } = this.state
+    const { messages, contact, loading, limit, page, messagesCount, notesCount } = this.state
 
     if (!contact || !contact.id) {
       return null
@@ -112,20 +127,29 @@ class MessagesList extends React.Component {
 
     return (
       <div>
-        {messages.length > 0
-          ? loading
+        {
+          loading
             ? <Loader />
-            : <ListGroup>
-              {messages.map((message) => {
-                if (message.type === 'message') {
-                  return <MessageCard key={`message-${message.id}`} message={message} />
-                } else if (message.type === 'note') {
-                  return <NoteCard key={`note-${message.id}`} note={message} />
-                }
-              })}
-              <div ref={(el) => { this.messagesEnd = el }} />
-            </ListGroup>
-          : <Alert variant='info'>No messages yet</Alert>}
+            : messages.length > 0
+              ? <>
+                <Pagination page={page} total={messagesCount} perPage={limit} onPress={(page) => this.changePage(page)} />
+                <ListGroup>
+                  {messages.map((message) => {
+                    if (message.type === 'message') {
+                      return <MessageCard key={`message-${message.id}`} message={message} />
+                    } else if (message.type === 'note') {
+                      return <NoteCard key={`note-${message.id}`} note={message} />
+                    }
+                  })}
+                  <div ref={(el) => { this.messagesEnd = el }} />
+                </ListGroup>
+                <br />
+                <Pagination page={page} total={messagesCount} perPage={limit} onPress={(page) => this.changePage(page)} />
+                <br />
+                <p className='text-muted'>{messagesCount} total messages, {notesCount} total notes</p>
+              </>
+              : <Alert variant='info'>No messages yet</Alert>
+        }
       </div>
     )
   }

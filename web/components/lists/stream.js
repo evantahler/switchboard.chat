@@ -8,6 +8,7 @@ import ContactsRepository from './../../repositories/contacts'
 import ContactRepository from './../../repositories/contact'
 import FoldersList from './folders.js'
 import Loader from './../loader'
+import Pagination from './../pagination'
 
 class MessageRow extends React.Component {
   async showContact () {
@@ -70,7 +71,11 @@ class StreamList extends React.Component {
       folder: {},
       contactsHashById: {},
       messages: [],
-      loading: false
+      loading: false,
+      limit: 100,
+      page: 0,
+      messagesCount: 0,
+      notesCount: 0
     }
   }
 
@@ -102,13 +107,26 @@ class StreamList extends React.Component {
     }
 
     await StreamRepository.setKey()
-    const streamResponse = await StreamRepository.get()
-    if (streamResponse) { this.setState({ messages: streamResponse.messages }) }
+    const { limit, page } = this.state
+    const offset = page * limit
+    const streamResponse = await StreamRepository.get({ limit, offset })
+    if (streamResponse) {
+      this.setState({
+        messages: streamResponse.messages,
+        messagesCount: streamResponse.messagesCount,
+        notesCount: streamResponse.notesCount
+      })
+    }
     this.setState({ loading: false })
   }
 
+  async changePage (page) {
+    await this.setState({ page })
+    this.load()
+  }
+
   render () {
-    const { folder, messages, loading, contactsHashById } = this.state
+    const { folder, messages, messagesCount, notesCount, limit, page, loading, contactsHashById } = this.state
 
     if (!loading && messages.length === 0) {
       return (
@@ -126,15 +144,21 @@ class StreamList extends React.Component {
         <h2>{folder.name ? `${folder.name} Messages` : 'All Messages'}</h2>
         <FoldersList />
         <br />
-        <p className='text-muted'>Click a contact to see thread and send messages</p>
         {
           loading
             ? <Loader />
-            : <ListGroup>
-              {
-                messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} contact={contactsHashById[message.contactId]} />)
-              }
-            </ListGroup>
+            : <>
+              <p className='text-muted'>Click a contact to see thread and send messages</p>
+              <Pagination page={page} total={messagesCount} perPage={limit} onPress={(page) => this.changePage(page)} />
+              <ListGroup>
+                {
+                  messages.map(message => <MessageRow key={`message-${message.type}-${message.id}`} message={message} contact={contactsHashById[message.contactId]} />)
+                }
+              </ListGroup>
+              <br />
+              <Pagination page={page} total={messagesCount} perPage={limit} onPress={(page) => this.changePage(page)} />
+              <p className='text-muted'>{messagesCount} total messages, {notesCount} total notes</p>
+            </>
         }
       </>
     )

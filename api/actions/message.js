@@ -79,6 +79,16 @@ exports.messagesAndNotesList = class messagesAndNotesList extends Action {
       folderId: {
         required: false,
         formatter: s => { return parseInt(s) }
+      },
+      limit: {
+        required: false,
+        formatter: s => { return parseInt(s) },
+        default: 100
+      },
+      offset: {
+        required: false,
+        formatter: s => { return parseInt(s) },
+        default: 0
       }
     }
   }
@@ -90,5 +100,9 @@ exports.messagesAndNotesList = class messagesAndNotesList extends Action {
     for (const i in messages) {
       response.messages.push(await messages[i].apiData())
     }
+
+    const { messagesCount, notesCount } = await team.messagesAndNotesCount(params)
+    response.messagesCount = messagesCount
+    response.notesCount = notesCount
   }
 }
