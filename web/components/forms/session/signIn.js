@@ -6,7 +6,7 @@ import FormSerializer from './../utils/formSerializer'
 import SessionRepository from './../../../repositories/session'
 import UserRepository from './../../../repositories/user'
 import ErrorRepository from './../../../repositories/error'
-// import Loader from './../../loader'
+import Loader from './../../loader'
 import GoogleLogin from 'react-google-login'
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID
@@ -14,7 +14,10 @@ const googleClientId = process.env.GOOGLE_CLIENT_ID
 class SignUpForm extends React.Component {
   constructor () {
     super()
-    this.state = { validated: false }
+    this.state = {
+      validated: false,
+      loading: false
+    }
   }
 
   validate (event) {
@@ -27,15 +30,20 @@ class SignUpForm extends React.Component {
   }
 
   async submit (form) {
+    this.setState({ loading: true })
     const data = FormSerializer(form)
     const sessionData = await SessionRepository.create(data)
-    if (!sessionData) { return }
+    if (!sessionData) { return this.setState({ loading: false }) }
     const user = await UserRepository.get(sessionData)
     if (user) { Router.push('/user/teams') }
   }
 
   async responseGoogle (googleData) {
-    if (googleData.error) { return ErrorRepository.set({ error: `${googleData.error}: ${googleData.details}` }) }
+    this.setState({ loading: true })
+    if (googleData.error) {
+      this.setState({ loading: false })
+      return ErrorRepository.set({ error: `${googleData.error}: ${googleData.details}` })
+    }
 
     const data = {
       email: googleData.profileObj.email,
@@ -45,24 +53,28 @@ class SignUpForm extends React.Component {
     }
 
     const sessionData = await SessionRepository.create(data)
-    if (!sessionData) { return }
+    if (!sessionData) { return this.setState({ loading: false }) }
     const user = await UserRepository.get(sessionData)
     if (user) { Router.push('/user/teams') }
   }
 
   render () {
-    const { validated } = this.state
+    const { validated, loading } = this.state
 
     return (
       <>
-        <div style={{ textAlign: 'center' }}>
-          <GoogleLogin
-            clientId={googleClientId}
-            buttonText='Login with Google'
-            onSuccess={this.responseGoogle}
-            onFailure={this.responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
+        <div id='googleButton'>
+          {
+            loading
+              ? <Loader />
+              : <GoogleLogin
+                clientId={googleClientId}
+                buttonText='Login with Google'
+                onSuccess={this.responseGoogle.bind(this)}
+                onFailure={this.responseGoogle.bind(this)}
+                cookiePolicy={'single_host_origin'}
+              />
+          }
         </div>
 
         <hr />
@@ -85,9 +97,11 @@ class SignUpForm extends React.Component {
             <Form.Control.Feedback type='invalid'>A password is required</Form.Control.Feedback>
           </Form.Group>
 
-          <Button variant='primary' type='submit'>
-            Submit
-          </Button>
+          {
+            loading
+              ? <Loader />
+              : <Button variant='primary' type='submit'>Submit</Button>
+          }
         </Form>
 
         <br />

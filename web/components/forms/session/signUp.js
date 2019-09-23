@@ -5,6 +5,7 @@ import FormSerializer from './../utils/formSerializer'
 import UserRepository from './../../../repositories/user'
 import SessionRepository from './../../../repositories/session'
 import ErrorRepository from './../../../repositories/error'
+import Loader from './../../loader'
 import GoogleLogin from 'react-google-login'
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID
@@ -12,7 +13,8 @@ class SignUpForm extends React.Component {
   constructor () {
     super()
     this.state = {
-      validated: false
+      validated: false,
+      loading: false
     }
   }
 
@@ -30,19 +32,26 @@ class SignUpForm extends React.Component {
     if (data.password !== data.passwordConfirm) { return alert('passwords do not match') } //eslint-disable-line
     delete data.passwordConfirm
 
+    this.setState({ loading: true })
     const userSuccess = await UserRepository.create(data)
     if (userSuccess && !userSuccess.error) {
       const sessionSuccess = await SessionRepository.create(data)
       if (sessionSuccess) {
         Router.push('/user/teams')
+      } else {
+        this.setState({ loading: false })
       }
     } else {
-      this.setState({ validated: false })
+      this.setState({ validated: false, loading: false })
     }
   }
 
   async responseGoogle (googleData) {
-    if (googleData.error) { return ErrorRepository.set({ error: `${googleData.error}: ${googleData.details}` }) }
+    this.setState({ loading: true })
+    if (googleData.error) {
+      this.setState({ loading: false })
+      return ErrorRepository.set({ error: `${googleData.error}: ${googleData.details}` })
+    }
 
     const data = {
       email: googleData.profileObj.email,
@@ -56,23 +65,31 @@ class SignUpForm extends React.Component {
       const sessionSuccess = await SessionRepository.create(data)
       if (sessionSuccess) {
         Router.push('/user/teams')
+      } else {
+        this.setState({ loading: false })
       }
+    } else {
+      this.setState({ loading: false })
     }
   }
 
   render () {
-    const { validated } = this.state
+    const { validated, loading } = this.state
 
     return (
       <>
-        <div style={{ textAlign: 'center' }}>
-          <GoogleLogin
-            clientId={googleClientId}
-            buttonText='Sign Up with Google'
-            onSuccess={this.responseGoogle}
-            onFailure={this.responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
+        <div id='googleButton'>
+          {
+            loading
+              ? <Loader />
+              : <GoogleLogin
+                clientId={googleClientId}
+                buttonText='Login with Google'
+                onSuccess={this.responseGoogle.bind(this)}
+                onFailure={this.responseGoogle.bind(this)}
+                cookiePolicy={'single_host_origin'}
+              />
+          }
         </div>
 
         <hr />
@@ -119,9 +136,11 @@ class SignUpForm extends React.Component {
             <Form.Check required label='I Agree to the terms' feedback='You must agree to the terms' />
           </Form.Group>
 
-          <Button variant='primary' type='submit'>
-            Submit
-          </Button>
+          {
+            loading
+              ? <Loader />
+              : <Button variant='primary' type='submit'>Submit</Button>
+          }
         </Form>
       </>
     )
