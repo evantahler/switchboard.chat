@@ -84,7 +84,7 @@ class SignUpForm extends React.Component {
               ? <Loader />
               : <GoogleLogin
                 clientId={googleClientId}
-                buttonText='Login with Google'
+                buttonText='Sign Up with Google'
                 onSuccess={this.responseGoogle.bind(this)}
                 onFailure={this.responseGoogle.bind(this)}
                 cookiePolicy={'single_host_origin'}
