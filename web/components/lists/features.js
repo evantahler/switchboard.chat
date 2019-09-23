@@ -39,7 +39,7 @@ const FeaturesTable = () => {
                 <Image src='/static/images/screenshots/notifications.jpg' fluid />
               </Tab.Pane>
               <Tab.Pane eventKey='#feature3'>
-                <p>Need to communicate with other team members?  Leave in-thead messages to coordinate in one place.</p>
+                <p>Need to communicate with other team members?  Leave in-thread messages to coordinate in one place.</p>
                 <Image src='/static/images/screenshots/contact-stream.jpg' fluid />
               </Tab.Pane>
               <Tab.Pane eventKey='#feature4'>
@@ -47,7 +47,7 @@ const FeaturesTable = () => {
                 <Image src='/static/images/screenshots/contact-tasks.jpg' fluid />
               </Tab.Pane>
               <Tab.Pane eventKey='#feature5'>
-                <p>Store both incomming and outgoing message attachments, images, and videos... all included with Switchboard's standard pricing</p>
+                <p>Store both incoming and outgoing message attachments, images, and videos... all included with Switchboard's standard pricing</p>
                 <Image src='/static/images/screenshots/stream.jpg' fluid />
               </Tab.Pane>
               <Tab.Pane eventKey='#feature6'>

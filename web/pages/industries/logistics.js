@@ -25,7 +25,7 @@ class Page extends React.Component {
 
           <Col md={7}>
             <h2>How can we help Movers, Planners, and Coordinators?</h2>
-            <p>Communicating with your team in a timely way is paramount to successfully completing a job.  You know that sometimes sending text messages, photos, or videos is often the best way to share information, especially when you team is busy or in a location with spotty reception.  Stop tying all this critical infastructure to just one phone!  Switchboard lets you use any website or mobile device to send messages to you team, and you can share this communcations with supervisors, leads, and the rest of the team.</p>
+            <p>Communicating with your team in a timely way is paramount to successfully completing a job.  You know that sometimes sending text messages, photos, or videos is often the best way to share information, especially when you team is busy or in a location with spotty reception.  Stop tying all this critical infrastructure to just one phone!  Switchboard lets you use any website or mobile device to send messages to you team, and you can share this communications with supervisors, leads, and the rest of the team.</p>
 
             <p>Some of the things teams have used Switchboard to do:</p>
             <ListGroup>

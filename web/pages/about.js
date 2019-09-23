@@ -15,11 +15,11 @@ class Page extends React.Component {
             <h2>Origin Story</h2>
 
             <p>
-              <a href='http://evantahler.com'>Evan</a> initially created Switchboard for his wife Christina, while she was workign as a  preschool administrator.  She was looking for a better way for teachers to communicate unplanned absences and to contact substitute teachers. She dreamed for there to be a way to reach teachers (even those without smartphones) that did not necessitate using her personal cell phone. She also wanted a way for other school administrators to be able to view and help facilitate the staffing processes. Subscribing to the mantra of "happy wife happy life", Evan created switchboard.chat to make this dream a reality.
+              <a href='http://evantahler.com'>Evan</a> initially created Switchboard for his wife Christina, while she was working as a  preschool administrator.  She was looking for a better way for teachers to communicate unplanned absences and to contact substitute teachers. She dreamed for there to be a way to reach teachers (even those without smartphones) that did not necessitate using her personal cell phone. She also wanted a way for other school administrators to be able to view and help facilitate the staffing processes. Subscribing to the mantra of "happy wife happy life", Evan created switchboard.chat to make this dream a reality.
             </p>
 
             <p>
-              Growing from those beginings, we've learend that there are many industries that still rely on SMS communications between employees, and are doing so by physically sharing phones.  This tool aims to make it easier for the managers of those teams to work with the tool they already use (text-messaging) but gain some control, centralization, and logging.  Switchboard aims to provide a cost-effective, sharable alternative to purchasing employee phones.
+              Growing from those beginnings, we've learned that there are many industries that still rely on SMS communications between employees, and are doing so by physically sharing phones.  This tool aims to make it easier for the managers of those teams to work with the tool they already use (text-messaging) but gain some control, centralization, and logging.  Switchboard aims to provide a cost-effective, sharable alternative to purchasing employee phones.
             </p>
           </Col>
           <Col md={4}>

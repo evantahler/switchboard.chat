@@ -24,13 +24,13 @@ class Page extends React.Component {
           </Col>
 
           <Col md={7}>
-            <h2>How can we help Realators, Property Managers, and Maintenance Staff?</h2>
-            <p>Communicating with your tennants is important.  Text-messaging provides a trusted and intamate channel between you and your rentors... but it can be a pain if that communication is tied to your personal phone.  Switchboard provides a place to share this communication with your team, assign jobs, and handle followup communication... and for you to keep your personal phone personal.</p>
+            <h2>How can we help Realtors, Property Managers, and Maintenance Staff?</h2>
+            <p>Communicating with your tenants is important.  Text-messaging provides a trusted and intimate channel between you and your renters... but it can be a pain if that communication is tied to your personal phone.  Switchboard provides a place to share this communication with your team, assign jobs, and handle followup communication... and for you to keep your personal phone personal.</p>
 
             <p>Some of the things teams have used Switchboard to do:</p>
             <ListGroup>
               <ListGroup.Item>Coordinating requests with clients</ListGroup.Item>
-              <ListGroup.Item>Scheduling and Maintainance</ListGroup.Item>
+              <ListGroup.Item>Scheduling and Maintenance</ListGroup.Item>
               <ListGroup.Item>Managing schedules</ListGroup.Item>
               <ListGroup.Item>Sharing job documentation and photos</ListGroup.Item>
               <ListGroup.Item>Sharing contact lists for phone chains or activities</ListGroup.Item>

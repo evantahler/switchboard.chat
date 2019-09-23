@@ -25,10 +25,10 @@ class Page extends React.Component {
 
           <Col md={7}>
             <h2>How can we help Educators and Administrators?</h2>
-            <p>Switchboard was started to help school administrators contact and schedule subsitute teachers.  From there, we've seen Switchboard be used for many novel purposes:</p>
+            <p>Switchboard was started to help school administrators contact and schedule substitute teachers.  From there, we've seen Switchboard be used for many novel purposes:</p>
             <ListGroup>
               <ListGroup.Item>Coordinating facilities requests</ListGroup.Item>
-              <ListGroup.Item>Orginizing subsitute teachers</ListGroup.Item>
+              <ListGroup.Item>Organizing substitute teachers</ListGroup.Item>
               <ListGroup.Item>Emergency communications with parents or caregivers</ListGroup.Item>
               <ListGroup.Item>Auditing out-of-school communications</ListGroup.Item>
               <ListGroup.Item>Sharing contact lists for phone chains or activities</ListGroup.Item>
