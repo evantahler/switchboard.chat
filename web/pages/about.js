@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from './../components/layouts/loggedOut.js'
+import Link from 'next/link'
 import { Row, Col } from 'react-bootstrap'
 import JumboImage from '../components/jumboImage'
 
@@ -40,14 +41,11 @@ class Page extends React.Component {
         </Row>
         <Row>
           <Col>
-            <h2>Terms</h2>
-            <p>Coming Soon.</p>
-
-            <h2>Privacy Policy</h2>
-            <p>Coming Soon.</p>
-
-            <h2>Billing Policy</h2>
-            <p>Coming Soon.</p>
+            <h2>Documents</h2>
+            <ul>
+              <li><Link href='/privacy'>Privacy Policy</Link></li>
+              <li><Link href='/terms'>Terms of Service</Link></li>
+            </ul>
           </Col>
         </Row>
       </Layout>
