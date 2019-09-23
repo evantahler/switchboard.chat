@@ -27,8 +27,8 @@ class Footer extends React.Component {
         <Row>
           <Col md={6}>
             <p>
-              <Link href='/about'>Privacy</Link><br />
-              <Link href='/about'>Terms</Link><br />
+              <Link href='/privacy'>Privacy</Link><br />
+              <Link href='/terms'>Terms</Link><br />
               version {this.state.version.version}
             </p>
           </Col>
