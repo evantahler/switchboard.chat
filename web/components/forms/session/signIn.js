@@ -6,7 +6,7 @@ import FormSerializer from './../utils/formSerializer'
 import SessionRepository from './../../../repositories/session'
 import UserRepository from './../../../repositories/user'
 import ErrorRepository from './../../../repositories/error'
-import Loader from './../../loader'
+// import Loader from './../../loader'
 import GoogleLogin from 'react-google-login'
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID

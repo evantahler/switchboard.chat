@@ -46,7 +46,7 @@ exports.userCreate = class userCreate extends Action {
       await api.google.authenticate(params.email, params.idToken)
     }
 
-    const existingUser = api.models.User.findOne({where: { email: params.email } })
+    const existingUser = api.models.User.findOne({ where: { email: params.email } })
     if (existingUser) { throw new Error('this email already is registered to a Switchboard account.  Try logging in!') }
 
     const user = new api.models.User(params)
