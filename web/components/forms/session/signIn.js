@@ -5,13 +5,16 @@ import { Form, Button } from 'react-bootstrap'
 import FormSerializer from './../utils/formSerializer'
 import SessionRepository from './../../../repositories/session'
 import UserRepository from './../../../repositories/user'
+import ErrorRepository from './../../../repositories/error'
+import Loader from './../../loader'
+import GoogleLogin from 'react-google-login'
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID
 
 class SignUpForm extends React.Component {
   constructor () {
     super()
-    this.state = {
-      validated: false
-    }
+    this.state = { validated: false }
   }
 
   validate (event) {
@@ -31,11 +34,39 @@ class SignUpForm extends React.Component {
     if (user) { Router.push('/user/teams') }
   }
 
+  async responseGoogle (googleData) {
+    if (googleData.error) { return ErrorRepository.set({ error: `${googleData.error}: ${googleData.details}` }) }
+
+    const data = {
+      email: googleData.profileObj.email,
+      firstName: googleData.profileObj.givenName,
+      lastName: googleData.profileObj.familyName,
+      idToken: googleData.tokenObj.id_token
+    }
+
+    const sessionData = await SessionRepository.create(data)
+    if (!sessionData) { return }
+    const user = await UserRepository.get(sessionData)
+    if (user) { Router.push('/user/teams') }
+  }
+
   render () {
     const { validated } = this.state
 
     return (
       <>
+        <div style={{ textAlign: 'center' }}>
+          <GoogleLogin
+            clientId={googleClientId}
+            buttonText='Login with Google'
+            onSuccess={this.responseGoogle}
+            onFailure={this.responseGoogle}
+            cookiePolicy={'single_host_origin'}
+          />
+        </div>
+
+        <hr />
+
         <Form
           id='form'
           onSubmit={event => this.validate(event)}
