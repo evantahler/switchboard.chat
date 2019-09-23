@@ -10,6 +10,7 @@ import MessageRepository from './../../repositories/message'
 import FoldersRepository from './../../repositories/folders'
 import TeamMemberRepository from './../../repositories/teamMember'
 import TeamMembersRepository from './../../repositories/teamMembers'
+import Loader from './../loader'
 
 class TeamCard extends React.Component {
   async goToTeam (team, subpath = '') {
@@ -55,7 +56,10 @@ class TeamCard extends React.Component {
 class TeamsList extends React.Component {
   constructor () {
     super()
-    this.state = { teams: [] }
+    this.state = {
+      teams: [],
+      loading: false
+    }
   }
 
   async componentDidMount () {
@@ -63,12 +67,15 @@ class TeamsList extends React.Component {
   }
 
   async load () {
+    this.setState({ loading: true })
     const response = await TeamsRepository.get()
-    if (response) { this.setState({ teams: response.teams }) }
+    if (response) { this.setState({ teams: response.teams, loading: false }) }
   }
 
   render () {
-    const { teams } = this.state
+    const { teams, loading } = this.state
+
+    if (loading) { return <Loader /> }
 
     return (
       <div>
