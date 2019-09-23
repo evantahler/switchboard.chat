@@ -58,11 +58,14 @@ class BaseRepository {
     }
 
     this.loading = true
-    await next()
-    this.loading = false
+    try {
+      await next()
+    } finally {
+      this.loading = false
+    }
   }
 
-  async get (params) {
+  async get (params, showErrors = true) {
     const now = new Date().getTime()
     const response = JSON.parse(await this.storage.getItem(this.key))
     if (response && response.data && response.expiresAt > now) {
@@ -72,7 +75,7 @@ class BaseRepository {
         await this.hydrate(params)
         return this.get()
       } catch (error) {
-        if (this.errorHandler) {
+        if (this.errorHandler && showErrors) {
           this.errorHandler.set({ error: error.toString() })
         } else {
           throw error

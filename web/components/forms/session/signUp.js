@@ -36,6 +36,8 @@ class SignUpForm extends React.Component {
       if (sessionSuccess) {
         Router.push('/user/teams')
       }
+    } else {
+      this.setState({ validated: false })
     }
   }
 
@@ -102,7 +104,7 @@ class SignUpForm extends React.Component {
           </Form.Group>
 
           <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
+            <Form.Label>Password (at least 6 characters)</Form.Label>
             <Form.Control required type='password' placeholder='Password' />
             <Form.Control.Feedback type='invalid'>A password is required</Form.Control.Feedback>
           </Form.Group>
