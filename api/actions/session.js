@@ -11,16 +11,25 @@ exports.sessionCreate = class sessionCreate extends Action {
   inputs () {
     return {
       email: { required: true },
-      password: { required: true }
+      password: { required: false },
+      idToken: { required: false }
     }
   }
 
   async run ({ connection, response, params }) {
     response.success = false
+
     const user = await api.models.User.findOne({ where: { email: params.email } })
     if (!user) { throw new Error('user not found') }
-    const match = await user.checkPassword(params.password)
-    if (!match) { throw new Error('password does not match') }
+
+    if (params.password) {
+      const match = await user.checkPassword(params.password)
+      if (!match) { throw new Error('password does not match') }
+    } else if (params.idToken) {
+      await api.google.authenticate(params.email, params.idToken)
+    } else {
+      throw new Error('either password or idToken is required to authenticate')
+    }
 
     const sessionData = await api.session.create(connection, user)
     response.userId = user.id

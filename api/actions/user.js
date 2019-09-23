@@ -25,8 +25,11 @@ exports.userCreate = class userCreate extends Action {
         validator: s => { return validator.isEmail(s) }
       },
       password: {
-        required: true,
+        required: false,
         validator: s => { return validator.isLength(s, { min: api.models.User.minPasswordLength }) }
+      },
+      idToken: {
+        required: false
       },
       phoneNumber: {
         required: false,
@@ -37,9 +40,22 @@ exports.userCreate = class userCreate extends Action {
   }
 
   async run ({ connection, response, params }) {
+    if (!params.password && !params.idToken) { throw new Error('either password or idToken is required to create a new user') }
+
+    if (params.idToken) {
+      await api.google.authenticate(params.email, params.idToken)
+    }
+
+    const existingUser = await api.models.User.findOne({ where: { email: params.email } })
+    if (existingUser) { throw new Error('this email already is registered to a Switchboard account.  Try logging in!') }
+
     const user = new api.models.User(params)
     await user.save()
-    await user.updatePassword(params.password)
+
+    if (params.password) {
+      await user.updatePassword(params.password)
+    }
+
     await api.session.create(connection, user)
     response.user = user.apiData()
   }
