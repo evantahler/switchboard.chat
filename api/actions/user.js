@@ -57,6 +57,7 @@ exports.userCreate = class userCreate extends Action {
     }
 
     await api.session.create(connection, user)
+    await api.tasks.enqueue('mailchimpSubscribe', { userId: user.id }, 'default')
     response.user = user.apiData()
   }
 }

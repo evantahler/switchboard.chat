@@ -45,6 +45,7 @@ exports.teamMemberCreate = class teamMemberCreate extends Action {
     if (!params.userId && !params.email) { throw new Error('either userId or email is required') }
     const teamMember = await team.addTeamMember(params)
     await api.tasks.enqueue('welcomeTeamMember-email', { teamId: team.id, userId: teamMember.userId }, 'notifications')
+    await api.tasks.enqueue('mailchimpSubscribe', { userId: teamMember.userId }, 'default')
     response.teamMember = teamMember.apiData()
   }
 }
