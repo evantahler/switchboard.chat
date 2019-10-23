@@ -22,7 +22,7 @@ class Page extends React.Component {
     const { team } = this.state
 
     return (
-      <Layout>
+      <Layout pageTitle='Folders'>
         <h1>{team.name} Folders</h1>
         <AddFoldertModal />
         <br />

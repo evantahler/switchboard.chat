@@ -6,7 +6,7 @@ import JumboImage from '../components/jumboImage'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Support'>
         <Row>
           <Col>
             <h1>Support</h1>

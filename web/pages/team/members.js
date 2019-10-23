@@ -22,7 +22,7 @@ class Page extends React.Component {
     const { team } = this.state
 
     return (
-      <Layout>
+      <Layout pageTitle='Team Members'>
         <h1>{team.name} Team Members</h1>
         <br />
         <Row>

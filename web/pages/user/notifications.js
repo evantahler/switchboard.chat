@@ -5,7 +5,7 @@ import NotificationsEditForm from './../../components/forms/notifications/edit'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Notifications'>
         <h1>Notificaions</h1>
         <NotificationsEditForm />
       </Layout>

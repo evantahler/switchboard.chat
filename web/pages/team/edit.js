@@ -6,7 +6,7 @@ import TeamChargeHistory from './../../components/lists/teamChargeHistory'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Edit Team'>
         <h1>Edit Team</h1>
         <TeamEditForm />
         <hr />

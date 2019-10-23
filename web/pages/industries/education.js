@@ -9,10 +9,11 @@ import HowDoesSwitchboardWorkCard from '../../components/cards/howDoesSwitchboar
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Education'>
         <Row>
           <Col>
             <h1>Switchboard for Education</h1>
+            <h2>Group Text Messaging for Schools</h2>
             <JumboImage src='/static/images/headers/education.jpg' />
           </Col>
         </Row>

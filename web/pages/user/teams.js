@@ -7,7 +7,7 @@ import TeamsList from './../../components/lists/teams'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Teams'>
         <Row>
           <Col>
             <h1>Your Teams</h1>

@@ -5,7 +5,7 @@ import SignOutForm from './../../components/forms/session/signOut'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Sign Out'>
         <h1>Signing Out...</h1>
         <SignOutForm />
       </Layout>

@@ -6,7 +6,7 @@ import RequestPasswordResetForm from './../../components/forms/session/requestPa
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Request Password Reset'>
         <h1>Request Password Reset</h1>
         <Card border='success'>
           <Card.Body>

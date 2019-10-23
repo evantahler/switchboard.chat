@@ -14,7 +14,7 @@ class Page extends React.Component {
     const { content } = this.props
 
     return (
-      <Layout>
+      <Layout pageTitle='Privacy'>
         <h1>Switchboard Privacy Policy</h1>
         <JumboImage src='/static/images/headers/about.jpg' />
         <Row>

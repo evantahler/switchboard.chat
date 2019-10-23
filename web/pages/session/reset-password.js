@@ -6,7 +6,7 @@ import ResetPasswordForm from './../../components/forms/session/resetPassword'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Reset Password'>
         <h1>Reset Password</h1>
         <Card border='success'>
           <Card.Body>
