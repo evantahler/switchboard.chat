@@ -13,6 +13,7 @@ class Page extends React.Component {
         <Row>
           <Col>
             <h1>Switchboard for Education</h1>
+            <h2>Group Text Messaging for Schools</h2>
             <JumboImage src='/static/images/headers/education.jpg' />
           </Col>
         </Row>
