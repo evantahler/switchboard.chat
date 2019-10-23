@@ -39,15 +39,15 @@ class Page extends React.Component {
     }
 
     return (
-      <Layout>
+      <Layout pageTitle='Centralized Tex Messages for Teams' >
         <Jumbotron style={jumbotronStyle}>
           <Row>
             <Col md={12}>
               <h1>Switchboard:</h1>
-              <h2>Centralized SMS Communication for Teams</h2>
+              <h2>Centralized Text Messages for Teams</h2>
               <p>
                 <br />
-                Sign up to move all of your team's text messages to one easy-to-use place.
+                Sign up to move all of your team's SMS and MMS messages to one easy-to-use place.
               </p>
             </Col>
           </Row>

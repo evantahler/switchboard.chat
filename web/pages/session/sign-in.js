@@ -6,7 +6,7 @@ import SignInForm from './../../components/forms/session/signIn'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Sign In'>
         <h1>Sign In</h1>
         <Card border='success'>
           <Card.Body>

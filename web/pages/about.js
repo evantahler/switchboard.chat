@@ -7,7 +7,7 @@ import JumboImage from '../components/jumboImage'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='About'>
         <h1>About Switchboard</h1>
         <JumboImage src='/static/images/headers/about.jpg' />
         <Row>

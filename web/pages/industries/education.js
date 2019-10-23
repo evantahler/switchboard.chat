@@ -9,7 +9,7 @@ import HowDoesSwitchboardWorkCard from '../../components/cards/howDoesSwitchboar
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Education'>
         <Row>
           <Col>
             <h1>Switchboard for Education</h1>

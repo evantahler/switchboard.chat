@@ -7,7 +7,7 @@ import LoggedOutCatcher from './../loggedOutCatcher'
 class PageLoggedOut extends React.Component {
   render () {
     return (
-      <PageBase>
+      <PageBase pageTitle={this.props.pageTitle}>
         <NavbarLoggedIn />
         <br />
         {this.props.children}

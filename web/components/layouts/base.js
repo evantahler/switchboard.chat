@@ -29,6 +29,8 @@ class PageBase extends React.Component {
         <script async src='https://js.stripe.com/v3/' />
         <script src={`${process.env.API_URL}/public/javascript/ActionheroWebsocketClient.min.js`} />
         <title>{this.state.pageTitle}</title>
+        <meta name='keywords' content='SMS,Text,Message,MMS,Team,School,Business,Real Estate,Phone' />
+        <meta name='description' content='Switchboard is the simplest way to share a text message phone number with your team, school, or business' />
       </Head>
     )
   }

@@ -53,7 +53,7 @@ class Page extends React.Component {
     const { contact, folder } = this.state
 
     return (
-      <Layout>
+      <Layout pageTitle='Contacts'>
         <Row>
           <Col>
             <h2>Contacts</h2>

@@ -7,7 +7,7 @@ import Stream from './../../components/lists/stream.js'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Stream'>
         <Row>
           <Col>
             <Stream />

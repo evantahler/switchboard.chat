@@ -6,7 +6,7 @@ import UserEditForm from './../../components/forms/user/edit'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Profile'>
         <h1>Profile</h1>
         <Card border='success'>
           <Card.Body>

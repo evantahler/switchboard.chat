@@ -6,7 +6,7 @@ import SignUpForm from './../../components/forms/session/signUp'
 class Page extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout pageTitle='Sign Up'>
         <h1>Sign Up</h1>
         <Card border='success'>
           <Card.Body>
