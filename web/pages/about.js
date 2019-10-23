@@ -1,7 +1,7 @@
 import React from 'react'
 import Layout from './../components/layouts/loggedOut.js'
 import Link from 'next/link'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Image } from 'react-bootstrap'
 import JumboImage from '../components/jumboImage'
 
 class Page extends React.Component {
@@ -11,18 +11,28 @@ class Page extends React.Component {
         <h1>About Switchboard</h1>
         <JumboImage src='/static/images/headers/about.jpg' />
         <Row>
+          <Col md={4}>
+            <Image style={{ maxWidth: '100%' }} src='/static/images/about-phone.jpg' />
+          </Col>
           <Col md={8}>
-            <h2>Origin Story</h2>
-
+            <h2>Origin</h2>
             <p>
-              <a href='http://evantahler.com'>Evan</a> initially created Switchboard for his wife Christina, while she was working as a  preschool administrator.  She was looking for a better way for teachers to communicate unplanned absences and to contact substitute teachers. She dreamed for there to be a way to reach teachers (even those without smartphones) that did not necessitate using her personal cell phone. She also wanted a way for other school administrators to be able to view and help facilitate the staffing processes. Subscribing to the mantra of "happy wife happy life", Evan created switchboard.chat to make this dream a reality.
+              <a href='http://evantahler.com'>Evan</a> initially created Switchboard for his wife Christina, while she was working as a  preschool administrator.  She was looking for a better way for teachers to communicate unplanned absences and to contact substitute teachers. She dreamed for there to be a way to reach teachers (even those without smartphones) that did not necessitate using her personal cell phone. She also wanted a way for other school administrators to be able to view and help facilitate the staffing processes. Evan created <a href='https://www.switchboard.chat'>switchboard.chat</a> to make this dream a reality.
             </p>
 
+            <h2>Today</h2>
             <p>
-              Growing from those beginnings, we've learned that there are many industries that still rely on SMS communications between employees, and are doing so by physically sharing phones.  This tool aims to make it easier for the managers of those teams to work with the tool they already use (text-messaging) but gain some control, centralization, and logging.  Switchboard aims to provide a cost-effective, sharable alternative to purchasing employee phones.
+              Growing from those beginnings, we've learned that there are many industries that still rely on text message communications between employees and clients... and they are doing so by physically sharing phones!  However, those phones can get lost or break... and then you are left with now way to reach your customers!  This tool aims to make it easier for the managers of those teams to work with the tool they already use (text-messaging) but gain some control, centralization, and logging.  Switchboard aims to provide a cost-effective, sharable alternative to purchasing employee phones.
             </p>
           </Col>
-          <Col md={4}>
+        </Row>
+        <Row>
+          <Col>
+            <hr />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
             <h2>Thank You</h2>
             <p>Asset Credits:</p>
             <ul>
@@ -38,9 +48,7 @@ class Page extends React.Component {
               <li><a href='https://react-bootstrap.github.io'>React Bootstrap</a></li>
             </ul>
           </Col>
-        </Row>
-        <Row>
-          <Col>
+          <Col md={6}>
             <h2>Documents</h2>
             <ul>
               <li><Link href='/privacy'>Privacy Policy</Link></li>
