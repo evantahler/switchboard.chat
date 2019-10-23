@@ -13,7 +13,7 @@ class Page extends React.Component {
         <Row>
           <Col>
             <h1>Switchboard for Real Estate</h1>
-            <h2>Group Text Messaging for Property Managers and Realators</h2>
+            <h2>Group Text Messaging for Property Managers and Realtors</h2>
             <JumboImage src='/static/images/headers/real-estate.jpg' />
           </Col>
         </Row>
