@@ -45,10 +45,6 @@ class Page extends React.Component {
             <Col md={12}>
               <h1>Switchboard:</h1>
               <h2>Centralized Text Messages for Teams</h2>
-              <p>
-                <br />
-                Sign up to move all of your team's SMS and MMS messages to one easy-to-use place.
-              </p>
             </Col>
           </Row>
           <Row style={{ paddingTop: 200 }}>

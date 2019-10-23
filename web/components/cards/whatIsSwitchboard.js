@@ -12,6 +12,8 @@ const WhatIsSwitchboard = () => {
           <li>The ability to add internal notes and comments to the conversation, just for your team.  Share internatl updates and status along with the text messages.</li>
           <li>Customizable notifications for unread messages so you never miss a thing!</li>
         </ul>
+
+        <p><span className='text-info'>Join today to move all of your team's SMS and MMS messages to one easy-to-use place.</span></p>
       </Card.Body>
     </Card>
   )
