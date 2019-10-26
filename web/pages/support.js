@@ -27,7 +27,7 @@ class Page extends React.Component {
           </Col>
           <Col>
             <Card>
-              <Card.Header as='h5'>Phone</Card.Header>
+              <Card.Header as='h5'>Phone (text us!)</Card.Header>
               <Card.Body>
                 <Card.Text>
                   <a href='tel:+14123019086'>+1 412 301 9086</a>
