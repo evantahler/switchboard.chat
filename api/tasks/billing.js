@@ -10,14 +10,21 @@ module.exports = class Billing extends Task {
     this.middleware = []
   }
 
-  async billTeam (team) {
-    await team.charge()
-  }
-
   async run (params) {
     const teams = await api.models.Team.findAll()
     for (const i in teams) {
-      await this.billTeam(teams[i])
+      try {
+        await teams[i].charge()
+      } catch (error) {
+        const messages = []
+        messages.push(`unable to bill team: ${JSON.stringify(teams[i])}`)
+        messages.push('- - - - -')
+        messages.push(`error: ${error.message}`)
+        for (const i in error.stack.split('\n')) { messages.push(error.stack[i]) }
+
+        api.log(`something went wrong with billing team ${teams[i].id}... notifying admin`)
+        await api.tasks.enqueue('notifyAdmin', { messages }, 'notifications')
+      }
     }
   }
 }
