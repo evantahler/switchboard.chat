@@ -20,7 +20,9 @@ module.exports = class Billing extends Task {
         messages.push(`unable to bill team: ${JSON.stringify(teams[i])}`)
         messages.push('- - - - -')
         messages.push(`error: ${error.message}`)
-        for (const i in error.stack.split('\n')) { messages.push(error.stack[i]) }
+        messages.push('- - - - -')
+        const stackLines = error.stack.split('\n')
+        for (const i in stackLines) { messages.push(stackLines[i]) }
 
         api.log(`something went wrong with billing team ${teams[i].id}... notifying admin`)
         await api.tasks.enqueue('notifyAdmin', { messages }, 'notifications')
