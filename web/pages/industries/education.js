@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from './../../components/layouts/loggedOut.js'
 import JumboImage from '../../components/jumboImage'
 import Router from 'next/router'
-import { Row, Col, Jumbotron, Button, ListGroup } from 'react-bootstrap'
+import { Row, Col, Jumbotron, Button, ListGroup, Image } from 'react-bootstrap'
 import WhatIsSwitchboardCard from '../../components/cards/whatIsSwitchboard'
 import HowDoesSwitchboardWorkCard from '../../components/cards/howDoesSwitchboardWork'
 
@@ -35,6 +35,14 @@ class Page extends React.Component {
               <ListGroup.Item>Sharing contact lists for phone chains or activities</ListGroup.Item>
               <ListGroup.Item>Logging and assigning follow-ups</ListGroup.Item>
             </ListGroup>
+          </Col>
+        </Row>
+
+        <br />
+
+        <Row>
+          <Col style={{ textAlign: 'center' }}>
+            <Image src='/static/images/screenshots/stream.jpg' style={{ maxWidth: '90%' }} />
           </Col>
         </Row>
 
