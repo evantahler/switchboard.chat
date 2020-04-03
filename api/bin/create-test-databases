@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-n=10
-for ((i=1; i<=n; i++)) {
-    echo "creating database switchboard_test_$i"
-    `mysql -e "create database if not exists switchboard_test_$i" -u root`
-}
