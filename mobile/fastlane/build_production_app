@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+export API_URL="https://api.switchboard.chat"
+export PUBLIC_URL="https://www.switchboard.chat"
+export STRIPE_API_PUBLISHABLE_KEY="pk_live_sxpTuPW4S79nW6FMAGclq3QD"
+
+fastlane ios beta
